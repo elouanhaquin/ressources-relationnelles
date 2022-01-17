@@ -1,26 +1,41 @@
 import MessageListItem from '../components/MessageListItem';
+import ProfilItem from '../components/profilItem';
+import { Profil, getProfil } from '../data/profil';
 import { useState } from 'react';
 import { Message, getMessages } from '../data/messages';
+
 import {
   IonContent,
   IonHeader,
+  IonItem,
+  IonGrid, 
+  IonRow, 
+  IonCol, 
   IonList,
   IonPage,
   IonRefresher,
   IonRefresherContent,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter
+  useIonViewWillEnter,
+  IonSearchbar,
+  IonCard,
+  IonButton,
+  IonLabel,
+  IonAvatar
 } from '@ionic/react';
 import './Home.css';
 
 const Home: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [profil, setProfil] = useState<Profil[]>([]);
 
   useIonViewWillEnter(() => {
     const msgs = getMessages();
+    const prfl = getProfil();
     setMessages(msgs);
+    setProfil(prfl);
   });
 
   const refresh = (e: CustomEvent) => {
@@ -31,10 +46,25 @@ const Home: React.FC = () => {
 
   return (
     <IonPage id="home-page">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Ressource Relationnelles</IonTitle>
-        </IonToolbar>
+      <IonHeader className="dark"  slot="fixed">
+      <IonGrid>
+        <IonRow>
+          <IonCol size="4">   
+           <IonToolbar>
+            <IonTitle>(Re)source Relationnelles</IonTitle>
+           </IonToolbar> 
+          </IonCol>
+          <IonCol size="3">   
+           <IonSearchbar>
+           </IonSearchbar> 
+          </IonCol>
+          <IonCol size="4">   
+        
+          
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+      
       </IonHeader>
       <IonContent fullscreen>
         <IonRefresher slot="fixed" onIonRefresh={refresh}>
@@ -49,10 +79,15 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
-        </IonList>
+      <IonGrid>
+        <IonRow>
+          <IonCol size="3"> {profil.map(m => <ProfilItem key={m.id} profil={m} />)} </IonCol>
+          <IonCol size="6"> <IonList>{messages.map(m => <MessageListItem key={m.id} message={m} />)}</IonList> </IonCol>
+        </IonRow>
+      </IonGrid> 
+
       </IonContent>
+    
     </IonPage>
   );
 };

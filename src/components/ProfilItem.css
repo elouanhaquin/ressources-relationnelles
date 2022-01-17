@@ -1,0 +1,17 @@
+.profilePic{
+    max-width: 150px;
+    min-width: 20px;
+}
+
+.profileCard{
+    max-width: 60%;
+    align-self: center;
+    margin: auto;
+    align-content: center;
+    text-align: center;
+    padding: 0;
+}
+
+.profileCard img{
+   border-radius: 3px;
+}

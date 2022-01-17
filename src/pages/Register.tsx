@@ -135,7 +135,7 @@ const Register: React.FC = () => {
               <p style={{ fontSize: "small" }}>
                   By clicking Register you agree to our <a href="#">Policy</a>
               </p>
-              <IonButton expand="block" onClick={handleRegister}>Register</IonButton>
+              <IonButton onClick={handleRegister}>Register</IonButton>
               <p style={{ fontSize: "medium" }}>
                   Vous avez un compte? <Link to="Login">Se connecter!</Link>
               </p>
