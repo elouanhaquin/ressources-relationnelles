@@ -26,3 +26,9 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+.vs/slnx.sqlite
+.gitignore
+.vs/VSWorkspaceState.json
+.vs/ressources-relationnelles/config/applicationhost.config
+.gitignore
+.vs/ressources-relationnelles/v16/.suo
