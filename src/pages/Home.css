@@ -3,5 +3,9 @@
 }
 
 .buttonHeader{
-    align-content: center;
+    --background: #1f1f1f !important;
+    color: white;
+    border: 2px solid;
+    border-radius: 5px;
+    margin-top: 10px;
 }
