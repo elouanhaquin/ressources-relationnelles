@@ -1,9 +1,17 @@
 import {
   IonItem,
   IonLabel,
-  IonNote
+  IonNote,
+  IonCard, 
+  IonIcon, 
+  IonButton,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent
   } from '@ionic/react';
 import { Message } from '../data/messages';
+import { pin } from 'ionicons/icons'
 import './MessageListItem.css';
 
 interface MessageListItemProps {
@@ -12,20 +20,19 @@ interface MessageListItemProps {
 
 const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
   return (
-    <IonItem routerLink={`/message/${message.id}`} detail={false}>
-      <div slot="start" className="dot dot-unread"></div>
-      <IonLabel className="ion-text-wrap">
-        <h2>
-          {message.subject}
-          <span className="date">
-            <IonNote>{message.date}</IonNote>
-          </span>
-        </h2>
-        <h3  className="name">{message.fromName}</h3>
-        <p>
-        {message.content}</p>
-      </IonLabel>
-    </IonItem>
+    <IonItem   slot="start" routerLink={`/message/${message.id}`} detail={false}>
+      <IonCard  className="ion-text-wrap full-width">
+     
+      <IonCardHeader>
+        <IonCardSubtitle> {message.subject}</IonCardSubtitle>
+        <IonCardTitle>{message.fromName}</IonCardTitle>
+      </IonCardHeader>
+      <IonCardContent>
+        {message.content}
+      </IonCardContent>
+      <img src= {message.img} />
+    </IonCard>
+  </IonItem>
   );
 };
 
