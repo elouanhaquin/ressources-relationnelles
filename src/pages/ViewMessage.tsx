@@ -6,8 +6,14 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
   IonItem,
   IonLabel,
+  IonButton,
   IonNote,
   IonPage,
   IonToolbar,
@@ -31,7 +37,7 @@ function ViewMessage() {
       <IonHeader translucent>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton text="Inbox" defaultHref="/home"></IonBackButton>
+            <IonBackButton text="Home" defaultHref="/home"></IonBackButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
