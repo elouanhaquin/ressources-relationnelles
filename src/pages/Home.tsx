@@ -1,4 +1,5 @@
 import MessageListItem from '../components/MessageListItem';
+import AddMessage from '../components/AddMessage';
 import ProfilItem from '../components/profilItem';
 import { Profil, getProfil } from '../data/profil';
 import { useState } from 'react';
@@ -25,7 +26,6 @@ import {
   IonAvatar,
   IonIcon
 } from '@ionic/react';
-import { addOutline } from 'ionicons/icons';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -88,7 +88,10 @@ const Home: React.FC = () => {
       <IonGrid>
         <IonRow>
           <IonCol size="3"> {profil.map(m => <ProfilItem key={m.id} profil={m} />)} </IonCol>
-          <IonCol size="6"> <IonList>{messages.map(m => <MessageListItem key={m.id} message={m} />)}</IonList> </IonCol>
+          <IonCol size="6"> <IonList>
+          {profil.map(m => <AddMessage key={m.id} profil={m} />)}
+            {messages.map(m => <MessageListItem key={m.id} message={m} />)}
+            </IonList> </IonCol>
         </IonRow>
       </IonGrid> 
 

@@ -68,6 +68,17 @@ ion-item ion-note.md {
   width: 100%;
 }
 
+.iconAdd{
+  margin: auto;
+  font-size: 300%;
+    font-weight: 500;
+}
+.centerThings{
+  display: flex;
+  justify-content: center;
+}
+
+
 ion-footer ion-title {
   font-size: 11px;
   font-weight: normal;

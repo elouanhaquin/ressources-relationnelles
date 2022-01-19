@@ -36,7 +36,7 @@ const App: React.FC = () => (
         </Route>
         <Route path="/home" exact={true}>
           <Home />
-        </Route>
+          </Route>
         <Route path="/message/:id">
            <ViewMessage />
         </Route>
