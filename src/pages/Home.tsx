@@ -15,7 +15,6 @@ import {
   IonPage,
   IonRefresher,
   IonRefresherContent,
-  IonSearchbar,
   IonTitle,
   IonToolbar,
   useIonViewWillEnter,
