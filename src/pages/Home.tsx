@@ -3,7 +3,7 @@ import ProfilItem from '../components/profilItem';
 import { Profil, getProfil } from '../data/profil';
 import { useState } from 'react';
 import { Message, getMessages } from '../data/messages';
-
+import { addOutline} from 'ionicons/icons'
 import {
   IonContent,
   IonHeader,
@@ -22,7 +22,8 @@ import {
   IonCard,
   IonButton,
   IonLabel,
-  IonAvatar
+  IonAvatar,
+  IonIcon
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import './Home.css';
@@ -60,7 +61,10 @@ const Home: React.FC = () => {
            </IonSearchbar> 
           </IonCol>
           <IonCol size="4">   
-        
+          <IonButton className="buttonHeader">
+            <IonIcon  icon={addOutline}> </IonIcon>
+
+            </IonButton>
           
           </IonCol>
         </IonRow>
