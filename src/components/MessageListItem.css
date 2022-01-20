@@ -78,6 +78,20 @@ ion-item ion-note.md {
   justify-content: center;
 }
 
+ion-item{
+  background: none;
+font-size: 100%;
+margin-bottom:0;
+ /*margin-right: 5%;
+ margin-left: 5%;*/
+}
+ion-item h3{
+  font-size: 100%;
+  font-weight: 300;
+  font-family: system-ui;
+  margin: auto;
+  margin-left: 10px;
+  }
 
 ion-footer ion-title {
   font-size: 11px;
