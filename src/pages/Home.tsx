@@ -27,6 +27,8 @@ import {
   IonIcon
 } from '@ionic/react';
 import './Home.css';
+import HeadBar from '../components/headerBar';
+import ProfilItemHeader from '../components/profilItemHeader';
 
 const Home: React.FC = () => {
 
@@ -48,24 +50,22 @@ const Home: React.FC = () => {
 
   return (
     <IonPage id="home-page">
-      <IonHeader className="dark"  slot="fixed">
+      <IonHeader className="padding-headbar"   slot="fixed">
       <IonGrid>
         <IonRow>
           <IonCol size="4">   
-           <IonToolbar>
-            <IonTitle>(Re)source Relationnelles</IonTitle>
-           </IonToolbar> 
+          <img  src="assets/icon/logoR.svg" width="246" height="43" />
           </IonCol>
           <IonCol size="3">   
            <IonSearchbar>
            </IonSearchbar> 
           </IonCol>
-          <IonCol size="4">   
-          <IonButton className="buttonHeader">
-            <IonIcon  icon={addOutline}> </IonIcon>
+          <IonCol size="3">   
+            <IonButton routerLink={`/submit/`}  className="buttonHeader" > <IonIcon  icon={addOutline}> </IonIcon> </IonButton>
 
-            </IonButton>
-          
+          </IonCol>
+          <IonCol size="2">   
+            {profil.map(m => <ProfilItemHeader key={m.id} profil={m} />)}
           </IonCol>
         </IonRow>
       </IonGrid>
@@ -84,7 +84,6 @@ const Home: React.FC = () => {
             </IonTitle>
           </IonToolbar>
         </IonHeader>
-
       <IonGrid>
         <IonRow>
           <IonCol size="3"> {profil.map(m => <ProfilItem key={m.id} profil={m} />)} </IonCol>

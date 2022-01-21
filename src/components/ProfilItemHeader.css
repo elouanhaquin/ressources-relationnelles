@@ -1,0 +1,18 @@
+ion-item{
+    background: var(--ion-color-primary-contrast);
+    vertical-align: middle;
+    color: var(--ion-color-primary-shade);
+    max-height: 100%;
+}
+ion-avatar{
+    max-height: 32px;
+    max-width: 32px;
+}
+ion-label{
+    margin: auto;
+    vertical-align: middle;
+}
+
+ProfilHeaderItem{
+    background: var(--ion-color-primary-contrast);
+}

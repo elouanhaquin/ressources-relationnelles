@@ -1,6 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import Submit from './pages/Submit';
 import Home from './pages/Home';
 import ViewMessage from './pages/ViewMessage';
 import Login from './pages/Login';
@@ -39,6 +40,9 @@ const App: React.FC = () => (
           </Route>
         <Route path="/message/:id">
            <ViewMessage />
+        </Route>
+        <Route path="/submit">
+           <Submit />
         </Route>
 
         <Route path="/login" component={Login} exact={true}/>
