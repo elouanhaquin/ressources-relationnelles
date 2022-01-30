@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import { Message, getMessage } from '../data/messages';
+
 import {
     IonContent,
     IonHeader,
     IonItem,
-    IonGrid, 
+    IonInput, 
     IonRow, 
     IonCol, 
     IonList,
@@ -23,36 +22,73 @@ import {
     IonCard,
     IonCardHeader,
     IonCardTitle,
-    IonCardSubtitle,
-    IonCardContent
+    IonCardContent,
+    IonTextarea
 } from '@ionic/react';
-import ProfilItemHeader from '../components/profilItemHeader';
-import { Profil, getProfil } from '../data/profil';
-import { personCircle, addOutline } from 'ionicons/icons';
+
+import { send, documentOutline, imageOutline, videocamOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import './Submit.css';
 
 function Submit() {
-
-
   return (
-      <IonItem>    <IonCard  className="ion-text-wrap full-width">
+    <IonItem className="Submit">    <IonCard  className="ion-text-wrap full-width">
      
     <IonCardHeader>
       <IonCardTitle> Ajouter une ressource</IonCardTitle>
-      <IonCardSubtitle className="date" > </IonCardSubtitle>
-      <IonCardSubtitle ></IonCardSubtitle>
-    </IonCardHeader>
-    <IonCardContent>
-     
+      </IonCardHeader>
+      <IonCardContent>
+         <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="floating"> Titre</IonLabel>
+                <IonInput type="text" placeholder="Titre"></IonInput>
+              </IonItem>
+        
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonItem>
+                <IonLabel position="floating"> Texte</IonLabel>
+                <IonTextarea rows={6} spellcheck placeholder="Bonjour à tous, je suis très heureux de vous partager la nouvelle..."></IonTextarea>
+                
+              
+               </IonItem>
+               </IonCol>
+              </IonRow>
 
+
+            <IonRow>
+              <IonCol>
+              <IonItem>
+                <IonLabel position="floating"> Catégorie</IonLabel>
+                <IonInput type="text" placeholder="Nature"></IonInput>
+           
+              </IonItem>
+              </IonCol>
+            
+              
+          </IonRow>
+      
+     <IonRow className="center-things footer">
+        <IonCol >
+                <IonItem>
+                  <IonButton expand="block" ><IonIcon slot="icon-only" icon={imageOutline} /></IonButton>
+                  <IonButton expand="block" ><IonIcon slot="icon-only" icon={documentOutline} /></IonButton>
+                  <IonButton expand="block" ><IonIcon slot="icon-only" icon={videocamOutline} /></IonButton>
+                </IonItem>
+              </IonCol>
+     </IonRow>
+
+
+     
     </IonCardContent>
+
   </IonCard>
   </IonItem>
 
         )
-
-  
 }
 
 export default Submit;

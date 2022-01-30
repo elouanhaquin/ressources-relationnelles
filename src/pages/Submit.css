@@ -1,0 +1,32 @@
+.Submit{
+    color : var(--ion-color-dark);
+}
+
+ion-input {
+    border-bottom: 1px solid var(--ion-color-dark);
+    border-radius: 5px;
+}
+ion-textarea {
+    border-bottom: 1px solid var(--ion-color-dark);
+    border-radius: 5px;
+}
+.Submit ion-icon{
+    color: var(--ion-color-dark-contrast);
+    font-size: 200%;
+}
+.Submit ion-button{
+    width: 15%;
+    height: 75%;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.Submit .center-things{
+    justify-content: center;
+}
+
+.Submit .footer{
+   margin-top: 10%;
+}

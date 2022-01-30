@@ -88,10 +88,10 @@ ion-item ion-note.md {
 
 ion-item{
   background: none;
-font-size: 100%;
-margin-bottom:0;
- /*margin-right: 5%;
- margin-left: 5%;*/
+  font-size: 100%;
+  margin-bottom:0;
+  /*margin-right: 5%;
+  margin-left: 5%;*/
 }
 ion-item h3{
   font-size: 100%;
@@ -99,6 +99,7 @@ ion-item h3{
   font-family: system-ui;
   margin: auto;
   margin-left: 10px;
+  color: var(--ion-color-dark);
   }
 
 ion-footer ion-title {

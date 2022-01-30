@@ -20,7 +20,7 @@ import {
   
   const ProfilItemHeader: React.FC<ProfilItemExample> = ({ profil }) => {
     return (
-        <IonItem color="warning">
+        <IonItem color="warning" className="ProfilItem">
              <IonAvatar>
             <IonImg className="addPic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profil.img}></IonImg>
           </IonAvatar>
