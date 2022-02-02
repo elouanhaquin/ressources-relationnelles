@@ -1,4 +1,5 @@
 
+
 import {
     IonContent,
     IonHeader,
@@ -29,12 +30,12 @@ import {
 
 import { documentAttachSharp, documentOutline, imageOutline, videocamOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
-import './Submit.css';
+import '../pages/Submit.css';
 
-function Submit() {
+function SubmitPopOver() {
   return (
-    <IonItem className="Submit">    
-    <IonCard  className="ion-text-wrap full-width">
+   
+    <IonCard  className="Submit ion-text-wrap full-width">
     
       <IonCardContent>
         
@@ -76,9 +77,9 @@ function Submit() {
     </IonCardContent>
     <IonButton className="button-submit" color="success" expand="block" > Soumettre</IonButton>
   </IonCard>
-  </IonItem>
+
 
         )
 }
 
-export default Submit;
+export default SubmitPopOver;

@@ -1,26 +1,50 @@
 .Submit{
     color : var(--ion-color-dark);
+    margin: 0;
+    height: 100%;
 }
 
-ion-input {
-    border-bottom: 1px solid var(--ion-color-dark);
-    border-radius: 5px;
+.Submit ion-card{
+    padding-bottom: 0;
+   
 }
-ion-textarea {
-    border-bottom: 1px solid var(--ion-color-dark);
-    border-radius: 5px;
+
+.Submit ion-card-content{
+    padding-bottom: 0;
 }
+
+
 .Submit ion-icon{
     color: var(--ion-color-dark-contrast);
     font-size: 200%;
 }
 .Submit ion-button{
-    width: 15%;
+    min-width: 15%;
     height: 75%;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 3%;
     margin-right: 3%;
+}
+
+.Submit ion-input, .Submit ion-textarea{
+   /* padding-left: 10px;
+    padding-right: 1%;
+    border-left: 0.5px solid var(--ion-color-dark) ;
+    border-right: 0.5px solid var(--ion-color-dark) ;
+    background: var(--ion-color-light-tint);*/
+    border-bottom: 0.1px solid var(--ion-color-medium-tint) ;
+    opacity: 1 !important;
+ 
+}
+
+
+.Submit ion-label{
+   /* padding-left: 1%;*/
+    font-weight: 500;
+    font-size: 150% !important;
+    opacity: 0.4 !important;
+    z-index: 10;
 }
 
 .Submit .center-things{
@@ -29,4 +53,16 @@ ion-textarea {
 
 .Submit .footer{
    margin-top: 10%;
+}
+
+.Submit .button-submit{
+    font-weight: 700;
+    font-size: 120%;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 5%;
+    height: 50px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }

@@ -14,10 +14,24 @@ firebase.initializeApp(config);
 
 export async function loginUser(username : string, password : string){
 
-   // const email = '${username}'
+
     try{
 
         const res = await firebase.auth().signInWithEmailAndPassword(username, password);
+        console.log(res);
+        return true;
+    }
+    catch(error){
+    console.log(error);
+    return false;
+   }
+}
+
+export async function RegisterUser(username : string, password : string){
+
+    try{
+
+        const res = await firebase.auth().createUserWithEmailAndPassword(username, password);
         console.log(res);
         return true;
     }

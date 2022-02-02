@@ -15,3 +15,7 @@
 .profileCard img{
    border-radius: 3px;
 }
+.modal-wrapper, .inner-scroll {
+    background: transparent !important;
+  }
+

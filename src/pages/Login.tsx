@@ -1,4 +1,4 @@
-import { IonToast, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading } from '@ionic/react';
 import React, { useState } from 'react';
 import axios from "axios";
 import {
@@ -26,6 +26,7 @@ const Home: React.FC = () => {
   const [email, setEmail] = useState<string>("ressources@relationelles.fr");
   const [password, setPassword] = useState<string>("cesi");
   const [iserror, setIserror] = useState<boolean>(false);
+  const [busy, setBusy] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   async function presentToast(message : string, duration = 2000){
     const toast =  document.createElement('ion-toast');
@@ -39,12 +40,13 @@ const Home: React.FC = () => {
        //return toast.present();
   }
   async function Logged() {
-  
-  //  const res = await loginUser(email, password);
-  //  if(!false)
-  presentToast("dede");
     
-//    console.log (res);
+    setBusy(true);
+    const res = await loginUser(email, password);
+  //  if(!false)
+ // presentToast("dede");
+    setBusy(false);
+    console.log(`${res}`);
   }
 
   return (
@@ -54,6 +56,7 @@ const Home: React.FC = () => {
           <IonTitle>Login</IonTitle>
         </IonToolbar>
       </IonHeader>
+      <IonLoading message="Attendez s'il-vous-plait" duration={0} isOpen={busy}></IonLoading>
       <IonContent fullscreen className="ion-padding ion-text-center">
         <IonGrid>
         <IonRow>
@@ -82,7 +85,7 @@ const Home: React.FC = () => {
             <IonLabel position="floating"> Email</IonLabel>
             <IonInput
                 type="email"
-                value={email}
+                placeholder={email}
                 onIonChange={(e) => setEmail(e.detail.value!)}
                 >
             </IonInput>
@@ -96,7 +99,7 @@ const Home: React.FC = () => {
               <IonLabel position="floating"> Password</IonLabel>
               <IonInput
                 type="password"
-                value={password}
+                placeholder={password}
                 onIonChange={(e) => setPassword(e.detail.value!)}
                 >
               </IonInput>
