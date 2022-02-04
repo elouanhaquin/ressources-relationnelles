@@ -12,6 +12,8 @@ import { personCircle } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 import { IonItem, IonLabel, IonInput, IonButton, IonIcon, IonAlert } from '@ionic/react';
 import {loginUser} from '../firebaseConfig'
+import { setUserState } from '../reducers/action';
+import { useDispatch } from 'react-redux';
 //import {presentToast} from '../toast'
  
 function validateEmail(email: string) {
@@ -28,6 +30,7 @@ const Home: React.FC = () => {
   const [iserror, setIserror] = useState<boolean>(false);
   const [busy, setBusy] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const dispatch = useDispatch();
   async function presentToast(message : string, duration = 2000){
     const toast =  document.createElement('ion-toast');
     toast.message = 'Your settings have been saved.';
@@ -42,10 +45,15 @@ const Home: React.FC = () => {
   async function Logged() {
     
     setBusy(true);
-    const res = await loginUser(email, password);
+    const res : any = await loginUser(email, password);
+    setBusy(false);
+    if(res){
+      dispatch(setUserState(res.email))
+      history.replace('/home');
+    }
   //  if(!false)
  // presentToast("dede");
-    setBusy(false);
+ setBusy(false);
     console.log(`${res}`);
   }
 

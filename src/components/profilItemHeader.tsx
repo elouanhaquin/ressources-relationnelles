@@ -13,12 +13,21 @@ import {
   import { Profil } from '../data/profil';
   import { pin } from 'ionicons/icons'
   import './ProfilItemHeader.css';
-  
+  import {logoutUser} from '../firebaseConfig'
+import { useHistory } from 'react-router';
+
   interface ProfilItemExample {
     profil: Profil;
   }
   
   const ProfilItemHeader: React.FC<ProfilItemExample> = ({ profil }) => {
+   const history = useHistory();
+
+    async function logout(){
+      await logoutUser();
+      history.replace('/login');
+    }
+    
     return (
         <IonItem color="warning" className="ProfilItem">
              <IonAvatar>
@@ -26,11 +35,11 @@ import {
           </IonAvatar>
           <IonLabel>{profil == undefined ? "error" : profil.name}</IonLabel>         
             <IonSelect interface="popover"
-                     onIonChange={e => window.location.href = e.detail.value}
+                     onIonChange={logout}
             >
               <IonSelectOption value="profil">Profil</IonSelectOption>
               <IonSelectOption value="options">Options</IonSelectOption>
-              <IonSelectOption value="deconnection">Deconnection</IonSelectOption>
+              <IonSelectOption onClick={logoutUser}>Deconnection</IonSelectOption>
             </IonSelect>
           
          

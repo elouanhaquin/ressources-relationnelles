@@ -1,20 +1,22 @@
+import firebase from "firebase";
 import { Reponse } from "./reponse";
 
 export interface Message {
-  fromName: string;
-  subject: string;
   category: string;
   content: string;
-  like: number;
-  dislike: number;
-  img: string;
   date: string;
+  dislike: number;
+  fromName: string;
+  img: string;
   id: number;
+  like: number;
   reponse: Reponse;
+  subject: string;
+
 }
 
 const messages: Message[] = [
-  {
+  /*{
     fromName: 'Matt Chorsey',
     subject: 'New event: Trip to Vegas',
     category: "DIY",
@@ -73,10 +75,12 @@ const messages: Message[] = [
     date: '9:32 AM',
     id: 4,
     reponse: {id:0,idAuthor:0,idMessage:0,text:""}
-  },
+  },*/
 
 ];
 
+export const setMessages = (data: Message) => {  messages.push(data)};
 export const getMessages = () => messages;
+
 
 export const getMessage = (id: number) => messages.find(m => m.id === id);

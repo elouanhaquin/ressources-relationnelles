@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSpinner, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Submit from './pages/Submit';
 import Home from './pages/Home';
@@ -25,11 +25,16 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useEffect, useState } from 'react';
+import  {getCurrentUser} from './firebaseConfig'
+import { setUserState } from './reducers/action';
+import {useDispatch} from 'react-redux';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
+const Routing: React.FC = () => {
+  return (
+    
     <IonReactRouter>
       <IonRouterOutlet>
         <Route path="/" exact={true}>
@@ -39,10 +44,10 @@ const App: React.FC = () => (
           <Home />
           </Route>
         <Route path="/message/:id">
-           <ViewMessage />
+          <ViewMessage />
         </Route>
         <Route path="/submit">
-           <Submit />
+          <Submit />
         </Route>
 
         <Route path="/login" component={Login} exact={true}/>
@@ -50,7 +55,33 @@ const App: React.FC = () => (
 
       </IonRouterOutlet>
     </IonReactRouter>
-  </IonApp>
-);
+
+  )
+}
+
+const App: React.FC = () => {
+  const [busy, setBusy] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getCurrentUser().then((user : any) => {
+      if(user){
+        //I'm logged in
+        dispatch(setUserState(user.email))
+        window.history.replaceState({}, '', '/home')
+      }
+      else{
+        window.history.replaceState( {},'', '/login')
+      }
+      setBusy(false)
+    })
+  }, [])
+
+  return (
+      <IonApp>{busy ? <IonSpinner/> :   <Routing/>}
+      
+      </IonApp>
+      )
+  };
 
 export default App;
