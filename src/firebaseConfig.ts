@@ -1,5 +1,6 @@
 import { resolve } from 'dns';
 import * as firebase from 'firebase'
+import { Observable } from 'redux';
 import { getMessages, setMessages, Message } from './data/messages';
 
 
@@ -62,20 +63,26 @@ export async function exportMessagesToDB() {
     const ref =  await firebase.default.database().ref('message');
     ref.push(getMessages());
 };
-
-export const getMessagesFromDB = async () : Promise<Message[]> => {
-    const ref = await firebase.default.database().ref('message');
-    try{
-        ref.on('value', (snapshot) => {
+export const getMessagesFromDB =  () => {
+    const ref =  firebase.default.database().ref('message').once('value').then((snapshot) => {
             const data = snapshot.val();
             const current : Message = data['-Mv4-nZYSk9PoE_cwkWw'][0];
            
             setMessages(current);
-            return current;
+           
         });
-    }catch (e) {
-        throw e; 
-    }
-    return getMessages();
+   return ref;
     
 };
+
+const snapshotToArray = (snapshot: any) => {
+    const returnArr: any[] = []
+  
+    snapshot.forEach((childSnapshot: any) => {
+      const item = childSnapshot.val()
+      item.key = childSnapshot.key
+      returnArr.push(item)
+    });
+  
+    return returnArr;
+  }

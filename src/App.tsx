@@ -26,15 +26,16 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { useEffect, useState } from 'react';
-import  {getCurrentUser} from './firebaseConfig'
+import { getCurrentUser, getMessagesFromDB } from './firebaseConfig'
 import { setUserState } from './reducers/action';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
+import React from 'react';
 
 setupIonicReact();
 
 const Routing: React.FC = () => {
   return (
-    
+
     <IonReactRouter>
       <IonRouterOutlet>
         <Route path="/" exact={true}>
@@ -42,7 +43,7 @@ const Routing: React.FC = () => {
         </Route>
         <Route path="/home" exact={true}>
           <Home />
-          </Route>
+        </Route>
         <Route path="/message/:id">
           <ViewMessage />
         </Route>
@@ -50,8 +51,8 @@ const Routing: React.FC = () => {
           <Submit />
         </Route>
 
-        <Route path="/login" component={Login} exact={true}/>
-        <Route path="/register" component={Register} exact={true}/>
+        <Route path="/login" component={Login} exact={true} />
+        <Route path="/register" component={Register} exact={true} />
 
       </IonRouterOutlet>
     </IonReactRouter>
@@ -59,29 +60,34 @@ const Routing: React.FC = () => {
   )
 }
 
+
+
+
 const App: React.FC = () => {
   const [busy, setBusy] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getCurrentUser().then((user : any) => {
-      if(user){
+    getCurrentUser().then((user: any) => {
+      if (user) {
         //I'm logged in
         dispatch(setUserState(user.email))
         window.history.replaceState({}, '', '/home')
       }
-      else{
-        window.history.replaceState( {},'', '/login')
+      else {
+        window.history.replaceState({}, '', '/login')
       }
       setBusy(false)
     })
   }, [])
 
   return (
-      <IonApp>{busy ? <IonSpinner/> :   <Routing/>}
-      
-      </IonApp>
-      )
-  };
+
+    <IonApp>{busy ? <IonSpinner /> : <Routing />}
+
+    </IonApp>
+
+  )
+};
 
 export default App;

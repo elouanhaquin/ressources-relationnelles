@@ -16,7 +16,7 @@ export interface Message {
 }
 
 const messages: Message[] = [
-  /*{
+ /* {
     fromName: 'Matt Chorsey',
     subject: 'New event: Trip to Vegas',
     category: "DIY",
@@ -84,3 +84,4 @@ export const getMessages = () => messages;
 
 
 export const getMessage = (id: number) => messages.find(m => m.id === id);
+
