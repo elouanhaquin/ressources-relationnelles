@@ -5,7 +5,7 @@ export interface Message {
   category: string;
   content: string;
   date: string;
-  dislike: number;
+  views: number;
   fromName: string;
   img: string;
   id: number;
@@ -16,7 +16,7 @@ export interface Message {
 }
 
 const messages: Message[] = [
- /* {
+  /*{
     fromName: 'Matt Chorsey',
     subject: 'New event: Trip to Vegas',
     category: "DIY",
@@ -79,6 +79,10 @@ const messages: Message[] = [
 
 ];
 
+export const setMessagesBDD = (data: Message[]) => {  
+
+  data.map(m=> messages.includes(m)? m :  messages.push(m));
+};
 export const setMessages = (data: Message) => {  messages.push(data)};
 export const getMessages = () => messages;
 

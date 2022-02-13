@@ -2,8 +2,8 @@ import MessageListItem from '../components/MessageListItem';
 import AddMessage from '../components/AddMessage';
 import ProfilItem from '../components/profilItem';
 import { Profil, getProfil } from '../data/profil';
-import { useState } from 'react';
-import { Message, getMessages } from '../data/messages';
+import { useEffect, useState } from 'react';
+import { Message, getMessages, setMessagesBDD } from '../data/messages';
 import { addOutline } from 'ionicons/icons'
 import {
   IonContent,
@@ -36,6 +36,8 @@ import { exportMessagesToDB, getMessagesFromDB } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
 
+
+
 const Home: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -46,23 +48,31 @@ const Home: React.FC = () => {
 
   useIonViewWillEnter(() => {
     getMessagesFromDB()
-    const msgs = getMessages();
-    setMessages(msgs);
+    // const msgs = getMessages();
+    // setMessages(msgs);
+  //  const msgs = getMessages();
+  //  setMessages([...messages, ...msgs]);
     setBusy(false)
     const prfl = getProfil();
     setProfil(prfl);
   });
 
+  useEffect(() => {
+    // manually deep compare here before updating state
+    return setMessages(messages)
+  }, [messages])
 
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      const msgs = getMessages();
-      setMessages(msgs);
-      e.detail.complete();
+  function refresh() {
 
-
-    }, 1000);
-  };
+    const msgs = getMessages();
+    //if(messages.length != msgs.length){
+      const newArray = msgs.concat(...messages);
+      if(newArray != msgs){
+        setMessages( newArray);
+        setMessagesBDD(newArray);
+      }
+   // }
+  }
 
 
   return (
@@ -70,19 +80,19 @@ const Home: React.FC = () => {
       <IonHeader className="padding-headbar" slot="fixed">
         <IonGrid>
           <IonRow>
-            <IonCol size="4">
+            <IonCol size="3">
               <img src="assets/icon/logoR.svg" width="246" height="43" />
             </IonCol>
-            <IonCol size="3">
+            <IonCol size="5">
               <IonSearchbar>
-                
+
               </IonSearchbar>
             </IonCol>
-            <IonCol size="3">
-              <IonButton routerLink={`/submit/`} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
+            <IonCol size="1">
+              <IonButton href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
 
             </IonCol>
-            <IonCol size="2">
+            <IonCol size="3">
               {profil.map(m => <ProfilItemHeader key={m.id} profil={m} />)}
             </IonCol>
           </IonRow>
@@ -100,14 +110,24 @@ const Home: React.FC = () => {
             </IonTitle>
           </IonToolbar>
         </IonHeader>
-        
+        <IonButton routerLink={"/home"} onClick={refresh}> {messages.length}</IonButton>
         <IonGrid>
           <IonRow>
-            <IonCol size="3"> {profil.map(m => <ProfilItem key={m.id} profil={m} />)} </IonCol>
-            <IonCol size="6"> <IonList>
-              {profil.map(m => <AddMessage key={m.id} profil={m} />)}
-              {busy ? <IonSpinner /> : messages.map(m => <MessageListItem key={m.id} message={m} />)}
-            </IonList> </IonCol>
+            
+            <IonCol className="hidden-lg-down" size="3"> {profil.map(m => <ProfilItem key={m.id} profil={m} />)} </IonCol>
+            <IonCol className="hidden-md-down" size="9">
+              <IonList>
+                {profil.map(m => <AddMessage key={m.id} profil={m} />)}
+                {messages.map(m => <MessageListItem key={m.id} message={m}> {m.category}</MessageListItem>)}
+              </IonList>
+            </IonCol>
+
+            <IonCol className="hidden-md-up" size="12">
+              <IonList>
+                {profil.map(m => <AddMessage key={m.id} profil={m} />)}
+                {!busy ? messages.map(m => <MessageListItem key={m.id} message={m}> {m.category}</MessageListItem>) : <div/>}
+              </IonList>
+            </IonCol>
           </IonRow>
         </IonGrid>
 

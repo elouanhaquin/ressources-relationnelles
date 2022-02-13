@@ -1,7 +1,7 @@
 import { resolve } from 'dns';
 import * as firebase from 'firebase'
 import { Observable } from 'redux';
-import { getMessages, setMessages, Message } from './data/messages';
+import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
 
 
 const config = {
@@ -17,72 +17,111 @@ const config = {
 
 
 firebase.default.initializeApp(config);
-export  function getCurrentUser(){
+export function getCurrentUser() {
     return new Promise((resolve, reject) => {
-        const unsubscribe =  firebase.default.auth().onAuthStateChanged(function(user){
-            if(user){
+        const unsubscribe = firebase.default.auth().onAuthStateChanged(function (user) {
+            if (user) {
                 resolve(user)
-            }else{
+            } else {
                 resolve(null)
             }
             unsubscribe()
         });
     })
-  
 }
 
-export function logoutUser(){
+
+export function logoutUser() {
     return firebase.default.auth().signOut();
 }
 
-export async function loginUser(username : string, password : string){
-    try{
+export async function loginUser(username: string, password: string) {
+    try {
         const res = await firebase.default.auth().signInWithEmailAndPassword(username, password);
         return res;
     }
-    catch(error){
-    console.log(error);
-    return false;
-   }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
 }
 
-export async function RegisterUser(username : string, password : string){
-    try{
+export async function RegisterUser(username: string, password: string) {
+    try {
 
         const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password);
         console.log(res);
         return true;
     }
-    catch(error){
-    console.log(error);
-    return false;
-   }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
 }
 
 export async function exportMessagesToDB() {
-    const ref =  await firebase.default.database().ref('message');
+    const ref = await firebase.default.database().ref('message');
     ref.push(getMessages());
 };
-export const getMessagesFromDB =  () => {
-    const ref =  firebase.default.database().ref('message').once('value').then((snapshot) => {
-            const data = snapshot.val();
-            const current : Message = data['-Mv4-nZYSk9PoE_cwkWw'][0];
-           
-            setMessages(current);
-           
-        });
-   return ref;
+
+export async function exportMessageToDB(data: Message) {
+    const ref = await firebase.default.database().ref();
+    ref.child('Messages').child('' + data.category).child(''+data.id).set(data);
+
+};
+
+export const snapshotToArray = (snapshot: any) => {
+    const returnArr: any[] = []
+
+    snapshot.forEach((childSnapshot: any) => {
+        const item = childSnapshot.val()
+        item.key = childSnapshot.key
+        returnArr.push(item)
+    });
+
+    return returnArr;
+}
+
+export const getMessageFromDB = () => {
+    const ref = firebase.default.database().ref('message').once('value').then((snapshot) => {
+        const data = snapshot.val();
+        const current: Message = data['-Mv4-nZYSk9PoE_cwkWw'];
+        setMessages(current);
+
+    });
+};
+
+export const getMessagesFromDBWithCategory = ( category : string) => {
+    const ref = firebase.default.database().ref('Messages/'+category).once('value').then((snapshot) => {
+        const data = snapshotToArray(snapshot);
+        console.log(data)
+
+        const current: Message[] = data;
+        console.log(current)
+        setMessagesBDD(current);
+
+    });
     
 };
 
-const snapshotToArray = (snapshot: any) => {
-    const returnArr: any[] = []
-  
-    snapshot.forEach((childSnapshot: any) => {
-      const item = childSnapshot.val()
-      item.key = childSnapshot.key
-      returnArr.push(item)
+
+export const getMessagesFromDB = () => {
+    const ref = firebase.default.database().ref('Messages/chasse').once('value').then((snapshot) => {
+        const data = snapshotToArray(snapshot);
+        console.log(data)
+
+        const current: Message[] = data;
+        console.log(current)
+        setMessagesBDD(current);
+
     });
-  
-    return returnArr;
-  }
+};
+
+export const uploadImageToStorage= (path : string, imageName : string) => {
+    let reference = firebase.default.storage().ref(imageName);         // 2
+    let task = reference.putString(path);               // 3
+
+    task.then(() => {                                 // 4
+        console.log('Image uploaded to the bucket!');
+    }).catch((e) => console.log('uploading image error => ', e));
+}

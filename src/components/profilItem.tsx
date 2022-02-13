@@ -2,8 +2,8 @@ import {
     IonItem,
     IonLabel,
     IonNote,
-    IonCard, 
-    IonIcon, 
+    IonCard,
+    IonIcon,
     IonButton,
     IonCardHeader,
     IonCardTitle,
@@ -13,11 +13,11 @@ import {
   import { Profil } from '../data/profil';
   import { pin } from 'ionicons/icons'
   import './ProfilItem.css';
-  
+
   interface ProfilItemExample {
     profil: Profil;
   }
-  
+
   const ProfilItem: React.FC<ProfilItemExample> = ({ profil }) => {
     return (
    //   <IonItem   >
@@ -25,11 +25,10 @@ import {
         <IonCardHeader>
             <img  className="profilePic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profil.img}/>
           <IonCardTitle  >{profil == undefined ? "error" : profil.name}</IonCardTitle>
-        </IonCardHeader>   
+        </IonCardHeader>
       </IonCard>
   //  </IonItem>
     );
   };
-  
+
   export default ProfilItem;
-  

@@ -35,7 +35,7 @@ import '../pages/Submit.css';
 function SubmitPopOver() {
   return (
    
-    <IonCard  className="Submit ion-text-wrap full-width">
+    <IonCard  className="Submit ion-text-wrap ">
     
       <IonCardContent>
         

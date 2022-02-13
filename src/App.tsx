@@ -72,7 +72,7 @@ const App: React.FC = () => {
       if (user) {
         //I'm logged in
         dispatch(setUserState(user.email))
-        window.history.replaceState({}, '', '/home')
+       // window.history.replaceState({}, '', '/home')
       }
       else {
         window.history.replaceState({}, '', '/login')

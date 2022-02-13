@@ -1,24 +1,30 @@
-.Submit{
-    color : var(--ion-color-dark);
+.Submit {
+    color: var(--ion-color-dark);
     margin: 0;
     height: 100%;
 }
 
-.Submit ion-card{
-    padding-bottom: 0;
-   
-}
-
-.Submit ion-card-content{
+.Submit ion-card {
     padding-bottom: 0;
 }
 
+.Submit ion-card-title {
+    font-size: 150%;
+    font-weight: 600;
+}
 
-.Submit ion-icon{
+.Submit ion-card-content {
+    padding-bottom: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.Submit ion-icon {
     color: var(--ion-color-dark-contrast);
     font-size: 200%;
 }
-.Submit ion-button{
+
+.Submit ion-button {
     min-width: 15%;
     height: 75%;
     margin-top: auto;
@@ -27,42 +33,39 @@
     margin-right: 3%;
 }
 
-.Submit ion-input, .Submit ion-textarea{
-   /* padding-left: 10px;
+.Submit ion-input,
+.Submit ion-textarea {
+    /* padding-left: 10px;
     padding-right: 1%;
     border-left: 0.5px solid var(--ion-color-dark) ;
     border-right: 0.5px solid var(--ion-color-dark) ;
     background: var(--ion-color-light-tint);*/
-    border-bottom: 0.1px solid var(--ion-color-medium-tint) ;
+    border-bottom: 0.1px solid var(--ion-color-medium-tint);
     opacity: 1 !important;
- 
 }
 
-
-.Submit ion-label{
-   /* padding-left: 1%;*/
+.Submit ion-label {
+    /* padding-left: 1%;*/
     font-weight: 500;
     font-size: 150% !important;
     opacity: 0.4 !important;
     z-index: 10;
 }
 
-.Submit .center-things{
+.Submit .center-things {
     justify-content: center;
 }
 
-.Submit .footer{
-   margin-top: 10%;
+.Submit .footer {
+    margin-top: 10%;
 }
 
-.Submit .button-submit{
+.Submit .button-submit {
     font-weight: 700;
     font-size: 120%;
     margin-left: 0px;
     margin-right: 0px;
     margin-top: 5%;
     height: 50px;
-    position: fixed;
-    bottom: 0;
     width: 100%;
 }
