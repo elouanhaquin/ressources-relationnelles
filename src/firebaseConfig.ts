@@ -1,6 +1,7 @@
 import { resolve } from 'dns';
 import * as firebase from 'firebase'
 import { Observable } from 'redux';
+import { pathToFileURL } from 'url';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
 
 
@@ -64,9 +65,15 @@ export async function exportMessagesToDB() {
     ref.push(getMessages());
 };
 
+export async function exportMessageToDBInGivenCategory(data: Message) {
+    const ref = await firebase.default.database().ref();
+    ref.child('Messages').child('' + data.category).child('' + data.id).set(data);
+
+};
+
 export async function exportMessageToDB(data: Message) {
     const ref = await firebase.default.database().ref();
-    ref.child('Messages').child('' + data.category).child(''+data.id).set(data);
+    ref.child('Messages').child('' + data.id).set(data);
 
 };
 
@@ -82,26 +89,30 @@ export const snapshotToArray = (snapshot: any) => {
     return returnArr;
 }
 
-export const getMessageFromDB = () => {
-    const ref = firebase.default.database().ref('message').once('value').then((snapshot) => {
-        const data = snapshot.val();
-        const current: Message = data['-Mv4-nZYSk9PoE_cwkWw'];
-        setMessages(current);
 
-    });
-};
-
-export const getMessagesFromDBWithCategory = ( category : string) => {
-    const ref = firebase.default.database().ref('Messages/'+category).once('value').then((snapshot) => {
+export const getMessagesFromDBWithoutCategory = () => {
+    const ref = firebase.default.database().ref('Messages/').once('value').then((snapshot) => {
         const data = snapshotToArray(snapshot);
-        console.log(data)
 
         const current: Message[] = data;
         console.log(current)
         setMessagesBDD(current);
 
     });
-    
+
+};
+
+
+export const getMessagesFromDBWithCategory = (category: string) => {
+    const ref = firebase.default.database().ref('Messages/' + category).once('value').then((snapshot) => {
+        const data = snapshotToArray(snapshot);
+
+        const current: Message[] = data;
+        console.log(current)
+        setMessagesBDD(current);
+
+    });
+
 };
 
 
@@ -117,11 +128,11 @@ export const getMessagesFromDB = () => {
     });
 };
 
-export const uploadImageToStorage= (path : string, imageName : string) => {
-    let reference = firebase.default.storage().ref(imageName);         // 2
-    let task = reference.putString(path);               // 3
+export const uploadImageToStorage = (path: File, imageName: string) => {
+    let reference = firebase.default.storage().ref(imageName);
+    let task = reference.put(path);
 
-    task.then(() => {                                 // 4
+    task.then(() => {
         console.log('Image uploaded to the bucket!');
     }).catch((e) => console.log('uploading image error => ', e));
 }

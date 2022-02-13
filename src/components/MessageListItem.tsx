@@ -38,7 +38,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message}) => {
       <IonCardContent>
         <IonCardSubtitle >{message.content}</IonCardSubtitle>
         
-        <img src= {message.img} />
+        {message.img ?  <img src= {message.img} /> : <div></div>}
       </IonCardContent>
       <IonRow class="footer">
       

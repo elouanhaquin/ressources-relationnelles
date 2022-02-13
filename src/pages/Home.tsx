@@ -32,9 +32,10 @@ import './Home.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
-import { exportMessagesToDB, getMessagesFromDB } from '../firebaseConfig'
+import { exportMessagesToDB, getMessagesFromDB, getMessagesFromDBWithCategory, getMessagesFromDBWithoutCategory } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
+import HeaderBar from '../components/headerBar';
 
 
 
@@ -43,11 +44,11 @@ const Home: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [profil, setProfil] = useState<Profil[]>([]);
   const [busy, setBusy] = useState(true);
-
   const username = useSelector((state: any) => state.userData.username)
 
   useIonViewWillEnter(() => {
-    getMessagesFromDB()
+    getMessagesFromDBWithoutCategory();
+   // getMessagesFromDBWithCategory("chasse")
     // const msgs = getMessages();
     // setMessages(msgs);
   //  const msgs = getMessages();
@@ -77,39 +78,9 @@ const Home: React.FC = () => {
 
   return (
     <IonPage id="home-page">
-      <IonHeader className="padding-headbar" slot="fixed">
-        <IonGrid>
-          <IonRow>
-            <IonCol size="3">
-              <img src="assets/icon/logoR.svg" width="246" height="43" />
-            </IonCol>
-            <IonCol size="5">
-              <IonSearchbar>
-
-              </IonSearchbar>
-            </IonCol>
-            <IonCol size="1">
-              <IonButton href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
-
-            </IonCol>
-            <IonCol size="3">
-              {profil.map(m => <ProfilItemHeader key={m.id} profil={m} />)}
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-
-      </IonHeader>
+      <HeaderBar/>
       <IonContent fullscreen>
 
-
-        <IonHeader collapse="condense">
-
-          <IonToolbar>
-            <IonTitle size="large">
-              ResRel
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonButton routerLink={"/home"} onClick={refresh}> {messages.length}</IonButton>
         <IonGrid>
           <IonRow>

@@ -30,6 +30,8 @@ import { getCurrentUser, getMessagesFromDB } from './firebaseConfig'
 import { setUserState } from './reducers/action';
 import { useDispatch } from 'react-redux';
 import React from 'react';
+import Profil from './pages/Profil';
+import ProfilView from './pages/Profil';
 
 setupIonicReact();
 
@@ -53,6 +55,7 @@ const Routing: React.FC = () => {
 
         <Route path="/login" component={Login} exact={true} />
         <Route path="/register" component={Register} exact={true} />
+        <Route path="/profil" component={ProfilView} exact={true} />
 
       </IonRouterOutlet>
     </IonReactRouter>

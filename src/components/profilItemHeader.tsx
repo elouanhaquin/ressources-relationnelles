@@ -15,31 +15,41 @@ import { pin } from 'ionicons/icons'
 import './ProfilItemHeader.css';
 import { logoutUser } from '../firebaseConfig'
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
 
 interface ProfilItemExample {
   profil: Profil;
 }
 
 const ProfilItemHeader: React.FC<ProfilItemExample> = ({ profil }) => {
+  const username = useSelector((state: any) => state.userData.username)
+  const profilImg = useSelector((state: any) => state.userData.profilImg)
+
   const history = useHistory();
 
-  async function logout() {
+  async function Deconnection() {
     await logoutUser();
     history.replace('/login');
+  }
+  async function Profil() {
+    history.replace('/profil');
+  }
+  async function Options() {
+    history.replace('/options');
   }
 
   return (
     <IonItem color="warning" className="ProfilItem">
       <IonAvatar>
-        <IonImg className="addPic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profil.img}></IonImg>
+        <IonImg className="addPic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profilImg}></IonImg>
       </IonAvatar>
-      <IonLabel>{profil == undefined ? "error" : profil.name}</IonLabel>
+      <IonLabel>{username == undefined ? "error" : username}</IonLabel>
       <IonSelect interface="popover"
-        onIonChange={logout}
+        onIonChange={e=>e.detail.value == "deconnection" ? Deconnection() : e.detail.value == "profil" ? Profil() : e.detail.value == "options" ? Options() : Profil()}
       >
         <IonSelectOption value="profil">Profil</IonSelectOption>
         <IonSelectOption value="options">Options</IonSelectOption>
-        <IonSelectOption onClick={logoutUser}>Deconnection</IonSelectOption>
+        <IonSelectOption value="deconnection" onClick={Deconnection}>Deconnection</IonSelectOption>
       </IonSelect>
 
 

@@ -1,0 +1,13 @@
+.add-message {
+    width: 100%;
+}
+
+.add-message ion-card {
+    width: 100%;
+}
+
+.add-message ion-icon {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 200%;
+}
