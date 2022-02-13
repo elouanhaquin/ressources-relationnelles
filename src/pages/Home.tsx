@@ -32,7 +32,7 @@ import './Home.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
-import { exportMessagesToDB, getMessagesFromDB, getMessagesFromDBWithCategory, getMessagesFromDBWithoutCategory } from '../firebaseConfig'
+import { exportMessagesToDB, getMessagesFromDB, getMessagesFromDBWithCategory, getMessagesFromDBWithoutCategory, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
@@ -64,7 +64,6 @@ const Home: React.FC = () => {
   }, [messages])
 
   function refresh() {
-
     const msgs = getMessages();
     //if(messages.length != msgs.length){
       const newArray = msgs.concat(...messages);

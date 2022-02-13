@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import { ViewToMessageFromDBWithoutCategory } from "../firebaseConfig";
 import { Reponse } from "./reponse";
 
 export interface Message {
@@ -84,7 +85,9 @@ export const setMessagesBDD = (data: Message[]) => {
   data.map(m=> messages.includes(m)? m :  messages.push(m));
 };
 export const setMessages = (data: Message) => {  messages.push(data)};
-export const getMessages = () => messages;
+export const getMessages = () => { messages.forEach(element => {
+  ViewToMessageFromDBWithoutCategory(""+ element.id, 1)
+}); return messages};
 
 
 export const getMessage = (id: number) => messages.find(m => m.id === id);

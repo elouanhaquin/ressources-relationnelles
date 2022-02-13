@@ -74,7 +74,6 @@ export async function exportMessageToDBInGivenCategory(data: Message) {
 export async function exportMessageToDB(data: Message) {
     const ref = await firebase.default.database().ref();
     ref.child('Messages').child('' + data.id).set(data);
-
 };
 
 export const snapshotToArray = (snapshot: any) => {
@@ -97,9 +96,7 @@ export const getMessagesFromDBWithoutCategory = () => {
         const current: Message[] = data;
         console.log(current)
         setMessagesBDD(current);
-
     });
-
 };
 
 
@@ -136,3 +133,23 @@ export const uploadImageToStorage = (path: File, imageName: string) => {
         console.log('Image uploaded to the bucket!');
     }).catch((e) => console.log('uploading image error => ', e));
 }
+
+
+export const LikeToMessageFromDBWithoutCategory = (id: string, like: number) => {
+
+
+    var adaRankRef = firebase.default.database().ref('Messages/' + id + '/like');
+    adaRankRef.transaction(function (currentRank) {
+        // If users/ada/rank has never been set, currentRank will be `null`.
+        return currentRank + like;
+    });
+};
+
+
+export const ViewToMessageFromDBWithoutCategory = (id: string, like: number) => {
+    var adaRankRef = firebase.default.database().ref('Messages/' + id + '/views');
+    adaRankRef.transaction(function (currentRank) {
+        // If users/ada/rank has never been set, currentRank will be `null`.
+        return currentRank + like;
+    });
+};
