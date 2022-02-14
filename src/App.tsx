@@ -26,7 +26,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { useEffect, useState } from 'react';
-import { getCurrentUser, getMessagesFromDB } from './firebaseConfig'
+import { getCurrentUser } from './firebaseConfig'
 import { setUserState } from './reducers/action';
 import { useDispatch } from 'react-redux';
 import React from 'react';
@@ -49,11 +49,15 @@ const Routing: React.FC = () => {
         <Route path="/message/:id">
           <ViewMessage />
         </Route>
+        <Route path="/profil/:id">
+          <ProfilView />
+        </Route>
         <Route path="/submit">
           <Submit />
         </Route>
 
         <Route path="/login" component={Login} exact={true} />
+        <Route path="/" component={Login} exact={true} />
         <Route path="/register" component={Register} exact={true} />
         <Route path="/profil" component={ProfilView} exact={true} />
 

@@ -2,8 +2,9 @@ import { resolve } from 'dns';
 import * as firebase from 'firebase'
 import { Observable } from 'redux';
 import { pathToFileURL } from 'url';
+import { DBWrapper } from 'workbox-core/_private';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
-import { Profil, setProfil } from './data/profil';
+import { addProfilBBD, Profil, setProfilsBDD } from './data/profil';
 
 
 const config = {
@@ -56,7 +57,11 @@ export async function loginUserGetUID(username: string, password: string) {
 export async function RegisterUser(username: string, password: string) {
     try {
 
-        const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password);
+        const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password).then(cred => {
+            return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
+                name: username
+            })
+        });
         console.log(res);
         return true;
     }
@@ -79,6 +84,10 @@ export async function exportMessageToDBInGivenCategory(data: Message) {
 
 export async function exportMessageToFireStoreDB(data: Message) {
     const ref = await firebase.default.firestore().collection('messages');
+    ref.doc("" + data.id).set(data);
+};
+export async function exportProfilToFireStoreDB(data: Profil) {
+    const ref = await firebase.default.firestore().collection('profils');
     ref.doc("" + data.id).set(data);
 };
 
@@ -107,18 +116,9 @@ export const snapshotToArray = (snapshot: any) => {
 
 
 
-export const getMessagesFromFireStoreDB = () => {
-    const ref =  firebase.default.firestore().collection('messages').get().then((snapshot) => {
-        const data = snapshotToArray(snapshot.docs);
-        const current: Message[] = data;
-        console.log(current)
-        setMessagesBDD(current);
-
-    });
-}
 
 
-
+/*
 export const getMessagesFromDBWithoutCategory = () => {
     const ref = firebase.default.database().ref('Messages/').once('value').then((snapshot) => {
         const data = snapshotToArray(snapshot);
@@ -153,7 +153,7 @@ export const getMessagesFromDB = () => {
         setMessagesBDD(current);
 
     });
-};
+};*/
 
 export const uploadImageToStorage = (path: File, imageName: string) => {
     let reference = firebase.default.storage().ref(imageName);
@@ -164,37 +164,99 @@ export const uploadImageToStorage = (path: File, imageName: string) => {
     }).catch((e) => console.log('uploading image error => ', e));
 }
 
-export const getProfilWithID = (id: string) => {
-    const ref = firebase.default.database().ref('Profil/' + id).once('value').then((snapshot) => {
-        const data = snapshotToArray(snapshot);
 
+export const getProfilFromFireStoreDBwithID = (id: string) => {
+
+    const te = firebase.default.firestore().collection('profils').doc(id);
+   return  firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(te).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            const profi: Profil =
+            {
+                name: sfDoc.get("name"),
+                lastName: sfDoc.get("lastName"),
+                firstName: sfDoc.get("firstName"),
+                img: sfDoc.get("img"),
+                id: Number.parseInt(id)
+            };
+            return profi;
+        });
+    })
+
+}
+
+
+export const getProfilFromFireStoreDB = () => {
+    const ref = firebase.default.firestore().collection('profils').get().then((snapshot) => {
+        const data = snapshotToArray(snapshot.docs);
         const current: Profil[] = data;
         console.log(current)
-        setProfil(current);
+        setProfilsBDD(current);
     });
-};
+}
 
-
-export const getProfilsBDD = () => {
-    const ref = firebase.default.database().ref('Profil/').once('value').then((snapshot) => {
-        const data = snapshotToArray(snapshot);
-
-        const current: Profil[] = data;
+export const getMessagesFromFireStoreDB = () => {
+    const ref = firebase.default.firestore().collection('messages').get().then((snapshot) => {
+        const data = snapshotToArray(snapshot.docs);
+        const current: Message[] = data;
         console.log(current)
-        setProfil(current);
+        setMessagesBDD(current);
     });
-};
-
+}
 
 export const LikeToMessageFromDBWithoutCategory = (id: string, like: number) => {
-
-
     var adaRankRef = firebase.default.database().ref('Messages/' + id + '/like');
     adaRankRef.transaction(function (currentRank) {
         // If users/ada/rank has never been set, currentRank will be `null`.
         return currentRank + like;
     });
 };
+
+
+export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    console.log(id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("like") + 1;
+            transaction.update(sfDocRef, { like: newPopulation });
+            return newPopulation;
+        });
+    }).then((newPopulation) => {
+        console.log("Like increased to ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+
+};
+
+export const ViewMessageFromDBFireStore = (id: string, like: number) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    console.log(id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation = sfDoc.get("views") + 1;
+            transaction.update(sfDocRef, { views: newPopulation });
+            return newPopulation;
+        });
+    }).then((newPopulation) => {
+        console.log("Views increased to ", newPopulation);
+    }).catch((err) => {
+        console.error(err);
+    });
+
+};
+
 
 
 export const ViewToMessageFromDBWithoutCategory = (id: string, like: number) => {
