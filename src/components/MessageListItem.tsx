@@ -58,7 +58,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
 
           <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
           <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
-          <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.idMessage}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
+          <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
           <IonItem><IonIcon icon={shareSocialOutline}></IonIcon><h3 className="hidden-md-down">Partager</h3></IonItem>
           <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
 

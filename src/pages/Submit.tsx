@@ -33,7 +33,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import HeaderBar from '../components/headerBar';
 import { Message } from '../data/messages';
-import { exportMessageToDB, getCurrentUser, uploadImageToStorage } from '../firebaseConfig';
+import { exportMessageToDB, exportMessageToFireStoreDB, getCurrentUser, uploadImageToStorage } from '../firebaseConfig';
 
 import './Submit.css';
 
@@ -75,12 +75,12 @@ function Submit() {
           views: 0,
           date: "" + getDate(),
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
-          reponse: { id: 0, idAuthor: 0, idMessage: 0, text: "" }
+          reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "" }]
         }
        // uploadImageToStorage(selectedImage, selectedImage.toLowerCase().split("\\")[selectedImage.toLowerCase().split("\\").length-1])
         //uploadImageToStorage(imageAsFile, selectedImage.toLowerCase().split("\\")[selectedImage.toLowerCase().split("\\").length-1] )
 
-        exportMessageToDB(messages);
+        exportMessageToFireStoreDB(messages);
       }
 
     })

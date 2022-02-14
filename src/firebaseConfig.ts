@@ -3,6 +3,7 @@ import * as firebase from 'firebase'
 import { Observable } from 'redux';
 import { pathToFileURL } from 'url';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
+import { Profil, setProfil } from './data/profil';
 
 
 const config = {
@@ -39,12 +40,17 @@ export function logoutUser() {
 export async function loginUser(username: string, password: string) {
     try {
         const res = await firebase.default.auth().signInWithEmailAndPassword(username, password);
-        return res;
+        return "" + res;
     }
     catch (error) {
         console.log(error);
-        return false;
+        return "undefined";
     }
+}
+
+export async function loginUserGetUID(username: string, password: string) {
+    const res = (await firebase.default.auth().signInWithEmailAndPassword(username, password)).user?.uid;
+    return "" + res;
 }
 
 export async function RegisterUser(username: string, password: string) {
@@ -71,22 +77,46 @@ export async function exportMessageToDBInGivenCategory(data: Message) {
 
 };
 
+export async function exportMessageToFireStoreDB(data: Message) {
+    const ref = await firebase.default.firestore().collection('messages');
+    ref.doc("" + data.id).set(data);
+};
+
 export async function exportMessageToDB(data: Message) {
     const ref = await firebase.default.database().ref();
     ref.child('Messages').child('' + data.id).set(data);
+};
+
+
+export async function exportProfilToDB(data: Profil) {
+    const ref = await firebase.default.database().ref();
+    ref.child('Profils').child('' + data.id).set(data);
 };
 
 export const snapshotToArray = (snapshot: any) => {
     const returnArr: any[] = []
 
     snapshot.forEach((childSnapshot: any) => {
-        const item = childSnapshot.val()
+        const item = childSnapshot.data()
         item.key = childSnapshot.key
         returnArr.push(item)
     });
 
     return returnArr;
 }
+
+
+
+export const getMessagesFromFireStoreDB = () => {
+    const ref =  firebase.default.firestore().collection('messages').get().then((snapshot) => {
+        const data = snapshotToArray(snapshot.docs);
+        const current: Message[] = data;
+        console.log(current)
+        setMessagesBDD(current);
+
+    });
+}
+
 
 
 export const getMessagesFromDBWithoutCategory = () => {
@@ -133,6 +163,27 @@ export const uploadImageToStorage = (path: File, imageName: string) => {
         console.log('Image uploaded to the bucket!');
     }).catch((e) => console.log('uploading image error => ', e));
 }
+
+export const getProfilWithID = (id: string) => {
+    const ref = firebase.default.database().ref('Profil/' + id).once('value').then((snapshot) => {
+        const data = snapshotToArray(snapshot);
+
+        const current: Profil[] = data;
+        console.log(current)
+        setProfil(current);
+    });
+};
+
+
+export const getProfilsBDD = () => {
+    const ref = firebase.default.database().ref('Profil/').once('value').then((snapshot) => {
+        const data = snapshotToArray(snapshot);
+
+        const current: Profil[] = data;
+        console.log(current)
+        setProfil(current);
+    });
+};
 
 
 export const LikeToMessageFromDBWithoutCategory = (id: string, like: number) => {
