@@ -1,58 +1,67 @@
-ion-item {
-  /*--padding-start: 20vw;
+.message-list-item {
+    /*--padding-start: 20vw;
   --inner-padding-end: 20vw;
 /*  margin-bottom: 80vh;*/
-  border-radius: 0.3em !important;
-  border-collapse: separate;
-  margin-bottom: 2vh;
-  align-self: center;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
+    border-radius: 0.3em !important;
+    border-collapse: separate;
+    margin-bottom: 2vh;
+    align-self: center;
+    margin-right: auto;
+    max-width: 800px;
 }
 
-ion-label {
-  margin-top: 12px;
-  margin-bottom: auto;
+.message-list-item ion-label {
+    margin-top: 12px;
+    margin-bottom: auto;
 }
 
-ion-item h2 {
-  font-weight: 600;
-  margin: 0;
+.message-list-item h2 {
+    font-weight: 600;
+    margin: 0;
 }
 
-ion-item p {
-  /*text-overflow: ellipsis;
+.message-list-item p {
+    /*text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;*/
-  width: 95%;
-}
-ion-item .name{
-  font-style: italic;
+    width: 95%;
 }
 
-ion-item .date {
-  float: right;
-  align-items: center;
-  display: flex;
+.message-list-item .name {
+    font-style: italic;
 }
 
-ion-item ion-icon {
-  color: #c9c9ca;
+.message-list-item ion-card-subtitle {
+    font-style: italic;
 }
 
-ion-item ion-note {
-  font-size: 15px;
-  margin-right: 8px;
-  font-weight: normal;
+.message-list-item .date {
+    font-style: normal;
+    color: var(--ion-color-secondary);
+    margin-top: 0%;
+    padding-top: 0%;
+    float: right;
+    align-items: center;
+    display: flex;
 }
 
-ion-item ion-note.md {
-  margin-right: 14px;
+.message-list-item ion-icon {
+    color: #c9c9ca;
 }
 
-.dot {
-  display: none;/*
+.message-list-item ion-note {
+    font-size: 15px;
+    margin-right: 8px;
+    font-weight: normal;
+}
+
+.message-list-item ion-note.md {
+    margin-right: 14px;
+}
+
+.message-list-item .dot {
+    display: none;
+    /*
   height: 12px;
   width: 12px;
   border-radius: 50%;
@@ -60,11 +69,72 @@ ion-item ion-note.md {
   margin: 16px 10px 16px 16px;*/
 }
 
-.dot-unread {
-  background: var(--ion-color-primary);
+.message-list-item .dot-unread {
+    background: var(--ion-color-primary);
 }
 
-ion-footer ion-title {
-  font-size: 11px;
-  font-weight: normal;
+.message-list-item .full-width {
+    width: 100%;
+}
+
+.message-list-item .iconAdd {
+    margin: auto;
+    font-size: 300%;
+    font-weight: 500;
+}
+
+.centerThings {
+    display: flex;
+    justify-content: center;
+}
+
+.message-list-item {
+    background: none;
+    font-size: 100%;
+    margin-bottom: 0;
+    /*margin-right: 5%;
+  margin-left: 5%;*/
+}
+
+.message-list-item h3 {
+    font-size: 100%;
+    font-weight: 300;
+    font-family: system-ui;
+    margin: auto;
+    margin-left: 10px;
+    color: var(--ion-color-dark);
+}
+
+.message-list-item img {
+    margin-top: 15px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 500px;
+    min-height: 250px;
+    object-fit: scale-down;
+}
+
+.message-list-item .footer {
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.message-list-item ion-card-content {
+    padding: 0;
+}
+
+.message-list-item ion-card-content ion-card-subtitle {
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.message-list-item ion-icon {
+    cursor: pointer;
+}
+
+.message-list-item ion-footer ion-title {
+    font-size: 100%;
+    font-weight: normal;
 }

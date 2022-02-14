@@ -1,0 +1,32 @@
+.profil .content {
+    width: 90%;
+    margin: auto;
+}
+
+.profil .content ion-row {
+    width: 90%;
+    margin: auto;
+}
+
+.profil .profile-pic {
+    height: 200px;
+    width: 200px;
+    border-radius: 500px;
+    margin: 0;
+}
+
+.profil ion-img {
+    border-radius: 50px;
+    max-width: 500px;
+}
+
+.profil ion-col ion-card-title {
+    margin-top: 0;
+    font-size: 150%;
+    width: 100%;
+    text-align: left;
+}
+
+.profil ion-col ion-card-title:first-of-type {
+    font-weight: 700;
+}

@@ -1,4 +1,4 @@
-import { IonToast, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading } from '@ionic/react';
 import React, { useState } from 'react';
 import axios from "axios";
 import {
@@ -12,6 +12,8 @@ import { personCircle } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 import { IonItem, IonLabel, IonInput, IonButton, IonIcon, IonAlert } from '@ionic/react';
 import {loginUser} from '../firebaseConfig'
+import { setUserState } from '../reducers/action';
+import { useDispatch } from 'react-redux';
 //import {presentToast} from '../toast'
  
 function validateEmail(email: string) {
@@ -26,7 +28,9 @@ const Home: React.FC = () => {
   const [email, setEmail] = useState<string>("ressources@relationelles.fr");
   const [password, setPassword] = useState<string>("cesi");
   const [iserror, setIserror] = useState<boolean>(false);
+  const [busy, setBusy] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const dispatch = useDispatch();
   async function presentToast(message : string, duration = 2000){
     const toast =  document.createElement('ion-toast');
     toast.message = 'Your settings have been saved.';
@@ -39,12 +43,18 @@ const Home: React.FC = () => {
        //return toast.present();
   }
   async function Logged() {
-  
-  //  const res = await loginUser(email, password);
-  //  if(!false)
-  presentToast("dede");
     
-//    console.log (res);
+    setBusy(true);
+    const res : any = await loginUser(email, password);
+    setBusy(false);
+    if(res){
+      dispatch(setUserState(res.email))
+      history.replace('/home');
+    }
+  //  if(!false)
+ // presentToast("dede");
+ setBusy(false);
+    console.log(`${res}`);
   }
 
   return (
@@ -54,6 +64,7 @@ const Home: React.FC = () => {
           <IonTitle>Login</IonTitle>
         </IonToolbar>
       </IonHeader>
+      <IonLoading message="Attendez s'il-vous-plait" duration={0} isOpen={busy}></IonLoading>
       <IonContent fullscreen className="ion-padding ion-text-center">
         <IonGrid>
         <IonRow>
@@ -82,7 +93,7 @@ const Home: React.FC = () => {
             <IonLabel position="floating"> Email</IonLabel>
             <IonInput
                 type="email"
-                value={email}
+                placeholder={email}
                 onIonChange={(e) => setEmail(e.detail.value!)}
                 >
             </IonInput>
@@ -96,7 +107,7 @@ const Home: React.FC = () => {
               <IonLabel position="floating"> Password</IonLabel>
               <IonInput
                 type="password"
-                value={password}
+                placeholder={password}
                 onIonChange={(e) => setPassword(e.detail.value!)}
                 >
               </IonInput>
