@@ -7,12 +7,12 @@ export interface Profil {
   likes?: Message[];
   categories?: string[];
   img: string;
-  uid: string;
+  uid?: string;
   id: number;
 }
 
 const profils: Profil[] = [
-  {
+ /* {
     name: 'Matt Chorsey',
     firstName: "",
     lastName: "",
@@ -20,12 +20,12 @@ const profils: Profil[] = [
     categories: ["chasse", "peche"],
     uid:"0",
     id: 0
-  }
+  }*/
 ];
 
 export const getProfil = () => profils;
-export const setProfil = (pro : Profil[]) => {pro.map(m=> profils.includes(m)? m :  profils.push(m));};
-
+export const setProfilsBDD = (pro : Profil[]) => {pro.map(m=> profils.includes(m)? m :  profils.push(m));};
+export const addProfilBBD = (pro : Profil) =>  profils.push(pro);
 export const getProfilWithID = (id: number) => profils.find(m => m.id === id);
 
 

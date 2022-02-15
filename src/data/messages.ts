@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { ViewToMessageFromDBWithoutCategory } from "../firebaseConfig";
+import { ViewMessageFromDBFireStore, ViewToMessageFromDBWithoutCategory } from "../firebaseConfig";
 import { Reponse } from "./reponse";
 
 export interface Message {
@@ -86,7 +86,7 @@ export const setMessagesBDD = (data: Message[]) => {
 };
 export const setMessages = (data: Message) => {  messages.push(data)};
 export const getMessages = () => { messages.forEach(element => {
-  ViewToMessageFromDBWithoutCategory(""+ element.id, 1)
+  ViewMessageFromDBFireStore(""+ element.id, 1)
 }); return messages};
 
 

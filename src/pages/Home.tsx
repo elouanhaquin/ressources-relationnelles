@@ -32,7 +32,7 @@ import './Home.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
-import { exportMessagesToDB, getMessagesFromDB, getMessagesFromDBWithCategory, getMessagesFromDBWithoutCategory, getMessagesFromFireStoreDB, getProfilsBDD, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig'
+import { exportMessagesToDB, getMessagesFromFireStoreDB, getProfilFromFireStoreDB, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
@@ -48,7 +48,7 @@ const Home: React.FC = () => {
 
   useIonViewWillEnter(() => {
     getMessagesFromFireStoreDB();
-    getProfilsBDD();
+    getProfilFromFireStoreDB();
     // getMessagesFromDBWithCategory("chasse")
     // const msgs = getMessages();
     // setMessages(msgs);

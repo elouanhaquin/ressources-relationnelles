@@ -17,7 +17,7 @@ import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, 
 import './MessageListItem.css';
 import { Reponse } from '../data/reponse';
 import { useState } from 'react';
-import { LikeToMessageFromDBWithoutCategory } from '../firebaseConfig';
+import { LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig';
 
 interface MessageListItemProps {
   message: Message;
@@ -33,7 +33,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
   function likeItem() {
     if (!isLike) {
       setLike(true);
-      LikeToMessageFromDBWithoutCategory('' + message.id, 1)
+      LikeToMessageFromDBFireStore('' + message.id, 1)
     }
 
   }
