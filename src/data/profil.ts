@@ -4,7 +4,7 @@ export interface Profil {
   name: string;
   firstName: string;
   lastName: string;
-  likes?: Message[];
+  likes?: number[];
   categories?: string[];
   img: string;
   uid?: string;

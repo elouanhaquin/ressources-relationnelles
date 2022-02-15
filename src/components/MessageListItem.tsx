@@ -17,23 +17,35 @@ import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, 
 import './MessageListItem.css';
 import { Reponse } from '../data/reponse';
 import { useState } from 'react';
-import { LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig';
+import { getCurrentUIDUserFireBase, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore } from '../firebaseConfig';
+import { useSelector } from 'react-redux';
 
 interface MessageListItemProps {
   message: Message;
+  uid : string
 }
 
 interface ReponseItem {
 
 }
 
-const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
+const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
   const [isLike, setLike] = useState<Boolean>();
+  const email = useSelector((state: any) => state.userData.email)
 
+  
   function likeItem() {
-    if (!isLike) {
-      setLike(true);
-      LikeToMessageFromDBFireStore('' + message.id, 1)
+    console.log("uid : " +uid);
+    if(uid.length > 0){
+
+      if (!isLike) {
+        setLike(true);
+        LikeToMessageFromDBFireStore('' + message.id, 1)
+        LikeToProfilFromDBFireStore(uid,"" + message.id)
+      }else{
+        setLike(false);
+        LikeToMessageFromDBFireStore('' + message.id, -1)
+      }
     }
 
   }
@@ -58,7 +70,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
 
           <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
           <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
-          <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
+          <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.filter(r => r.text.length > 0).length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
           <IonItem><IonIcon icon={shareSocialOutline}></IonIcon><h3 className="hidden-md-down">Partager</h3></IonItem>
           <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
 

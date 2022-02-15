@@ -167,8 +167,8 @@ export const uploadImageToStorage = (path: File, imageName: string) => {
 
 export const getProfilFromFireStoreDBwithID = (id: string) => {
 
-    const te = firebase.default.firestore().collection('profils').doc(id);
-   return  firebase.default.firestore().runTransaction((transaction) => {
+    const te = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(te).then((sfDoc) => {
             if (!sfDoc.exists) {
                 throw "Document does not exist!";
@@ -236,6 +236,48 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
     });
 
 };
+
+export const LikeToProfilFromDBFireStore = (id: string, idRessource: string) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    console.log(id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("like");
+            if (!newPopulation.includes(idRessource))
+                newPopulation.push(idRessource)
+            transaction.update(sfDocRef, { like: newPopulation });
+            return idRessource;
+        });
+    }).then((newPopulation) => {
+        console.log("Like increased to ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+
+};
+
+export const getCurrentUIDUserFireBase = (email: string) => {
+   firebase.default.firestore().collection('profils').get().then((snapshot) => {
+        const data = snapshotToArray(snapshot.docs);
+        try{
+            const current: any = data.filter(d => d.name == email)[0].id;
+            console.log( current)
+            return "" + current;    
+        }catch(e){
+            console.error(e)
+        }
+    });
+
+    return ""
+};
+
+
+
 
 export const ViewMessageFromDBFireStore = (id: string, like: number) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);

@@ -10,6 +10,7 @@ export default function reducer(state = defaultState, {type, payload} : {type:st
             return {...state, 
             userData:{
                 username: (payload.charAt(0).toUpperCase() + payload.slice(1)).split('@')[0],
+                email: payload,
                 uid: payload.uid,
                 profilImg:  'https://pbs.twimg.com/media/EWZwV1WWsAAMhkv.jpg',
                 location:  'Lannion',
