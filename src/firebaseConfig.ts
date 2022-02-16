@@ -63,7 +63,7 @@ export async function getUIDCurrentUser() {
 
 export async function RegisterUser(username: string, password: string) {
     try {
-
+         
         const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
                 name: username,
@@ -183,6 +183,7 @@ export async function  getImageTypeFromStorage(imageName: string){
     });
 
 }
+
 
 
 

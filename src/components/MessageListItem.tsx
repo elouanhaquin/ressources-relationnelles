@@ -15,7 +15,10 @@ import {
   IonImg,
   IonInput,
   IonSlides,
-  IonSlide
+  IonSlide,
+  IonAccordion,
+  IonList,
+  IonAccordionGroup
 } from '@ionic/react';
 import { Message } from '../data/messages';
 import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward } from 'ionicons/icons'
@@ -25,6 +28,8 @@ import { useEffect, useState } from 'react';
 import { getImageTypeFromStorage, isMessageLiked, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore } from '../firebaseConfig';
 import { useSelector } from 'react-redux';
 import { Document, Page, pdfjs } from "react-pdf";
+import CommentListItem from './CommentListItem';
+import { randomInt } from 'crypto';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface MessageListItemProps {
@@ -36,11 +41,14 @@ interface ReponseItem {
 
 }
 
+const arrayOfNumbers = [ 0,1,2,3,4,5];
+
 const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
   const [isLike, setLike] = useState<Boolean>();
   const [busy, setBusy] = useState<Boolean>(true);
   const [isPDF, setPDF] = useState<Boolean>(false);
-  const [numPages, setNumPages] = useState<number>(0);
+  const [display, setDisplay] = useState<Boolean>(false);
+  const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
 
 
@@ -48,7 +56,6 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
 
   function onDocumentLoadSuccess(_numPages: number) {
     setNumPages(_numPages);
-    console.log(numPages)
     setPDF(true)
   }
   function onDocumentLoadError(e: any) {
@@ -114,11 +121,10 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
   }
 
   const slideOpts = {
-    initialSlide: 1,
+    initialSlide: 0,
     speed: 400
   };
-
-  return (!busy ?
+  return (!busy ? 
     <IonItem className="message-list-item" slot="start" detail={false}>
       <IonCard className="ion-text-wrap full-width">
         <IonCardHeader>
@@ -129,13 +135,20 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
         <IonCardContent>
           <IonCardSubtitle >{message.content}</IonCardSubtitle>
 
-          {isPDF && message.img ?
+          {isPDF && message.img && !display?
             <div>
 
 
               <Document file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
                 <IonSlides pager={true} options={slideOpts}  onIonSlideDoubleTap={e=>changePage(1) }>
-                    {[pageNumber+1, ...Array(numPages > 5 ? 5 : numPages)].map((e, i) => {return <IonSlide  ><Page pageNumber={i}  />    </IonSlide>})}
+                    {arrayOfNumbers.map((e, i) => {
+              
+
+                      return (
+                      <IonSlide  >
+                        <Page key={i} pageNumber={i + 1}  />    
+                        </IonSlide>)
+                    })}
                 </IonSlides>
               </Document>
              
@@ -152,7 +165,9 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
           <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
 
         </IonRow>
-
+        <CommentListItem  key={message.id} message={message} uid={uid}/>
+       
+  
       </IonCard>
 
     </IonItem> : <div></div>

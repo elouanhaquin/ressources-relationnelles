@@ -1,0 +1,19 @@
+.comment ion-item ion-label {
+    color: var( --ion-color-medium-shade) !important;
+}
+
+.comment ion-list ion-label {
+    color: var( --ion-color-dark-shade) !important;
+}
+
+.comment ion-list ion-item {
+    border-radius: 15px;
+    margin-bottom: 5px;
+    width: 90%;
+    margin: auto;
+}
+
+.comment {
+    width: 90%;
+    margin: auto;
+}
