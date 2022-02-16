@@ -67,7 +67,7 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
                     <IonLabel>Voir le{numCom > 1 ? 's ' + numCom : ''}  commentaire{numCom > 1 ? 's' : ''}...</IonLabel>
                 </IonItem>
                 <IonList slot="content">
-                    {message.reponse.filter(g => g.text.length>1).map(m =>
+                    {message.reponse.filter(g => g.text.length > 1 && g.id + 11 > message.reponse.length).map(m =>
                         < IonItem key={m.id}> 
                             <div className="item-content">
 
