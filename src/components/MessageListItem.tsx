@@ -41,17 +41,13 @@ interface ReponseItem {
 
 }
 
-const arrayOfNumbers = [ 0,1,2,3,4,5];
+const arrayOfNumbers = [0, 1, 2, 3, 4, 5];
 
-const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
-  const [isLike, setLike] = useState<Boolean>();
-  const [busy, setBusy] = useState<Boolean>(true);
-  const [isPDF, setPDF] = useState<Boolean>(false);
-  const [display, setDisplay] = useState<Boolean>(false);
+const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
   const [numPages, setNumPages] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState(1);
-
-
+  const [isPDF, setPDF] = useState<Boolean>(false);
+  const [busy, setBusy] = useState<Boolean>(true);
 
 
   function onDocumentLoadSuccess(_numPages: number) {
@@ -62,6 +58,41 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
     console.log(e)
     setPDF(false)
   }
+  function changePage(numpage: number) {
+    if (pageNumber + numpage > 1 && pageNumber + numpage < numPages + 1)
+      setPageNumber(pageNumber + numpage);
+  }
+  useEffect(() => {
+    if (busy) {
+        setBusy(false);
+    }
+  });
+
+
+  const slideOpts = {
+    initialSlide: 0,
+    speed: 400
+  };
+
+  return ( !busy ? 
+  <Document file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
+    <IonSlides pager={true} options={slideOpts} onIonSlideDoubleTap={e => changePage(1)}>
+      {arrayOfNumbers.map((e, i) => {
+        return (
+          <IonSlide  >
+            <Page key={i} pageNumber={i + 1} />
+          </IonSlide>)
+      })}
+    </IonSlides>
+  </Document> : <div/>)
+}
+
+const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
+  const [isLike, setLike] = useState<Boolean>();
+  const [busy, setBusy] = useState<Boolean>(true);
+  const [isPDF, setPDF] = useState<Boolean>(false);
+  const [display, setDisplay] = useState<Boolean>(false);
+ 
 
 
   useEffect(() => {
@@ -115,16 +146,8 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
     }
   }
 
-  function changePage(numpage: number) {
-    if (pageNumber + numpage > 1 && pageNumber + numpage < numPages + 1)
-      setPageNumber(pageNumber + numpage);
-  }
 
-  const slideOpts = {
-    initialSlide: 0,
-    speed: 400
-  };
-  return (!busy ? 
+  return (!busy ?
     <IonItem className="message-list-item" slot="start" detail={false}>
       <IonCard className="ion-text-wrap full-width">
         <IonCardHeader>
@@ -135,23 +158,12 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
         <IonCardContent>
           <IonCardSubtitle >{message.content}</IonCardSubtitle>
 
-          {isPDF && message.img && !display?
+          {isPDF && message.img && !display ?
             <div>
 
+          <Carousel key={message.id} message={message} uid={uid} />
+           
 
-              <Document file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
-                <IonSlides pager={true} options={slideOpts}  onIonSlideDoubleTap={e=>changePage(1) }>
-                    {arrayOfNumbers.map((e, i) => {
-              
-
-                      return (
-                      <IonSlide  >
-                        <Page key={i} pageNumber={i + 1}  />    
-                        </IonSlide>)
-                    })}
-                </IonSlides>
-              </Document>
-             
             </div>
             : !isPDF && message.img ?
               <img src={message.img} /> : <div />}
@@ -165,9 +177,9 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
           <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
 
         </IonRow>
-        <CommentListItem  key={message.id} message={message} uid={uid}/>
-       
-  
+        <CommentListItem key={message.id} message={message} uid={uid} />
+
+
       </IonCard>
 
     </IonItem> : <div></div>
