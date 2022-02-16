@@ -255,6 +255,23 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
 
 };
 
+export const ReplyToMessageFromDBFireStore = (id: string, message: string, sender : string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("reponse")
+            newPopulation = newPopulation.concat({...{id: newPopulation.length, idAuthor: sender, text: message}});
+            transaction.update(sfDocRef, { reponse: newPopulation });
+            return newPopulation;
+        });
+    })
+
+};
+
 export async function isMessageLiked (id: string, idRessource: string) {
     var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
     return  firebase.default.firestore().runTransaction((transaction) => {
