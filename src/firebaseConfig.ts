@@ -163,13 +163,17 @@ export const getMessagesFromDB = () => {
     });
 };*/
 
-export const uploadImageToStorage = (path: File, imageName: string) => {
+export async function  uploadImageToStorage(path: Blob, imageName: string){
     let reference = firebase.default.storage().ref(imageName);
     let task = reference.put(path);
 
-    task.then(() => {
+    return task.then(() => {
         console.log('Image uploaded to the bucket!');
+        return reference.getDownloadURL() 
+
     }).catch((e) => console.log('uploading image error => ', e));
+
+
 }
 
 

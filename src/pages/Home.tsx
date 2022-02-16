@@ -64,7 +64,7 @@ const Home: React.FC = () => {
     // setMessages(msgs);
     //  const msgs = getMessages();
     //  setMessages([...messages, ...msgs]);
-    setBusy(false)
+ 
     const prfl = getProfil();
     setProfil(prfl);
 
@@ -82,9 +82,21 @@ const Home: React.FC = () => {
   });
 
   useEffect(() => {
-    // manually deep compare here before updating state
-    return setMessages(messages)
-  }, [messages])
+    if(busy){
+      const msgs = getMessages();
+      //if(messages.length != msgs.length){
+      const newArray = msgs.concat(...messages);
+      setMessages(newArray);
+      setMessagesBDD(newArray);
+      getUIDCurrentUser().then(data => {
+        setUID("" + data);
+        getProfilFromFireStoreDBwithID("" + data);
+  
+      });
+      setBusy(false)
+    }
+
+  })
 
   function refresh() {
     const msgs = getMessages();
@@ -97,7 +109,6 @@ const Home: React.FC = () => {
       getProfilFromFireStoreDBwithID("" + data);
 
     });
-    console.log(userUID);
 
     // }
   }

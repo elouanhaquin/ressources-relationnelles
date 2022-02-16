@@ -29,7 +29,7 @@ import {
 import firebase from 'firebase';
 
 import { documentAttachSharp, documentOutline, imageOutline, videocamOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useParams } from 'react-router';
 import HeaderBar from '../components/headerBar';
 import { Message } from '../data/messages';
@@ -58,7 +58,7 @@ function Submit() {
   const [message, setMessage] = useState<string>("");
   const [tags, setTags] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<string>("");
-
+  const [file, setFile] = useState<File>();
 
   function submitMessage() {
     getCurrentUser().then((user: any) => {
@@ -77,15 +77,33 @@ function Submit() {
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
           reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "" }]
         }
-       // uploadImageToStorage(selectedImage, selectedImage.toLowerCase().split("\\")[selectedImage.toLowerCase().split("\\").length-1])
-        //uploadImageToStorage(imageAsFile, selectedImage.toLowerCase().split("\\")[selectedImage.toLowerCase().split("\\").length-1] )
 
-        exportMessageToFireStoreDB(messages);
+        if(file != undefined){
+          uploadImageToStorage(file, "" + messages.id).then(data => {
+            messages.img = data;
+            exportMessageToFireStoreDB(messages);
+
+          })
+        }else{
+          exportMessageToFireStoreDB(messages);
+
+        }
+     
+
       }
 
     })
 
   }
+
+
+
+  const onFileChange = (e: any): void => {
+    console.log(e.target.files)
+    if (e != undefined && e.target != undefined && e.target.files != undefined)
+      setFile(e.target.files[0])
+  }
+
 
   return (
     <IonPage>
@@ -115,7 +133,7 @@ function Submit() {
               <IonCol>
                 <IonItem>
                   <IonInput type="text" placeholder="Catégorie" value={tags} onIonChange={e => setTags(e.detail.value!.toLowerCase())}></IonInput>
-                  <input type="file" accept="image/*,.pdf" name="" id="upload-file"  onChange={(event) => { setSelectedImage(event.target.value!);}} />
+                  <input type="file" accept="image/*,.pdf" name="" id="upload-file" onChange={(event) => { onFileChange(event); }} />
                 </IonItem>
               </IonCol>
             </IonRow>
