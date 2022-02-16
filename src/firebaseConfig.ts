@@ -54,12 +54,20 @@ export async function loginUserGetUID(username: string, password: string) {
     return "" + res;
 }
 
+export async function getUIDCurrentUser() {
+    const auth = firebase.default.auth();
+    const user = auth.currentUser;
+
+    return auth.currentUser?.uid;
+}
+
 export async function RegisterUser(username: string, password: string) {
     try {
 
         const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
-                name: username
+                name: username,
+                id: 0
             })
         });
         console.log(res);
@@ -216,30 +224,42 @@ export const LikeToMessageFromDBWithoutCategory = (id: string, like: number) => 
 
 
 export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
+    console.log("like value : " + like)
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
     console.log(id);
-    firebase.default.firestore().runTransaction((transaction) => {
+    return firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(sfDocRef).then((sfDoc) => {
             if (!sfDoc.exists) {
                 throw "Document does not exist!";
             }
 
-            var newPopulation = sfDoc.get("like") + 1;
+            var newPopulation = sfDoc.get("like") + like;
             transaction.update(sfDocRef, { like: newPopulation });
             return newPopulation;
         });
-    }).then((newPopulation) => {
-        console.log("Like increased to ", newPopulation);
-    }).catch((err) => {
-        // This will be an "population is too big" error.
-        console.error(err);
-    });
+    })
 
 };
 
-export const LikeToProfilFromDBFireStore = (id: string, idRessource: string) => {
+export async function isMessageLiked (id: string, idRessource: string) {
     var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
-    console.log(id);
+    return await firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("like");
+            return newPopulation.includes(idRessource);
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+
+
+export const LikeToProfilFromDBFireStore = (id: string, idRessource: string, add: boolean) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
     firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(sfDocRef).then((sfDoc) => {
             if (!sfDoc.exists) {
@@ -247,8 +267,19 @@ export const LikeToProfilFromDBFireStore = (id: string, idRessource: string) => 
             }
 
             var newPopulation = sfDoc.get("like");
-            if (!newPopulation.includes(idRessource))
-                newPopulation.push(idRessource)
+            if (!add) {
+                const index = newPopulation.indexOf(idRessource);
+                console.log("removing item : " + index)
+
+                if (index > -1) {
+                     newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+            else {
+                if (!newPopulation.includes(idRessource))
+                    newPopulation.push(idRessource)
+            }
+
             transaction.update(sfDocRef, { like: newPopulation });
             return idRessource;
         });
@@ -258,23 +289,8 @@ export const LikeToProfilFromDBFireStore = (id: string, idRessource: string) => 
         // This will be an "population is too big" error.
         console.error(err);
     });
-
 };
 
-export const getCurrentUIDUserFireBase = (email: string) => {
-   firebase.default.firestore().collection('profils').get().then((snapshot) => {
-        const data = snapshotToArray(snapshot.docs);
-        try{
-            const current: any = data.filter(d => d.name == email)[0].id;
-            console.log( current)
-            return "" + current;    
-        }catch(e){
-            console.error(e)
-        }
-    });
-
-    return ""
-};
 
 
 

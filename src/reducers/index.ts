@@ -9,9 +9,9 @@ export default function reducer(state = defaultState, {type, payload} : {type:st
         case 'SET_USER_STATE':
             return {...state, 
             userData:{
-                username: (payload.charAt(0).toUpperCase() + payload.slice(1)).split('@')[0],
+                username: payload != undefined ? (payload.charAt(0).toUpperCase() + payload.slice(1)).split('@')[0] : "undefined",
                 email: payload,
-                uid: payload.uid,
+                uid: payload,
                 profilImg:  'https://pbs.twimg.com/media/EWZwV1WWsAAMhkv.jpg',
                 location:  'Lannion',
             }

@@ -10,19 +10,20 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardSubtitle,
-  IonCardContent
+  IonCardContent,
+  useIonViewWillEnter
 } from '@ionic/react';
 import { Message } from '../data/messages';
 import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp } from 'ionicons/icons'
 import './MessageListItem.css';
 import { Reponse } from '../data/reponse';
-import { useState } from 'react';
-import { getCurrentUIDUserFireBase, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore } from '../firebaseConfig';
+import { useEffect, useState } from 'react';
+import { isMessageLiked, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore } from '../firebaseConfig';
 import { useSelector } from 'react-redux';
 
 interface MessageListItemProps {
   message: Message;
-  uid : string
+  uid: string
 }
 
 interface ReponseItem {
@@ -31,21 +32,34 @@ interface ReponseItem {
 
 const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
   const [isLike, setLike] = useState<Boolean>();
-  const email = useSelector((state: any) => state.userData.email)
 
-  
+
+  useIonViewWillEnter(() => {
+    isMessageLiked(uid, "" + message.id).then(data => {
+      setLike(data);});
+  });
+
+
   function likeItem() {
-    console.log("uid : " +uid);
-    if(uid.length > 0){
-
-      if (!isLike) {
-        setLike(true);
-        LikeToMessageFromDBFireStore('' + message.id, 1)
-        LikeToProfilFromDBFireStore(uid,"" + message.id)
-      }else{
-        setLike(false);
-        LikeToMessageFromDBFireStore('' + message.id, -1)
-      }
+    if (uid.length > 0) {
+      isMessageLiked(uid, "" + message.id).then(data => {
+        console.log("is like ? "  + data)
+        setLike(data);
+        if (!data) {
+          console.log("Value of liked message : " + isMessageLiked(uid, "" + message.id))
+          LikeToMessageFromDBFireStore('' +  message.id, 1)
+          LikeToProfilFromDBFireStore(uid, "" + message.id, true)
+          setLike(true);
+  
+        } else {
+          LikeToMessageFromDBFireStore('' + message.id, -1)
+          console.log("removing...")
+          LikeToProfilFromDBFireStore(uid, "" + message.id, false)
+          setLike(false);
+  
+        }
+      })
+   
     }
 
   }

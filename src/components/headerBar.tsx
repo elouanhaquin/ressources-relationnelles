@@ -32,7 +32,7 @@ interface HeadBar {
 }
 
 const HeaderBar: React.FC = () => {
-  const [profil, setProfil] = useState<Profil[]>([]);
+  const [profil, setProfil] = useState<Profil>();
 
   useIonViewWillEnter(() => {
     const prfl = getProfil();
@@ -42,30 +42,30 @@ const HeaderBar: React.FC = () => {
 
 
   return (
-      <IonHeader className="padding-headbar header-bar" slot="fixed">
-        <IonGrid>
-          <IonRow>
-            <IonCol  size="3">
-              <IonItem href='/home'><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
-            </IonCol>
-            <IonCol size="5">
-              <IonSearchbar>
+    <IonHeader className="padding-headbar header-bar" slot="fixed">
+      <IonGrid>
+        <IonRow>
+          <IonCol size="3">
+            <IonItem href='/home'><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
+          </IonCol>
+          <IonCol size="5">
+            <IonSearchbar>
 
-              </IonSearchbar>
-            </IonCol>
-            <IonCol size="1">
-              <IonButton href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
+            </IonSearchbar>
+          </IonCol>
+          <IonCol size="1">
+            <IonButton href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
 
-            </IonCol>
-            <IonCol size="3">
-              {profil.map(m => <ProfilItemHeader key={m.id} profil={m} />)}
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+          </IonCol>
+          <IonCol size="3">
+            {profil != undefined ? <ProfilItemHeader profil={profil} /> : <div></div>}
+          </IonCol>
+        </IonRow>
+      </IonGrid>
 
-      </IonHeader>
+    </IonHeader>
 
-      );
+  );
 }
 
-      export default HeaderBar;
+export default HeaderBar;
