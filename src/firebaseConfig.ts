@@ -164,7 +164,7 @@ export const getMessagesFromDB = () => {
 };*/
 
 export async function  uploadImageToStorage(path: Blob, imageName: string){
-    let reference = firebase.default.storage().ref(imageName);
+    let reference = firebase.default.storage().ref("ressources").child(imageName);
     let task = reference.put(path);
 
     return task.then(() => {
@@ -175,6 +175,15 @@ export async function  uploadImageToStorage(path: Blob, imageName: string){
 
 
 }
+
+export async function  getImageTypeFromStorage(imageName: string){
+    let reference = firebase.default.storage().ref("ressources").child(imageName);
+    return reference.getMetadata().then(data => {
+        return data;
+    });
+
+}
+
 
 
 export const getProfilFromFireStoreDBwithID = (id: string) => {

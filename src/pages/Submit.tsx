@@ -50,7 +50,9 @@ function getDate() {
   return output;
 }
 
-
+const fileOutputAvailable = [
+  "png", "pdf", "jpg", "jpeg"
+]
 
 function Submit() {
 
@@ -78,13 +80,14 @@ function Submit() {
           reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "" }]
         }
 
-        if(file != undefined){
+        if(file != undefined && file.size < 50000000 && fileOutputAvailable.includes(file.type.toLowerCase().split('/')[1]) ){
           uploadImageToStorage(file, "" + messages.id).then(data => {
             messages.img = data;
             exportMessageToFireStoreDB(messages);
 
           })
         }else{
+          console.log(file?.type.toLowerCase() + " with size " +  file?.size);
           exportMessageToFireStoreDB(messages);
 
         }
