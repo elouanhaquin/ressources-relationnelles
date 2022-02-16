@@ -243,7 +243,7 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
 
 export async function isMessageLiked (id: string, idRessource: string) {
     var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
-    return await firebase.default.firestore().runTransaction((transaction) => {
+    return  firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(sfDocRef).then((sfDoc) => {
             if (!sfDoc.exists) {
                 throw "Document does not exist!";
