@@ -47,9 +47,9 @@ const Home: React.FC = () => {
     setBusy(true);
     const res : any = await loginUser(email, password);
     setBusy(false);
-    if(res){
-      dispatch(setUserState(res.email))
-      history.replace('/home');
+    if(res != "undefined"){
+      dispatch(setUserState(res))
+      history.push('/home');
     }
   //  if(!false)
  // presentToast("dede");

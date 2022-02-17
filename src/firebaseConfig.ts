@@ -1,11 +1,11 @@
 import { resolve } from 'dns';
 import * as firebase from 'firebase'
+import { userInfo } from 'os';
 import { Observable } from 'redux';
 import { pathToFileURL } from 'url';
 import { DBWrapper } from 'workbox-core/_private';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
 import { addProfilBBD, Profil, setProfilsBDD } from './data/profil';
-
 
 const config = {
     apiKey: "AIzaSyBfxVb5gDYd1cJehGGQwD468ZeQwNx7RVM",
@@ -41,7 +41,13 @@ export function logoutUser() {
 export async function loginUser(username: string, password: string) {
     try {
         const res = await firebase.default.auth().signInWithEmailAndPassword(username, password);
-        return "" + res;
+        //console.log(firebase.default.auth().currentUser?.emailVerified);
+        if (firebase.default.auth().currentUser?.emailVerified == true) {
+        return "" + res; 
+        }
+        else {
+            return "undefined"; 
+        }
     }
     catch (error) {
         console.log(error);
@@ -54,16 +60,24 @@ export async function loginUserGetUID(username: string, password: string) {
     return "" + res;
 }
 
-export async function RegisterUser(username: string, password: string) {
+export async function RegisterUser(email: string, password: string, pseudo: string, firstName: string, lastName:String, birthday:string, society:string) {
     try {
 
-        const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password).then(cred => {
+        const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
-                name: username
+                email: email,
+                pseudo : pseudo,
+                firstName : firstName,
+                lastName : lastName,
+                birthday : birthday,
+                society: society
             })
         });
+
+        firebase.default.auth().currentUser?.sendEmailVerification();
         console.log(res);
-        return true;
+        console.log(firebase.default.auth().currentUser?.emailVerified);
+        return true;   
     }
     catch (error) {
         console.log(error);
@@ -266,3 +280,7 @@ export const ViewToMessageFromDBWithoutCategory = (id: string, like: number) => 
         return currentRank + like;
     });
 };
+    function sendEmailVerification(currentUser: any) {
+        throw new Error('Function not implemented.');
+    }
+
