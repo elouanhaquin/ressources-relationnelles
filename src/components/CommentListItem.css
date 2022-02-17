@@ -17,6 +17,11 @@
     border: 0px solid var(--ion-color-light);
 }
 
+
+.comment ion-list a {
+   text-decoration: none;
+}
+
 .comment ion-list ion-input {
     border-radius: 5px;
     margin-bottom: 10px;

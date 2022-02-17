@@ -77,7 +77,7 @@ function Submit() {
           views: 0,
           date: "" + getDate(),
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
-          reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "" }]
+          reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "", username:"" }]
         }
 
         if(file != undefined && file.size < 50000000 && fileOutputAvailable.includes(file.type.toLowerCase().split('/')[1]) ){

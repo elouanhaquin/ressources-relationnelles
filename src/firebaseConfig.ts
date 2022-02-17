@@ -193,7 +193,7 @@ export const getProfilFromFireStoreDBwithID = (id: string) => {
     return firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(te).then((sfDoc) => {
             if (!sfDoc.exists) {
-                throw "Document does not exist!";
+                throw "Document does not exist! : " + "profils/" + id;
             }
             const profi: Profil =
             {
@@ -255,7 +255,7 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
 
 };
 
-export const ReplyToMessageFromDBFireStore = (id: string, message: string, sender : string) => {
+export const ReplyToMessageFromDBFireStore = (id: string, message: string, sender : string, senderName: string) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
     return firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(sfDocRef).then((sfDoc) => {
@@ -264,7 +264,7 @@ export const ReplyToMessageFromDBFireStore = (id: string, message: string, sende
             }
 
             var newPopulation = sfDoc.get("reponse")
-            newPopulation = newPopulation.concat({...{id: newPopulation.length, idAuthor: sender, text: message}});
+            newPopulation = newPopulation.concat({...{id: newPopulation.length, idAuthor: sender, text: message, username: senderName}});
             transaction.update(sfDocRef, { reponse: newPopulation });
             return newPopulation;
         });

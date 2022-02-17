@@ -43,23 +43,28 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
     const [reponseText, setReponse] = useState<string>("");
     const [reponseTextSendText, setReponseSendText] = useState<string>("");
     const [reponseTextSend, setReponseSend] = useState<boolean>(false);
+    const username = useSelector((state: any) => state.userData.username)
 
     useEffect(() => {
         setNumCom(message.reponse.filter(r => r.text.length > 0).length);
-        /* message.reponse.map(m => getProfilFromFireStoreDBwithID("" + m.idAuthor).then((data) => {
-             setProfilsNames(profilsNames.concat(data.name));
-           
-         }))*/
+        /*message.reponse.map(m => getProfilFromFireStoreDBwithID("" + m.idAuthor).then((data) => {
+            setProfilsNames(profilsNames.concat(data.name));
+               console.log(data.name)
+        }))*/
     })
 
     function sendMessage() {
-        if (reponseText?.length > 0 && reponseText?.length <  244) {
-            ReplyToMessageFromDBFireStore("" + message.id, reponseText, uid)
+        if (reponseText?.length > 0 && reponseText?.length < 244) {
+            ReplyToMessageFromDBFireStore("" + message.id, reponseText, uid, username)
             setReponseSend(true)
             setReponseSendText(reponseText)
             setReponse('');
         }
     }
+    function routeToUser(pathUrl: string) {
+
+    }
+
     return (message.reponse.filter(r => r.text.length > 0).length > 0 ?
         <IonAccordionGroup className='comment'>
             <IonAccordion value="colors">
@@ -68,19 +73,20 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
                 </IonItem>
                 <IonList slot="content">
                     {message.reponse.filter(g => g.text.length > 1 && g.id + 11 > message.reponse.length).map(m =>
-                        < IonItem key={m.id}> 
+                        < IonItem key={m.id}>
                             <div className="item-content">
 
-                                <IonLabel className='text'>{m.text.charAt(0).toUpperCase() + m.text.slice(1,m.text.length )}</IonLabel>
-                                <IonLabel className='name'>{'@' + m.idAuthor}</IonLabel>
+                                <IonLabel className='text'>{m.text.charAt(0).toUpperCase() + m.text.slice(1, m.text.length)}</IonLabel>
+                                <a href={"Profil/" + m.idAuthor}><IonLabel className='name'>{'@' + m.username}</IonLabel></a>
+
                             </div>
                         </IonItem>
                     )}
                     {reponseTextSend ?
                         < IonItem key={uid}>
                             <div className="item-content">
-                                <IonLabel className='text'>{reponseTextSendText.charAt(0).toUpperCase() + reponseTextSendText.slice(1,reponseTextSendText.length )}</IonLabel>
-                                <IonLabel className='name'>{'@' + uid}</IonLabel>
+                                <IonLabel className='text'>{reponseTextSendText.charAt(0).toUpperCase() + reponseTextSendText.slice(1, reponseTextSendText.length)}</IonLabel>
+                                <a href={"Profil/" + uid}> <IonLabel className='name'>{'@' + username}</IonLabel></a>
                             </div>
                         </IonItem> : <div />
                     }
@@ -102,7 +108,7 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
                     {reponseTextSend ?
                         < IonItem key={uid}>
                             <div className="item-content">
-                                <IonLabel className='text'>{reponseTextSendText.charAt(0).toUpperCase() + reponseTextSendText.slice(1,reponseTextSendText.length )}</IonLabel>
+                                <IonLabel className='text'>{reponseTextSendText.charAt(0).toUpperCase() + reponseTextSendText.slice(1, reponseTextSendText.length)}</IonLabel>
                                 <IonLabel className='name'>{'@' + uid}</IonLabel>
                             </div>
                         </IonItem> : <div />
