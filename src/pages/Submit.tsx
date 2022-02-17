@@ -34,7 +34,7 @@ import { useParams } from 'react-router';
 import HeaderBar from '../components/headerBar';
 import { Message } from '../data/messages';
 import { exportMessageToDB, exportMessageToFireStoreDB, getCurrentUser, uploadImageToStorage } from '../firebaseConfig';
-
+import { useHistory } from "react-router-dom";
 import './Submit.css';
 
 
@@ -54,6 +54,7 @@ function getDate() {
 
 function Submit() {
 
+  const history = useHistory();
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [tags, setTags] = useState<string>("");
@@ -81,6 +82,7 @@ function Submit() {
         //uploadImageToStorage(imageAsFile, selectedImage.toLowerCase().split("\\")[selectedImage.toLowerCase().split("\\").length-1] )
 
         exportMessageToFireStoreDB(messages);
+        history.push("/home");
       }
 
     })

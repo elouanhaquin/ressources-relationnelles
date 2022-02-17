@@ -47,10 +47,12 @@ const Home: React.FC = () => {
     setBusy(true);
     const res : any = await loginUser(email, password);
     setBusy(false);
+    
     if(res){
-      dispatch(setUserState(res.email))
-      history.replace('/home');
+      dispatch(setUserState(res))
+      history.push("/home");
     }
+    
   //  if(!false)
  // presentToast("dede");
  setBusy(false);
@@ -121,7 +123,7 @@ const Home: React.FC = () => {
               </p>
               <IonButton  onClick={Logged}>Login</IonButton>
               <p style={{ fontSize: "medium" }}>
-                  Don't have an account? <Link to="register">Sign up!</Link>
+                  Vous n'avez pas de compte? <Link to="register">Créez votre compte!</Link>
               </p>
 
             </IonCol>
