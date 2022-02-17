@@ -4,7 +4,7 @@ import ProfilItem from '../components/profilItem';
 import { Profil, getProfil } from '../data/profil';
 import { useEffect, useState } from 'react';
 import { Message, getMessages, setMessagesBDD } from '../data/messages';
-import { addOutline, locateOutline, locationOutline, optionsOutline, refreshOutline, warningOutline } from 'ionicons/icons'
+import { addOutline, checkmarkDone, locateOutline, locationOutline, optionsOutline, refreshOutline, warningOutline } from 'ionicons/icons'
 import {
     IonContent,
     IonHeader,
@@ -89,7 +89,6 @@ const Administration: React.FC = () => {
         const msgs = getMessages();
         const newArray = msgs;
         setMessages(newArray);
-
     }
 
     return (
@@ -111,9 +110,11 @@ const Administration: React.FC = () => {
                         <IonCol size="8">
                             <IonCard className="content">
                                 <IonTitle> <IonIcon color="danger" icon={warningOutline} /> Liste des ressources signalées : </IonTitle>
-                                <IonButton onClick={e => refresh()}> <IonIcon icon={refreshOutline}></IonIcon></IonButton>
+                                <IonButton onClick={e => refresh()}> <IonIcon icon={refreshOutline}></IonIcon> Actualiser</IonButton>
                                 <IonList >
-                                    {messages.map(m => <MessageListItem key={m.id} message={m} uid={id} admin={true}> {m.category}</MessageListItem>)}
+                                    {messages.filter(f => f.signaled != undefined && f.signaled > 0).length == 0 ?
+                                     <IonTitle> <IonIcon color="success" icon={checkmarkDone} /> Toutes les ressources ont étés traitées ! </IonTitle>
+                                    : messages.filter(f => f.signaled != undefined && f.signaled > 0).sort((a, b) => a.signaled + b.signaled).map(m => <MessageListItem key={m.id} message={m} uid={id} admin={true}> {m.category}</MessageListItem>)}
                                 </IonList>
 
                             </IonCard>

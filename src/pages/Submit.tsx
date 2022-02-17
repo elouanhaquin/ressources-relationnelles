@@ -75,6 +75,7 @@ function Submit() {
           img: "",
           like: 0,
           views: 0,
+          signaled: 0,
           date: "" + getDate(),
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
           reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "", username:"" }]

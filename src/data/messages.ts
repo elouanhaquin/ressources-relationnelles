@@ -11,6 +11,7 @@ export interface Message {
   img: string;
   id: number;
   like: number;
+  signaled: number;
   reponse: Reponse[];
   subject: string;
 
