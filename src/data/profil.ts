@@ -7,6 +7,7 @@ export interface Profil {
   likes?: number[];
   categories?: string[];
   img: string;
+  admin?: number
   uid?: string;
   id: number;
 }

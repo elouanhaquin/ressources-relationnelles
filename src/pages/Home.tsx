@@ -128,14 +128,14 @@ const Home: React.FC = () => {
             <IonCol className="hidden-md-down" size="9">
               <IonList>
                 {profil != undefined ? <ProfilItem profil={profil} /> : <div></div>}
-                {messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""}> {m.category}</MessageListItem>)}
+                {messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
               </IonList>
             </IonCol>
 
             <IonCol className="hidden-md-up" size="12">
               <IonList>
                 {profil != undefined ? <ProfilItem profil={profil} /> : <div></div>}
-                {!busy ? messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""}> {m.category}</MessageListItem>) : <div />}
+                {!busy ? messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>) : <div />}
               </IonList>
             </IonCol>
           </IonRow>

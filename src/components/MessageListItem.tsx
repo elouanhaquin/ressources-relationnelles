@@ -21,7 +21,7 @@ import {
   IonAccordionGroup
 } from '@ionic/react';
 import { Message } from '../data/messages';
-import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward } from 'ionicons/icons'
+import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward, removeOutline, trashOutline, checkmarkDoneOutline } from 'ionicons/icons'
 import './MessageListItem.css';
 import { Reponse } from '../data/reponse';
 import { useEffect, useState } from 'react';
@@ -34,7 +34,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 interface MessageListItemProps {
   message: Message;
-  uid: string
+  uid: string;
+  admin: boolean
 }
 
 interface ReponseItem {
@@ -87,7 +88,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
   </Document> : <div/>)
 }
 
-const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
+const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }) => {
   const [isLike, setLike] = useState<Boolean>();
   const [busy, setBusy] = useState<Boolean>(true);
   const [isPDF, setPDF] = useState<Boolean>(false);
@@ -161,22 +162,31 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid }) => {
           {isPDF && message.img && !display ?
             <div>
 
-          <Carousel key={message.id} message={message} uid={uid} />
+          <Carousel key={message.id} message={message} uid={uid} admin={admin} />
            
 
             </div>
             : !isPDF && message.img ?
               <img src={message.img} /> : <div />}
         </IonCardContent>
-        <IonRow class="footer">
-
-          <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
-          <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
-          <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.filter(r => r.text.length > 0).length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
-          <IonItem><IonIcon icon={shareSocialOutline}></IonIcon><h3 className="hidden-md-down">Partager</h3></IonItem>
-          <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
-
+        
+          {!admin ?
+          <IonRow class="footer">
+           <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
+           <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
+           <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.filter(r => r.text.length > 0).length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
+           <IonItem><IonIcon icon={shareSocialOutline}></IonIcon><h3 className="hidden-md-down">Partager</h3></IonItem>
+           <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
         </IonRow>
+            : 
+          <IonRow class="footer" >
+
+            <IonButton expand="block" color='success' onClick={e => likeItem()}><IonIcon icon={checkmarkDoneOutline}/> Valider <IonIcon icon={checkmarkDoneOutline}/></IonButton>
+            <IonButton expand="block" color='danger' onClick={e => likeItem()}><IonIcon icon={trashOutline}/> Supprimer <IonIcon icon={trashOutline}/></IonButton>
+            </IonRow>
+        
+          }
+         
         <CommentListItem key={message.id} message={message} uid={uid} />
 
 
