@@ -35,6 +35,7 @@ import React from 'react';
 import Profil from './pages/Profil';
 import ProfilView from './pages/Profil';
 import ResetPassword from './pages/ResetPassword';
+import Administration from './pages/Administration';
 
 setupIonicReact();
 
@@ -50,6 +51,9 @@ const Routing: React.FC = () => {
         </Route>
         <Route path="/home" exact={true}>
           <Home />
+        </Route>
+        <Route path="/Admin/:id" exact={true}>
+          <Administration />
         </Route>
         <Route path="/message/:id">
           <ViewMessage />

@@ -6,6 +6,7 @@ import { pathToFileURL } from 'url';
 import { DBWrapper } from 'workbox-core/_private';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
 import { addProfilBBD, Profil, setProfilsBDD } from './data/profil';
+import { Reponse } from './data/reponse';
 
 const config = {
     apiKey: "AIzaSyBfxVb5gDYd1cJehGGQwD468ZeQwNx7RVM",
@@ -20,6 +21,7 @@ const config = {
 
 
 firebase.default.initializeApp(config);
+
 export function getCurrentUser() {
     return new Promise((resolve, reject) => {
         const unsubscribe = firebase.default.auth().onAuthStateChanged(function (user) {
@@ -43,10 +45,10 @@ export async function loginUser(username: string, password: string) {
         const res = await firebase.default.auth().signInWithEmailAndPassword(username, password);
         //console.log(firebase.default.auth().currentUser?.emailVerified);
         if (firebase.default.auth().currentUser?.emailVerified == true) {
-        return "" + res; 
+        return "" + res;
         }
         else {
-            return "undefined"; 
+            return "undefined";
         }
     }
     catch (error) {
@@ -75,6 +77,13 @@ export async function loginUserGetUID(username: string, password: string) {
     return "" + res;
 }
 
+export async function getUIDCurrentUser() {
+    const auth = firebase.default.auth();
+    const user = auth.currentUser;
+
+    return auth.currentUser?.uid;
+}
+
 export async function RegisterUser(email: string, password: string, pseudo: string, firstName: string, lastName:String, birthday:string, society:string) {
     try {
 
@@ -92,7 +101,7 @@ export async function RegisterUser(email: string, password: string, pseudo: stri
         firebase.default.auth().currentUser?.sendEmailVerification();
         console.log(res);
         console.log(firebase.default.auth().currentUser?.emailVerified);
-        return true;   
+        return true;
     }
     catch (error) {
         console.log(error);
@@ -145,62 +154,43 @@ export const snapshotToArray = (snapshot: any) => {
 
 
 
-
-
-/*
-export const getMessagesFromDBWithoutCategory = () => {
-    const ref = firebase.default.database().ref('Messages/').once('value').then((snapshot) => {
-        const data = snapshotToArray(snapshot);
-
-        const current: Message[] = data;
-        console.log(current)
-        setMessagesBDD(current);
-    });
-};
-
-
-export const getMessagesFromDBWithCategory = (category: string) => {
-    const ref = firebase.default.database().ref('Messages/' + category).once('value').then((snapshot) => {
-        const data = snapshotToArray(snapshot);
-
-        const current: Message[] = data;
-        console.log(current)
-        setMessagesBDD(current);
-
-    });
-
-};
-
-
-export const getMessagesFromDB = () => {
-    const ref = firebase.default.database().ref('Messages/chasse').once('value').then((snapshot) => {
-        const data = snapshotToArray(snapshot);
-        console.log(data)
-
-        const current: Message[] = data;
-        console.log(current)
-        setMessagesBDD(current);
-
-    });
-};*/
-
-export const uploadImageToStorage = (path: File, imageName: string) => {
-    let reference = firebase.default.storage().ref(imageName);
+export async function uploadImageToStorage(path: Blob, imageName: string) {
+    let reference = firebase.default.storage().ref("ressources").child(imageName);
     let task = reference.put(path);
 
-    task.then(() => {
+    return task.then(() => {
         console.log('Image uploaded to the bucket!');
+        return reference.getDownloadURL()
+
     }).catch((e) => console.log('uploading image error => ', e));
+
+
+}
+
+export async function getImageTypeFromStorage(imageName: string) {
+    let reference = firebase.default.storage().ref("ressources").child(imageName);
+    return reference.getMetadata().then(data => {
+        return data;
+    });
+
+}
+
+export async function deleteImageTypeFromStorage(imageName: string) {
+    let reference = firebase.default.storage().ref("ressources").child(imageName);
+    return reference.delete().then((data) => {
+        return data;
+    })
+
 }
 
 
 export const getProfilFromFireStoreDBwithID = (id: string) => {
 
-    const te = firebase.default.firestore().collection('profils').doc(id);
-   return  firebase.default.firestore().runTransaction((transaction) => {
+    const te = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(te).then((sfDoc) => {
             if (!sfDoc.exists) {
-                throw "Document does not exist!";
+                throw "Document does not exist! : " + "profils/" + id;
             }
             const profi: Profil =
             {
@@ -208,6 +198,7 @@ export const getProfilFromFireStoreDBwithID = (id: string) => {
                 lastName: sfDoc.get("lastName"),
                 firstName: sfDoc.get("firstName"),
                 img: sfDoc.get("img"),
+                admin: sfDoc.get("admin"),
                 id: Number.parseInt(id)
             };
             return profi;
@@ -243,19 +234,73 @@ export const LikeToMessageFromDBWithoutCategory = (id: string, like: number) => 
     });
 };
 
-
-export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
+export const SignalToMessageFromDBFireStore = (id: string, like: number) => {
+    console.log("signal value : " + like)
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
     console.log(id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("signaled") + like;
+            transaction.update(sfDocRef, { signaled: newPopulation });
+            return newPopulation;
+        });
+    })
+
+};
+
+export const SignalToReponseFromDBFireStore = (id: string, idParent: string, like: number) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idParent);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation: Reponse[] = sfDoc.get("reponse")
+            var reponse = newPopulation.filter(r => r.id == Number.parseInt(id))
+            if (reponse.length > 0 && reponse[0].signaled != undefined) {
+                reponse[0].signaled += like;
+
+                newPopulation = newPopulation.filter(r => r.id != Number.parseInt(id))
+                newPopulation.push(reponse[0]);
+                transaction.update(sfDocRef, { reponse: newPopulation });
+            }
+            else {
+                throw "reponse not find"
+            }
+
+            return newPopulation;
+        });
+    })
+};
+
+export async function setSignaledCommentToUserFirebase(id: string, idParent: string, uid: string, add: boolean) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + uid);
     firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(sfDocRef).then((sfDoc) => {
             if (!sfDoc.exists) {
                 throw "Document does not exist!";
             }
 
-            var newPopulation = sfDoc.get("like") + 1;
-            transaction.update(sfDocRef, { like: newPopulation });
-            return newPopulation;
+            var newPopulation = sfDoc.get("signaled_comments");
+            if (!add) {
+                const index = newPopulation.indexOf(id);
+                console.log("removing item : " + index)
+
+                if (index > -1) {
+                    newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+            else {
+                if (!newPopulation.includes(id))
+                    newPopulation.push(id)
+            }
+
+            transaction.update(sfDocRef, { signaled_comments: newPopulation });
+            return id;
         });
     }).then((newPopulation) => {
         console.log("Like increased to ", newPopulation);
@@ -263,8 +308,281 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
         // This will be an "population is too big" error.
         console.error(err);
     });
+}
+
+export async function isReponseSignaledFromUser(id: string, idRessource: string, uid: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + uid);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("signaled_comments");
+            return newPopulation.includes(id);
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+
+
+export async function isReponseSignaled(id: string, idParent: string) {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idParent);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation: Reponse[] = sfDoc.get("reponse")
+            var reponse = newPopulation.filter(r => r.id == Number.parseInt(id))
+
+            return reponse[0];
+        });
+    }).then((data) => {
+        return data
+    });
+}
+
+export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
+    console.log("like value : " + like)
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    console.log(id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("like") + like;
+            transaction.update(sfDocRef, { like: newPopulation });
+            return newPopulation;
+        });
+    })
 
 };
+
+export const ReplyToMessageFromDBFireStore = (id: string, idReponse: string, message: string, sender: string, senderName: string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("reponse")
+            newPopulation = newPopulation.concat({ ...{ id: idReponse, idAuthor: sender, text: message, username: senderName, signaled: 0 } });
+            transaction.update(sfDocRef, { reponse: newPopulation });
+            return newPopulation;
+        });
+    })
+
+};
+
+export async function isMessageLiked(id: string, idRessource: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("like");
+            return newPopulation.includes(idRessource);
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+
+export async function isProfilSaysMessageSignaled(id: string, idRessource: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("signaled");
+            return newPopulation.includes(idRessource);
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+
+export async function isMessageSignaled(idRessource: string) {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("signaled");
+            if (newPopulation != undefined)
+                return newPopulation;
+            else
+                return -2
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+
+export async function getUserImage(idRessource: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + idRessource);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("img");
+            if (newPopulation != undefined)
+                return newPopulation;
+            else
+                return "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+export const DeleteCommentToDBFireStore = (id: string, idComm: string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("reponse");
+            let index: Reponse[] = newPopulation;
+            let newarray = index.filter(n => n.id != Number.parseInt(idComm));
+
+            transaction.update(sfDocRef, { reponse: newarray });
+            return index;
+        });
+    }).then((newPopulation) => {
+        console.log("Deleted ", id);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+
+
+export const DeleteRessoucesToDBFireStore = (id: string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            let t = sfDoc.get("img")
+
+            if (t.length > 1)
+                deleteImageTypeFromStorage(id);
+            transaction.delete(sfDocRef);
+        });
+    }).then((newPopulation) => {
+        console.log("Deleted ", id);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+
+export const validateRessourceToFireStore = (idRessource: string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+
+            transaction.update(sfDocRef, { signaled: -1 });
+            return idRessource;
+        });
+    }).then((newPopulation) => {
+        console.log(" Document id " + idRessource + " is now validated");
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+
+export const signaledRessourceToFireStore = (id: string, idRessource: string, add: boolean) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("signaled");
+            if (!add) {
+                const index = newPopulation.indexOf(idRessource);
+                console.log("removing item : " + index)
+
+                if (index > -1) {
+                    newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+            else {
+                if (!newPopulation.includes(idRessource))
+                    newPopulation.push(idRessource)
+            }
+
+            transaction.update(sfDocRef, { signaled: newPopulation });
+            return idRessource;
+        });
+    }).then((newPopulation) => {
+        console.log("Signaled increased to ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+
+export const LikeToProfilFromDBFireStore = (id: string, idRessource: string, add: boolean) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("like");
+            if (!add) {
+                const index = newPopulation.indexOf(idRessource);
+                console.log("removing item : " + index)
+
+                if (index > -1) {
+                    newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+            else {
+                if (!newPopulation.includes(idRessource))
+                    newPopulation.push(idRessource)
+            }
+
+            transaction.update(sfDocRef, { like: newPopulation });
+            return idRessource;
+        });
+    }).then((newPopulation) => {
+        console.log("Like increased to ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+
+
+
+
 
 export const ViewMessageFromDBFireStore = (id: string, like: number) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
@@ -298,4 +616,3 @@ export const ViewToMessageFromDBWithoutCategory = (id: string, like: number) => 
     function sendEmailVerification(currentUser: any) {
         throw new Error('Function not implemented.');
     }
-

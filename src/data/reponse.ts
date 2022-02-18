@@ -1,8 +1,10 @@
 export interface Reponse {
     id: number;
     idAuthor: number;
+    username: string;
     idMessage: number;
     text: string;
+    signaled?: number;
   }
   
   const messages: Reponse[] = [
@@ -10,6 +12,7 @@ export interface Reponse {
       id: 0,
       idAuthor: 0,
       idMessage: 0, 
+      username: "", 
       text: "You are so stupid, I cant stand you anymore. Plz kill yourself now, like dont wait, do it rn. I cant even look at you, how ugly you are... Are you even a human?"
     }
   ];
