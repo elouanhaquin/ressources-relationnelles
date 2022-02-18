@@ -12,6 +12,7 @@ export interface Message {
   id: number;
   like: number;
   signaled: number;
+  fromId: string;
   reponse: Reponse[];
   subject: string;
 

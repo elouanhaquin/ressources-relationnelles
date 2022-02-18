@@ -27,7 +27,7 @@ import './MessageListItem.css';
 import './CommentListItem.css';
 import { Reponse } from '../data/reponse';
 import { useEffect, useState } from 'react';
-import { getImageTypeFromStorage, getProfilFromFireStoreDBwithID, getUserImage, isMessageLiked, isProfilSaysMessageSignaled, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ReplyToMessageFromDBFireStore, signaledRessourceToFireStore, SignalToMessageFromDBFireStore } from '../firebaseConfig';
+import { DeleteRessoucesToDBFireStore, getImageTypeFromStorage, getProfilFromFireStoreDBwithID, getUserImage, isMessageLiked, isProfilSaysMessageSignaled, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ReplyToMessageFromDBFireStore, signaledRessourceToFireStore, SignalToMessageFromDBFireStore } from '../firebaseConfig';
 import { useSelector } from 'react-redux';
 import { Document, Page, pdfjs } from "react-pdf";
 import { randomInt } from 'crypto';
@@ -54,6 +54,7 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
     const [signaledNumber, setSignaledNumber] = useState<number>(0);
 
     useEffect(() => {
+        
         setNumCom(message.reponse.filter(r => r.text.length > 0).length);
         getUserImage('' + uid).then((d) => {
             setProfilPic(d == undefined || d.length < 3 ? "https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png" : d)
@@ -96,6 +97,7 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
         }
     }
 
+
     return (message.reponse.filter(r => r.text.length > 0).length > 0 ?
         <IonAccordionGroup className='comment'>
             <IonAccordion value="colors">
@@ -104,7 +106,7 @@ const CommentListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
                 </IonItem>
                 <IonList slot="content">
                     {message.reponse.filter(g => g.text.length > 1).map(m =>
-                       <CommentItem reponse={m} idParent={""+message.id} uid={uid} admin={admin} />
+                        <CommentItem reponse={m} idParent={"" + message.id} uid={uid} admin={admin} />
                     )}
                     {reponseTextSend ?
                         < IonItem key={uid}>

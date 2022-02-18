@@ -96,11 +96,13 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
   const [show, setShow] = useState<Boolean>(true);
   const [isPDF, setPDF] = useState<Boolean>(false);
   const [display, setDisplay] = useState<Boolean>(false);
+  const [isOwnMessage, setIsOwn] = useState<Boolean>(false);
 
 
 
   useEffect(() => {
     if (busy) {
+      setIsOwn("" + message.fromId == uid)
       isMessageSignaled("" + message.id).then((d) => {
         console.log(d)
         setSignaledNumber(d)
@@ -187,6 +189,14 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
   }
 
 
+  function deleteOwnItem(id: string) {
+    if (isOwnMessage) {
+      DeleteRessoucesToDBFireStore(id)
+      setShow(false);
+
+    }
+  }
+
   function validateItem() {
     if (uid.length > 0) {
       validateRessourceToFireStore("" + message.id);
@@ -219,7 +229,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
               <img src={message.img} /> : <div />}
         </IonCardContent>
 
-        {!admin ?
+        {!admin && !isOwnMessage?
           <IonRow class="footer">
             <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
             <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
@@ -234,14 +244,14 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
           </IonRow>
           :
           <IonRow class="footer" >
-
-            <IonButton expand="block" color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton>
+            
+            {!isOwnMessage ?<IonButton expand="block" color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton> : <div/>}
             <IonButton expand="block" color='danger' onClick={e => deleteItem()}><IonIcon icon={trashOutline} /> Supprimer <IonIcon icon={trashOutline} /></IonButton>
           </IonRow>
 
         }
 
-        <CommentListItem key={message.id} message={message} uid={uid} admin={admin}/>
+        <CommentListItem key={message.id} message={message} uid={uid} admin={admin} />
 
 
       </IonCard>

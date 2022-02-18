@@ -21,6 +21,7 @@ const config = {
 
 
 firebase.default.initializeApp(config);
+
 export function getCurrentUser() {
     return new Promise((resolve, reject) => {
         const unsubscribe = firebase.default.auth().onAuthStateChanged(function (user) {
@@ -428,7 +429,7 @@ export const DeleteCommentToDBFireStore = (id: string, idComm: string) => {
             }
 
             var newPopulation = sfDoc.get("reponse");
-            let index : Reponse[] = newPopulation;
+            let index: Reponse[] = newPopulation;
             let newarray = index.filter(n => n.id != Number.parseInt(idComm));
 
             transaction.update(sfDocRef, { reponse: newarray });
@@ -450,7 +451,11 @@ export const DeleteRessoucesToDBFireStore = (id: string) => {
             if (!sfDoc.exists) {
                 throw "Document does not exist!";
             }
-            deleteImageTypeFromStorage(id);
+
+            let t = sfDoc.get("img")
+
+            if (t.length > 1)
+                deleteImageTypeFromStorage(id);
             transaction.delete(sfDocRef);
         });
     }).then((newPopulation) => {
