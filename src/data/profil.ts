@@ -4,6 +4,8 @@ export interface Profil {
   name: string;
   firstName: string;
   lastName: string;
+  pseudo: string;
+  birthday: string;
   likes?: Message[];
   categories?: string[];
   img: string;

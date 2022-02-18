@@ -51,7 +51,7 @@ const ProfilView: React.FC = () => {
     const username = useSelector((state: any) => state.userData.username)
     const profilIMG = useSelector((state: any) => state.userData.profilImg)
     const location = useSelector((state: any) => state.userData.location)
-
+    const age = getAgeProfilWithBirthday(pro?.birthday);
     useIonViewWillEnter(() => {
         getProfilFromFireStoreDBwithID(id).then((data) => {
             const profi: Profil =
@@ -59,22 +59,33 @@ const ProfilView: React.FC = () => {
                 name: data.name,
                 lastName: data.lastName,
                 firstName: data.firstName,
+                pseudo: data.pseudo,
+                birthday: data.birthday,
                 img: data.img,
                 id: data.id
             };
             setProfi(profi)
+            
         });
 
       });
-    
+    function getAgeProfilWithBirthday(birthday: string|undefined) {
+        if (birthday!=undefined){
+            //let birthdate=birthday.split('-');
+            //console.log(Math.floor((Math.abs(Date.now()-Date.parse(birthday) / (1000 * 3600 * 24))/365));
+            return Math.floor((Math.abs(Date.now()-Date.parse(birthday)) / (1000 * 3600 * 24))/365);
+        }
+        
+    }
 
+
+    
     return (
         <IonPage className="profil" id="profil-page">
             <HeaderBar />
             <IonContent fullscreen>
                 <IonGrid>
                     <IonCard className="content">
-
                         <IonRow >
                             <IonCol size="6" className="hidden-md-down">
                                 <IonCard className="profile-pic">
@@ -82,8 +93,13 @@ const ProfilView: React.FC = () => {
                                 </IonCard>
                             </IonCol>
                             <IonCol size="6" className="hidden-md-down">
+                                <IonCardTitle> {pro?.pseudo}</IonCardTitle>
                                 <IonCardTitle> {pro?.firstName}</IonCardTitle>
+                                <IonCardTitle> {pro?.lastName}</IonCardTitle>
+                                <IonCardTitle> {pro?.birthday}</IonCardTitle>
+                                <IonCardTitle>  {age + "ans"}</IonCardTitle>
                                 <IonCardTitle> {'@' + username}</IonCardTitle>
+                                
                                 <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> { location}</IonCardTitle>
                             </IonCol>
                             <IonCol size="9" className="hidden-md-up">
@@ -97,13 +113,13 @@ const ProfilView: React.FC = () => {
                             <IonCol size="3" className="hidden-md-up">
                                 <IonButton>Modifier</IonButton>
                             </IonCol>
-                        </IonRow>
-                    </IonCard>
-
+                        </IonRow>                        
+                    </IonCard>                   
                 </IonGrid>
-            </IonContent>
-
+            </IonContent>        
         </IonPage>);
 };
 
 export default ProfilView;
+
+

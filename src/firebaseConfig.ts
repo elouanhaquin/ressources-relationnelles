@@ -178,6 +178,8 @@ export const getProfilFromFireStoreDBwithID = (id: string) => {
                 name: sfDoc.get("name"),
                 lastName: sfDoc.get("lastName"),
                 firstName: sfDoc.get("firstName"),
+                pseudo: sfDoc.get("pseudo"),
+                birthday:sfDoc.get("birthday"),
                 img: sfDoc.get("img"),
                 id: Number.parseInt(id)
             };
