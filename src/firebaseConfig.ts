@@ -55,6 +55,21 @@ export async function loginUser(username: string, password: string) {
     }
 }
 
+export async function resetPassword(email: string) {
+    try {
+        var ValidMail = false;
+        const res = await firebase.default.auth().sendPasswordResetEmail(email)
+        .then(() => {alert('Un mail de réinitialisation du mot de passe vous a été envoyé');
+        ValidMail = true;})
+        .catch(error => alert('Error'));
+        return ValidMail;
+    }
+    catch (error) {
+        console.log(error);
+        return "undefined";
+    }
+}
+
 export async function loginUserGetUID(username: string, password: string) {
     const res = (await firebase.default.auth().signInWithEmailAndPassword(username, password)).user?.uid;
     return "" + res;

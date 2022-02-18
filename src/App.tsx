@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import ViewMessage from './pages/ViewMessage';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,8 +34,11 @@ import { useDispatch } from 'react-redux';
 import React from 'react';
 import Profil from './pages/Profil';
 import ProfilView from './pages/Profil';
+import ResetPassword from './pages/ResetPassword';
 
 setupIonicReact();
+
+toast.configure()
 
 const Routing: React.FC = () => {
   return (
@@ -55,11 +60,15 @@ const Routing: React.FC = () => {
         <Route path="/submit">
           <Submit />
         </Route>
+        <Route path="/reset_password" exact={true}>
+          <ResetPassword />
+        </Route>
 
         <Route path="/login" component={Login} exact={true} />
         <Route path="/" component={Login} exact={true} />
         <Route path="/register" component={Register} exact={true} />
         <Route path="/profil" component={ProfilView} exact={true} />
+        <Route path="/reset_password" component={ResetPassword} exact={true} />
 
       </IonRouterOutlet>
     </IonReactRouter>

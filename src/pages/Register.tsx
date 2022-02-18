@@ -37,8 +37,8 @@ const Register: React.FC = () => {
   const [profil, setProfil] = useState<Profil>();
   const [birthDay, setBirthDay] = useState<string>("");
   const [society, setSociety] = useState<string>("");
-
-
+  const recaptchaRef: any = React.createRef();
+  const [isRegistred, setIsRegistred] = useState<boolean>(false);
 
  async  function registration() {
   setBusy(true);
@@ -68,6 +68,12 @@ const Register: React.FC = () => {
         setBusy(false);
         return;
     }
+    if(!(recaptchaRef.current.getValue())){
+      setMessage("Validez le ReCaptcha");
+      setIserror(true);
+      setBusy(false);
+        return;
+    }
 
   
     
@@ -87,6 +93,8 @@ const Register: React.FC = () => {
     if(res) exportProfilToDB(profi)
 
     setBusy(false);
+    setMessage("Un mail de confirmation vous a été envoyé, merci de le consulter afin de valider votre inscription");
+    setIsRegistred(true);
     history.push('/');
 
   };
@@ -109,6 +117,13 @@ const Register: React.FC = () => {
                 onDidDismiss={() => setIserror(false)}
                 cssClass="my-custom-class"
                 header={"Erreur !"}
+                message={message}
+                buttons={["J'ai compris"]}
+            />
+            <IonAlert
+                isOpen={isRegistred}
+                onDidDismiss={() => setIsRegistred(false)}
+                cssClass="my-custom-class"
                 message={message}
                 buttons={["J'ai compris"]}
             />
@@ -233,12 +248,17 @@ const Register: React.FC = () => {
                   * Champs obligatoires
             </p>
             </IonCol>
+          </IonRow>
+
+          <IonRow>       
             <IonCol>
+            <div style={{display:"inline-block"}}>
               <ReCAPTCHA
+                ref={recaptchaRef}
                 sitekey="6LdrNIQeAAAAAKwFXn5c9xCjy5KfdwCkipOpVtPn"
-                onChange={this.handleonChange}
-              />,
-            </IonCol>
+              />
+            </div>
+            </IonCol>        
           </IonRow>
 
           <IonRow>
