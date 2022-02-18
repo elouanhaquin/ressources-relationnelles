@@ -224,8 +224,8 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
             <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
             <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
             <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.filter(r => r.text.length > 0).length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
-            {signaledNumber == -2 ?
-              <IonItem onClick={e => signalItem()} >{isSignaled ? <IonIcon icon={warningOutline} />
+            {signaledNumber != -2 ?
+              <IonItem onClick={e => signalItem()} >{!isSignaled ? <IonIcon icon={warningOutline} />
                 :
                 <IonIcon color="danger" icon={warning} />}<h3 className="hidden-md-down">Signaler</h3></IonItem> :
               <IonItem > <IonIcon color="success" icon={checkmarkDone} /><h3 className="hidden-md-down">Validée</h3></IonItem>
@@ -241,7 +241,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
 
         }
 
-        <CommentListItem key={message.id} message={message} uid={uid} />
+        <CommentListItem key={message.id} message={message} uid={uid} admin={admin}/>
 
 
       </IonCard>

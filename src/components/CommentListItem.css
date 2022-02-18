@@ -58,6 +58,7 @@
     font-size: 80%;
     height: 80%;
     font-weight: 600;
+    font-style: normal;
     cursor: pointer;
 }
 
@@ -70,4 +71,32 @@
 .comment {
     width: 90%;
     margin: auto;
+}
+
+.comment .avatar img{
+    max-height: 50px;
+    height: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.comment .avatar{
+    max-height: 50px;
+    min-width: 50px;
+    height: 50px;
+    max-width: 50px;
+}
+
+.comment .signal{
+
+    max-width: 75px;
+    min-width: 75px;
+}
+
+
+.comment .signal ion-icon{
+cursor: pointer;
+}
+
+.comment .signal .delete {
 }

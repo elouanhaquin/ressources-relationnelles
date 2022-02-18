@@ -4,6 +4,7 @@ export interface Reponse {
     username: string;
     idMessage: number;
     text: string;
+    signaled?: number;
   }
   
   const messages: Reponse[] = [
