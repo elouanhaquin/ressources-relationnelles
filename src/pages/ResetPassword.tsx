@@ -11,24 +11,20 @@ import { IonGrid, IonRow, IonCol } from '@ionic/react';
 import { personCircle } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 import { IonItem, IonLabel, IonInput, IonButton, IonIcon, IonAlert } from '@ionic/react';
-import {loginUser} from '../firebaseConfig'
+import {loginUser, resetPassword} from '../firebaseConfig'
 import { setUserState } from '../reducers/action';
 import { useDispatch } from 'react-redux';
 import ReCAPTCHA from 'react-google-recaptcha';
-import {toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-toast.configure()
+//import {presentToast} from '../toast'
  
 function validateEmail(email: string) {
     const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
     return re.test(String(email).toLowerCase());
 }
 
-const Home: React.FC = () => {
+const ResetPassword: React.FC = () => {
   const history = useHistory();
   const [email, setEmail] = useState<string>("ressources@relationelles.fr");
-  const [password, setPassword] = useState<string>("cesi");
   const [iserror, setIserror] = useState<boolean>(false);
   const [busy, setBusy] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -42,39 +38,18 @@ const Home: React.FC = () => {
     document.body.appendChild(toast);
     if(toast)
     console.log(toast);
-  
+    
+       //return toast.present();
   }
 
-    const notify = ()=>{
-        toast('Hello Geeks 4',
-           {position: toast.POSITION.BOTTOM_LEFT})
-        toast('Hello Geeks 6',
-           {position: toast.POSITION.BOTTOM_RIGHT})
-        toast('Hello Geeks 5',
-           {position: toast.POSITION.BOTTOM_CENTER})
-        toast('Hello Geeks 1',
-           {position: toast.POSITION.TOP_LEFT})
-        toast('Hello Geeks 3',
-           {position: toast.POSITION.TOP_RIGHT})
-        toast('Hello Geeks 2',
-           {position: toast.POSITION.TOP_CENTER})
-    }
-  
-
-  async function Logged() {
+  async function AskForPwdReset() {
     if (email == "ressources@relationelles.fr" || email == "") {
       setMessage("Entrez une adresse email");
       setIserror(true);
       setBusy(false);
-      //recaptchaRef.reset();
       return;
     }
-    if (!password) {
-      setMessage("Entrez un mot de passe");
-      setIserror(true);
-      setBusy(false);
-      return;
-    }
+
     if(!(recaptchaRef.current.getValue())){
       setMessage("Validez le ReCaptcha");
       setIserror(true);
@@ -82,25 +57,19 @@ const Home: React.FC = () => {
         return;
     }
     else {
-    setBusy(true);
-    const res : any = await loginUser(email, password);
-    setBusy(false);
-    if(res != "undefined"){
-      dispatch(setUserState(res));
-      history.push('/home');
-    }
-  //  if(!false)
- // presentToast("dede");
- 
-    console.log(`${res}`);
+      setBusy(false);
+      const res : any = await resetPassword(email);
+      console.log(res);
+      if(res) {
+        history.push('/Login');
+      }
     }
   }
-
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Login</IonTitle>
+          <IonTitle>Demande de réinitialisation du mot de passe</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonLoading message="Attendez s'il-vous-plait" duration={0} isOpen={busy}></IonLoading>
@@ -138,22 +107,7 @@ const Home: React.FC = () => {
             </IonInput>
             </IonItem>
             </IonCol>
-          </IonRow>
-
-          <IonRow>
-            <IonCol>
-            <IonItem>
-              <IonLabel position="floating"> Mot de passe</IonLabel>
-              <IonInput
-                type="password"
-                placeholder={password}
-                onIonChange={(e) => setPassword(e.detail.value!)}
-                >
-              </IonInput>
-            </IonItem>
-            </IonCol>
-          </IonRow>
-            
+          </IonRow>            
           <IonRow>       
             <IonCol>
             <div style={{display:"inline-block"}}>
@@ -167,15 +121,7 @@ const Home: React.FC = () => {
 
           <IonRow>    
             <IonCol>
-              <p style={{ fontSize: "small" }}>
-                  En cliquant sur se connecter vous acceptez nos <a href="#">conditions d'utilisations</a>.
-              </p>
-              <IonButton  onClick={Logged}>Login</IonButton>
-              <button onClick={notify}>Click Me!</button>
-              <p style={{ fontSize: "medium" }}><Link to="reset_password">Mot de passe oublié</Link></p>
-              <p style={{ fontSize: "medium" }}>
-                  Vous n'avez pas de compte ? <Link to="register">Inscrivez-vous !</Link>
-              </p>
+              <IonButton onClick={AskForPwdReset}>Reinitialiser mon mot de passe</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -184,4 +130,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default ResetPassword;

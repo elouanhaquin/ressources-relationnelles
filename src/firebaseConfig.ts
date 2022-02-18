@@ -1,12 +1,12 @@
 import { resolve } from 'dns';
 import * as firebase from 'firebase'
+import { userInfo } from 'os';
 import { Observable } from 'redux';
 import { pathToFileURL } from 'url';
 import { DBWrapper } from 'workbox-core/_private';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
 import { addProfilBBD, Profil, setProfilsBDD } from './data/profil';
 import { Reponse } from './data/reponse';
-
 
 const config = {
     apiKey: "AIzaSyBfxVb5gDYd1cJehGGQwD468ZeQwNx7RVM",
@@ -43,7 +43,28 @@ export function logoutUser() {
 export async function loginUser(username: string, password: string) {
     try {
         const res = await firebase.default.auth().signInWithEmailAndPassword(username, password);
+        //console.log(firebase.default.auth().currentUser?.emailVerified);
+        if (firebase.default.auth().currentUser?.emailVerified == true) {
         return "" + res;
+        }
+        else {
+            return "undefined";
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return "undefined";
+    }
+}
+
+export async function resetPassword(email: string) {
+    try {
+        var ValidMail = false;
+        const res = await firebase.default.auth().sendPasswordResetEmail(email)
+        .then(() => {alert('Un mail de réinitialisation du mot de passe vous a été envoyé');
+        ValidMail = true;})
+        .catch(error => alert('Error'));
+        return ValidMail;
     }
     catch (error) {
         console.log(error);
@@ -63,16 +84,23 @@ export async function getUIDCurrentUser() {
     return auth.currentUser?.uid;
 }
 
-export async function RegisterUser(username: string, password: string) {
+export async function RegisterUser(email: string, password: string, pseudo: string, firstName: string, lastName:String, birthday:string, society:string) {
     try {
 
-        const res = await firebase.default.auth().createUserWithEmailAndPassword(username, password).then(cred => {
+        const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
-                name: username,
-                id: 0
+                email: email,
+                pseudo : pseudo,
+                firstName : firstName,
+                lastName : lastName,
+                birthday : birthday,
+                society: society
             })
         });
+
+        firebase.default.auth().currentUser?.sendEmailVerification();
         console.log(res);
+        console.log(firebase.default.auth().currentUser?.emailVerified);
         return true;
     }
     catch (error) {
@@ -585,3 +613,6 @@ export const ViewToMessageFromDBWithoutCategory = (id: string, like: number) => 
         return currentRank + like;
     });
 };
+    function sendEmailVerification(currentUser: any) {
+        throw new Error('Function not implemented.');
+    }

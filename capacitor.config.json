@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "Ressources Relationnelles",
-	"webDir": "build",
-	"bundledWebRuntime": false
+  "appId": "io.ionic.starter",
+  "appName": "Ressources Relationnelles",
+  "webDir": "build",
+  "bundledWebRuntime": false
 }
