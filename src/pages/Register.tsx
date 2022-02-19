@@ -15,7 +15,6 @@ import { exportProfilToDB, getCurrentUser, loginUserGetUID, RegisterUser } from 
 import { Profil } from '../data/profil';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendar } from 'ionicons/icons';
-import { format, parseISO } from 'date-fns';
 import ReCAPTCHA from "react-google-recaptcha";
 
 function validateEmail(email: string) {
