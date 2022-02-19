@@ -25,6 +25,7 @@ import { Message } from '../data/messages';
 import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward, trashBinOutline, checkmarkDone, warningOutline, warning, trashOutline } from 'ionicons/icons'
 import './MessageListItem.css';
 import './CommentListItem.css';
+import './CommentItem.css';
 import { Reponse } from '../data/reponse';
 import { useEffect, useState } from 'react';
 import { DeleteCommentToDBFireStore, getImageTypeFromStorage, getProfilFromFireStoreDBwithID, getUserImage, isMessageLiked, isProfilSaysMessageSignaled, isReponseSignaled, isReponseSignaledFromUser, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ReplyToMessageFromDBFireStore, setSignaledCommentToUserFirebase, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, SignalToReponseFromDBFireStore } from '../firebaseConfig';
@@ -86,7 +87,7 @@ const CommentItem: React.FC<MessageListItemProps> = ({ reponse, idParent, uid, a
     }
 
     return ( !deleted ? 
-        < IonItem key={reponse.id}>
+        < IonItem key={reponse.id} className='comment-item'>
             <IonAvatar className='avatar' >
                 <IonImg src={image} />
             </IonAvatar>

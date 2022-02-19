@@ -1,0 +1,7 @@
+.comment-item ion-label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    white-space: normal !important;
+    width: 95%;
+}

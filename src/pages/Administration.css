@@ -1,0 +1,21 @@
+.admin .reponse {}
+
+.admin .reponse ion-card {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    max-width: 95%;
+}
+
+.admin .header ion-icon {
+    color: var(--ion-color-tertiary-shade)
+}
+
+.admin .content ion-button ion-icon {
+    color: var(--ion-color-primary-contrast);
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.admin .reponse ion-icon {
+    color: var(--ion-color-primary-contrast)
+}
