@@ -1,0 +1,102 @@
+.comment ion-item ion-label {
+    color: var( --ion-color-medium-shade) !important;
+}
+
+.comment ion-list ion-label {
+    color: var( --ion-color-dark-shade) !important;
+}
+
+.comment ion-list ion-item {
+    margin: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.comment ion-list ion-item:last-of-type {
+    border: 0px solid var(--ion-color-light);
+}
+
+
+.comment ion-list a {
+   text-decoration: none;
+}
+
+.comment ion-list ion-input {
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: var(--ion-color-light);
+    width: 100%;
+    text-indent: 10px;
+    padding: 0;
+}
+
+.comment .item-content {
+    text-indent: 10px;
+    border-radius: 5px;
+    border: 3px solid var(--ion-color-light);
+    background-color: var(--ion-color-light);
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.comment ion-list ion-button {
+    margin: 0;
+    padding: 0;
+    margin-left: 10px;
+    height: 80%;
+    margin-bottom: 10px;
+}
+
+.comment .name {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    text-align: end;
+    font-size: 80%;
+    height: 80%;
+    font-weight: 600;
+    font-style: normal;
+    cursor: pointer;
+}
+
+.comment .text {
+    max-height: 100px;
+    margin-bottom: 10px;
+    text-overflow: clip;
+}
+
+.comment {
+    width: 90%;
+    margin: auto;
+}
+
+.comment .avatar img{
+    max-height: 50px;
+    height: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
+
+.comment .avatar{
+    max-height: 50px;
+    min-width: 50px;
+    height: 50px;
+    max-width: 50px;
+}
+
+.comment .signal{
+
+    max-width: 75px;
+    min-width: 75px;
+}
+
+
+.comment .signal ion-icon{
+cursor: pointer;
+}
+
+.comment .signal .delete {
+}
