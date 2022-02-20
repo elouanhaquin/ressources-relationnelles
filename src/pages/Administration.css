@@ -6,6 +6,10 @@
     max-width: 95%;
 }
 
+.admin .reponse ion-button {
+    align-self: center;
+}
+
 .admin .header ion-icon {
     color: var(--ion-color-tertiary-shade)
 }
@@ -18,4 +22,8 @@
 
 .admin .reponse ion-icon {
     color: var(--ion-color-primary-contrast)
+}
+
+.slider-pager .slider-pager-page {
+    stroke: #9f0 !important;
 }

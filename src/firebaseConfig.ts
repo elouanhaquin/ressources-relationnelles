@@ -344,6 +344,150 @@ export async function isReponseSignaled(id: string, idParent: string) {
     });
 }
 
+export async function getTopicsUserIsInterested(id: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation: string[] = sfDoc.get("interested")
+
+            return newPopulation;
+        });
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getFriendsUser(id: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation: string[] = sfDoc.get("friends")
+
+            return newPopulation;
+        });
+    }).then((data) => {
+        return data
+    });
+}
+
+
+export async function getFamilyUser(id: string) {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation: string[] = sfDoc.get("family")
+
+            return newPopulation;
+        });
+    }).then((data) => {
+        return data
+    });
+}
+
+export async function getRessourcesUserIsInterestedBy(id: string) {
+    return getTopicsUserIsInterested(id).then((data) => {
+        
+        let ressources =  firebase.default.firestore().collection('messages').where('category', 'in', data);
+        return ressources.get().then((querySnapshot) => {
+            let ress : Message[] = [];
+            querySnapshot.forEach((doc) => {
+                let m : Message = {
+                    category : doc.data().category,
+                    content : doc.data().content,
+                    date : doc.data().date,
+                    precise_date: doc.data().precise_date,
+                    views : doc.data().views,
+                    fromName : doc.data().fromName,
+                    img : doc.data().img,
+                    id : doc.data().id,
+                    like : doc.data().like,
+                    signaled : doc.data().signaled,
+                    fromId : doc.data().fromId,
+                    reponse : doc.data().reponse,
+                    subject : doc.data().subject,
+                    shareLevel: doc.data().shareLevel
+                } ;
+
+                ress.push( m)
+            });
+            return ress;
+        });
+    })
+}
+
+
+export async function getRessourcesUserFriends(id: string) {
+    return getFriendsUser(id).then((data) => {
+        let ressources =  firebase.default.firestore().collection('messages').where('fromId', 'in', data);
+        return ressources.get().then((querySnapshot) => {
+            let ress : Message[] = [];
+            querySnapshot.forEach((doc) => {
+                let m : Message = {
+                    category : doc.data().category,
+                    content : doc.data().content,
+                    date : doc.data().date,
+                    precise_date: doc.data().precise_date,
+                    views : doc.data().views,
+                    fromName : doc.data().fromName,
+                    img : doc.data().img,
+                    id : doc.data().id,
+                    like : doc.data().like,
+                    signaled : doc.data().signaled,
+                    fromId : doc.data().fromId,
+                    reponse : doc.data().reponse,
+                    subject : doc.data().subject,
+                    shareLevel: doc.data().shareLevel
+                } ;
+
+                ress.push( m)
+            });
+            return ress;
+        });
+    })
+}
+
+export async function getRessourcesUserFamily(id: string) {
+    return getFamilyUser(id).then((data) => {
+        let ressources =  firebase.default.firestore().collection('messages').where('fromId', 'in', data);
+        return ressources.get().then((querySnapshot) => {
+            let ress : Message[] = [];
+            querySnapshot.forEach((doc) => {
+                let m : Message = {
+                    category : doc.data().category,
+                    content : doc.data().content,
+                    date : doc.data().date,
+                    precise_date: doc.data().precise_date,
+                    views : doc.data().views,
+                    fromName : doc.data().fromName,
+                    img : doc.data().img,
+                    id : doc.data().id,
+                    like : doc.data().like,
+                    signaled : doc.data().signaled,
+                    fromId : doc.data().fromId,
+                    reponse : doc.data().reponse,
+                    subject : doc.data().subject,
+                    shareLevel: doc.data().shareLevel
+                } ;
+
+                ress.push( m)
+            });
+            return ress;
+        });
+    })
+}
+
+
+
+
 export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
     console.log("like value : " + like)
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
@@ -512,6 +656,31 @@ export const validateRessourceToFireStore = (idRessource: string) => {
         // This will be an "population is too big" error.
         console.error(err);
     });
+};
+
+export const validateCommentToFireStore = (idRessource: string, idComm : string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation: Reponse[] = sfDoc.get("reponse")
+            var reponse = newPopulation.filter(r => r.id == Number.parseInt(idComm))
+            if (reponse.length > 0 && reponse[0].signaled != undefined) {
+                reponse[0].signaled = -1;
+                console.log(reponse[0].signaled)
+                newPopulation = newPopulation.filter(r => r.id != Number.parseInt(idComm))
+                newPopulation.push(reponse[0]);
+                transaction.update(sfDocRef, { reponse: newPopulation });
+            }
+            else {
+                throw "reponse not find"
+            }
+
+            return newPopulation;
+        });
+    })
 };
 
 export const signaledRessourceToFireStore = (id: string, idRessource: string, add: boolean) => {

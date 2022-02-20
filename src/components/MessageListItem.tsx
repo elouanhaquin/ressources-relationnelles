@@ -30,6 +30,7 @@ import { useSelector } from 'react-redux';
 import { Document, Page, pdfjs } from "react-pdf";
 import CommentListItem from './CommentListItem';
 import { randomInt } from 'crypto';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface MessageListItemProps {
@@ -81,7 +82,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
         {arrayOfNumbers.map((e, i) => {
           return (
             <IonSlide  >
-              <Page key={i} pageNumber={i + 1} />
+              <Page pageNumber={i + 1} />
             </IonSlide>)
         })}
       </IonSlides>
@@ -104,7 +105,6 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
     if (busy) {
       setIsOwn("" + message.fromId == uid)
       isMessageSignaled("" + message.id).then((d) => {
-        console.log(d)
         setSignaledNumber(d)
         isMessageLiked(uid, "" + message.id).then(data => {
           showRessourceImageOrPdf();
@@ -221,7 +221,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
           {isPDF && message.img && !display ?
             <div>
 
-              <Carousel key={message.id} message={message} uid={uid} admin={admin} />
+            <Carousel message={message} uid={uid} admin={admin} />
 
 
             </div>
@@ -251,7 +251,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
 
         }
 
-        <CommentListItem key={message.id} message={message} uid={uid} admin={admin} />
+        <CommentListItem  message={message} uid={uid} admin={admin} />
 
 
       </IonCard>
