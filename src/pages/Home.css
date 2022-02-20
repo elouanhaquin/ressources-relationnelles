@@ -42,6 +42,11 @@ ion-grid {
     min-height: 150%;
 }
 
+.home .feed {
+    width: 80%;
+    max-width: 800px;
+}
+
 .footer-home-page {
     position: -webkit-sticky;
     position: sticky;
@@ -70,25 +75,6 @@ ion-grid {
     margin: auto;
     height: 70%;
     width: 70%;
-}
-
-:host {
-    --background: transparent !important;
-}
-
-.user-feed {}
-
-.swiper-pagination-bullet-active {
-    bottom: unset;
-    top: 90% !important;
-}
-
-.user-feed .swiper-pagination-fraction,
-.swiper-pagination-custom,
-.swiper-container-horizontal>.swiper-pagination-bullets {
-    top: 90vh;
-    left: 0;
-    width: 100%;
 }
 
 .invisible {

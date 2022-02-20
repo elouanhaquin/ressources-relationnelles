@@ -52,6 +52,9 @@ const Home: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messagesFriends, setFriendsMessages] = useState<Message[]>([]);
   const [messagesFamily, setFamilyMessages] = useState<Message[]>([]);
+  const [scrollA, setScrollA] = useState<number>();
+  const [scrollB, setScrollB] = useState<number>();
+  const [scrollC, setScrollC] = useState<number>();
   const [profil, setProfil] = useState<Profil>();
   const [pageNumber, setPageNumber] = useState(1);
   const [busy, setBusy] = useState(true);
@@ -99,8 +102,29 @@ const Home: React.FC = () => {
   };
 
   function changePage(numpage: number) {
-    console.log("change")
+    var top = window.pageYOffset || document.documentElement.scrollTop;
+    switch (pageNumber) {
+      case 0:
+        setScrollA(top);
+        break;
+      case 1:
+        setScrollB(top);
+        break;
+      case 2:
+        setScrollC(top);
+        break;
+    }
     setPageNumber(numpage);
+    window.scrollTo(0, 0);
+    scrollToTop();
+  }
+
+  function getContent() {
+    return document.querySelector('ion-content');
+  }
+
+  function scrollToTop() {
+    getContent()?.scrollToTop(500);
   }
 
   return (
@@ -112,36 +136,34 @@ const Home: React.FC = () => {
 
             <IonCol className="hidden-md-down" size="3"> {profil != undefined ? <ProfilItem profil={profil} /> : <div></div>} </IonCol>
 
-          
 
-            <IonCol  size="12">
 
-              <IonSlides className='user-feed' pager={true} options={slideOpts} onIonSlideDoubleTap={e => changePage(1)}>
-                <IonSlide hidden={pageNumber != 0}>
-                  <IonList>
-                    {messagesFamily.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
-                  </IonList>
-                </IonSlide>
-                <IonSlide hidden={pageNumber != 1}>
-                  <IonList>
-                    {messagesFriends.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
-                  </IonList>
-                </IonSlide>
-                <IonSlide hidden={pageNumber != 2}> 
-                  <IonList>
-                    {messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
-                  </IonList>
-                </IonSlide>
-              </IonSlides>
+            <IonCol size="12">
+
+              <IonSlide hidden={pageNumber != 0}>
+                <IonList className='feed'>
+                  {messagesFamily.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                </IonList>
+              </IonSlide>
+              <IonSlide hidden={pageNumber != 1}>
+                <IonList className='feed'>
+                  {messagesFriends.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                </IonList>
+              </IonSlide>
+              <IonSlide hidden={pageNumber != 2}>
+                <IonList className='feed'>
+                  {messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                </IonList>
+              </IonSlide>
 
             </IonCol>
           </IonRow>
 
         </IonGrid>
         <IonItem className="footer-home-page">
-          <IonButton fill="clear" onClick={e => changePage(0)}>{pageNumber == 0 ? <IonIcon icon={home}/> : <IonIcon icon={homeOutline}/>}</IonButton>
-          <IonButton fill="clear" onClick={e => changePage(1)}>{pageNumber == 1 ? <IonIcon icon={people}/>  : <IonIcon icon={peopleOutline}/> }</IonButton>
-          <IonButton fill="clear" onClick={e => changePage(2)}>{pageNumber == 2 ? <IonIcon icon={locationSharp}/>: <IonIcon icon={locationOutline}/>} </IonButton>
+          <IonButton fill="clear" onClick={e => changePage(0)}>{pageNumber == 0 ? <IonIcon icon={home} /> : <IonIcon icon={homeOutline} />}</IonButton>
+          <IonButton fill="clear" onClick={e => changePage(1)}>{pageNumber == 1 ? <IonIcon icon={people} /> : <IonIcon icon={peopleOutline} />}</IonButton>
+          <IonButton fill="clear" onClick={e => changePage(2)}> {pageNumber == 2 ? <IonIcon icon={locationSharp} /> : <IonIcon icon={locationOutline} />} </IonButton>
         </IonItem>
       </IonContent>
 
