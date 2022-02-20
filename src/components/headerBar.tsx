@@ -40,20 +40,20 @@ const HeaderBar: React.FC = () => {
       getProfilFromFireStoreDBwithID("" + data).then((d) => {
         const profi: Profil =
         {
-          name: d.name,
-          lastName: d.lastName,
-          firstName: d.firstName,
-          img: d.img,
-          id: d.id,
-          likes: d.likes,
-          categories: d.categories,
-          signaled: d.signaled,
-          signaled_comments: d.signaled_comments,
-          friends: d.friends,
-          family: d.family,
-          interested: d.interested,
-          admin: d.admin,
-          uid: d.uid
+          name: d.name ? d.name : "",
+          lastName: d.lastName? d.lastName : "",
+          firstName: d.firstName? d.firstName : "",
+          img: d.img? d.img : "",
+          id: d.id? d.id : 0,
+          likes: d.likes? d.likes : [],
+          categories: d.categories? d.categories : [],
+          signaled: d.signaled? d.signaled : [],
+          signaled_comments: d.signaled_comments? d.signaled_comments : [],
+          friends: d.friends? d.friends : [],
+          family: d.family? d.family : [],
+          interested: d.interested? d.interested : [],
+          admin: d.admin? d.admin : 0,
+          uid: d.uid? d.uid : ""
         };
         setProfil(profi)
       });

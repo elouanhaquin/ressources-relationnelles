@@ -84,17 +84,26 @@ export async function getUIDCurrentUser() {
     return auth.currentUser?.uid;
 }
 
-export async function RegisterUser(email: string, password: string, pseudo: string, firstName: string, lastName:String, birthday:string, society:string) {
+export async function RegisterUser(email: string, password: string, profil : Profil) {
     try {
 
         const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
                 email: email,
-                pseudo : pseudo,
-                firstName : firstName,
-                lastName : lastName,
-                birthday : birthday,
-                society: society
+                pseudo : profil.name,
+                firstName : profil.firstName,
+                lastName : profil.lastName,
+                img: profil.img,
+                id: profil.id,
+                likes: profil.likes,
+                categories: profil.categories,
+                signaled:profil.signaled,
+                signaled_comments: profil.signaled_comments,
+                friends: profil.friends,
+                family: profil.family,
+                interested: profil.interested,
+                admin: profil.admin,
+                uid: cred.user?.uid
             })
         });
 
