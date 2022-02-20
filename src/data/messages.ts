@@ -6,7 +6,7 @@ export interface Message {
   category: string;
   content: string;
   date: string;
-  precise_date: string;
+  precise_date: number;
   views: number;
   fromName: string;
   img: string;

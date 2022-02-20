@@ -86,6 +86,7 @@ const Home: React.FC = () => {
       });
 
     });
+    getContent()?.scrollToTop(500);
 
   });
 
@@ -133,26 +134,21 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         <IonGrid>
           <IonRow>
-
             <IonCol className="hidden-md-down" size="3"> {profil != undefined ? <ProfilItem profil={profil} /> : <div></div>} </IonCol>
-
-
-
             <IonCol size="12">
-
               <IonSlide hidden={pageNumber != 0}>
                 <IonList className='feed'>
-                  {messagesFamily.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                  {messagesFamily.sort((a,b) => a.precise_date - b.precise_date ).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
                 </IonList>
               </IonSlide>
               <IonSlide hidden={pageNumber != 1}>
                 <IonList className='feed'>
-                  {messagesFriends.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                  {messagesFriends.sort((a,b) => a.precise_date - b.precise_date ).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
                 </IonList>
               </IonSlide>
               <IonSlide hidden={pageNumber != 2}>
                 <IonList className='feed'>
-                  {messages.map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                  {messages.sort((a,b) => a.precise_date/a.like + b.precise_date/b.like ).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
                 </IonList>
               </IonSlide>
 

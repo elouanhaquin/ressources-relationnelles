@@ -72,7 +72,15 @@ const Administration: React.FC = () => {
                 firstName: data.firstName,
                 img: data.img,
                 id: data.id,
-                admin: data.admin
+                likes: data.likes,
+                categories: data.categories,
+                signaled: data.signaled,
+                signaled_comments: data.signaled_comments,
+                friends: data.friends,
+                family: data.family,
+                interested: data.interested,
+                admin: data.admin,
+                uid: data.uid
             };
             if (profi.admin == undefined || profi.admin == 0)
                 history.replace('/home');

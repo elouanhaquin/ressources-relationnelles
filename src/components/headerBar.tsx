@@ -26,6 +26,7 @@ import { Profil, getProfil } from '../data/profil';
 import { personCircle, addOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import './HeaderBar.css';
+import { getProfilFromFireStoreDBwithID, getUIDCurrentUser } from '../firebaseConfig';
 
 interface HeadBar {
   profil: Profil;
@@ -35,8 +36,28 @@ const HeaderBar: React.FC = () => {
   const [profil, setProfil] = useState<Profil>();
 
   useIonViewWillEnter(() => {
-    const prfl = getProfil();
-    setProfil(prfl);
+    getUIDCurrentUser().then(data => {
+      getProfilFromFireStoreDBwithID("" + data).then((d) => {
+        const profi: Profil =
+        {
+          name: d.name,
+          lastName: d.lastName,
+          firstName: d.firstName,
+          img: d.img,
+          id: d.id,
+          likes: d.likes,
+          categories: d.categories,
+          signaled: d.signaled,
+          signaled_comments: d.signaled_comments,
+          friends: d.friends,
+          family: d.family,
+          interested: d.interested,
+          admin: d.admin,
+          uid: d.uid
+        };
+        setProfil(profi)
+      });
+    });
   });
 
 

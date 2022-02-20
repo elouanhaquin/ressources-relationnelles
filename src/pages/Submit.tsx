@@ -77,7 +77,7 @@ function Submit() {
           views: 0,
           signaled: 0,
           date: "" + getDate(),
-          precise_date: "" + Date.now(),
+          precise_date: Date.now(),
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
           fromId: user.uid,
           shareLevel: 0,

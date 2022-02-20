@@ -186,24 +186,31 @@ export async function deleteImageTypeFromStorage(imageName: string) {
 
 export const getProfilFromFireStoreDBwithID = (id: string) => {
 
-    const te = firebase.default.firestore().collection('profils').doc('' + id);
-    return firebase.default.firestore().runTransaction((transaction) => {
-        return transaction.get(te).then((sfDoc) => {
-            if (!sfDoc.exists) {
-                throw "Document does not exist! : " + "profils/" + id;
-            }
-            const profi: Profil =
-            {
-                name: sfDoc.get("name"),
-                lastName: sfDoc.get("lastName"),
-                firstName: sfDoc.get("firstName"),
-                img: sfDoc.get("img"),
-                admin: sfDoc.get("admin"),
-                id: Number.parseInt(id)
-            };
-            return profi;
+    const te = firebase.default.firestore().collection('profils').where('id', '==', id);
+    return te.get().then((querySnapshot) => {
+        let ress : Profil[] = [];
+        querySnapshot.forEach((doc) => {
+            let m : Profil = {
+                      name: doc.data().name,
+                    lastName: doc.data().lastName,
+                    firstName: doc.data().firstName,
+                    img: doc.data().img,
+                    id: doc.data().id,
+                    likes: doc.data().likes,
+                    categories: doc.data().categories,
+                    signaled: doc.data().signaled,
+                    signaled_comments: doc.data().signaled_comments,
+                    friends: doc.data().friends,
+                    family: doc.data().family,
+                    interested: doc.data().interested,
+                    admin: doc.data().admin,
+                    uid: doc.data().uid
+            } ;
+
+            ress.push( m)
         });
-    })
+        return ress[0];
+    });
 
 }
 
@@ -392,6 +399,35 @@ export async function getFamilyUser(id: string) {
         return data
     });
 }
+
+export const getProfilToAdd = (research : string ) => {
+    const ref = firebase.default.firestore().collection('profils').where('name', '==', research.toLowerCase());
+    return ref.get().then((querySnapshot) => {
+        let ress : Profil[] = [];
+        querySnapshot.forEach((doc) => {
+            let m : Profil = {
+                      name: doc.data().name,
+                    lastName: doc.data().lastName,
+                    firstName: doc.data().firstName,
+                    img: doc.data().img,
+                    id: doc.data().id,
+                    likes: doc.data().likes,
+                    categories: doc.data().categories,
+                    signaled: doc.data().signaled,
+                    signaled_comments: doc.data().signaled_comments,
+                    friends: doc.data().friends,
+                    family: doc.data().family,
+                    interested: doc.data().interested,
+                    admin: doc.data().admin,
+                    uid: doc.data().uid
+            } ;
+
+            ress.push( m)
+        });
+        return ress;
+    });
+}
+
 
 export async function getRessourcesUserIsInterestedBy(id: string) {
     return getTopicsUserIsInterested(id).then((data) => {
