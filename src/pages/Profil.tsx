@@ -151,7 +151,7 @@ const ProfilView: React.FC = () => {
     //todo recherche working - IMPORTANT 
     //todo sauvegarder ressource - IMPORTANT  - done
     //todo css - IMPORTANT 
-    //supprimer utilisateur - IMPORTANT 
+    //supprimer utilisateur - IMPORTANT - done
     //modifier user - IMPORTANT 
 
     return (
@@ -182,7 +182,7 @@ const ProfilView: React.FC = () => {
                             </IonCol>
                             <IonCol size="3" className="hidden-md-up">
                             {id == undefined ?  <div><IonButton fill="clear">Modifier</IonButton>
-                                <IonButton color='danger'> Supprimer</IonButton></div> 
+                                <IonButton color='danger' onClick={e=> deleteProfil()}> Supprimer</IonButton></div> 
                                 :  isAlreadyFriend ?  <div>
                                     <IonButton hidden={isNotFriendAnymore} onClick={e => removeFriend(id)} fill="clear" color='danger'><IonIcon icon={personRemoveOutline}/></IonButton></div>
                                     : !friendRequestSent ? 
