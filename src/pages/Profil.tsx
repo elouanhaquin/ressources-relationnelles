@@ -149,7 +149,7 @@ const ProfilView: React.FC = () => {
     //todo modifier ressources - IMPORTANT - done
     //todo button  demande amis sur profil - done
     //todo recherche working - IMPORTANT 
-    //todo sauvegarder ressource - IMPORTANT 
+    //todo sauvegarder ressource - IMPORTANT  - done
     //todo css - IMPORTANT 
     //supprimer utilisateur - IMPORTANT 
     //modifier user - IMPORTANT 

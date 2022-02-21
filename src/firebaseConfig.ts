@@ -807,7 +807,48 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
             return newPopulation;
         });
     })
+};
 
+export const SavedMessageFromDBFireStore = (id: string, idRessource : string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
+    console.log(id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("saved_by");
+            if(!newPopulation.includes(id))
+                newPopulation.push(id)
+
+            transaction.update(sfDocRef, { saved_by: newPopulation });
+            return newPopulation;
+        });
+    })
+};
+
+export const RemoveSavedMessageFromDBFireStore = (id: string, idRessource : string) => {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
+    console.log(id);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("saved_by");
+
+            const index = newPopulation.indexOf(id);
+            if (index > -1) {
+                newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+            }
+       
+                
+            transaction.update(sfDocRef, { saved_by: newPopulation });
+            return newPopulation;
+        });
+    })
 };
 
 export const ReplyToMessageFromDBFireStore = (id: string, idReponse: string, message: string, sender: string, senderName: string) => {
@@ -837,6 +878,22 @@ export async function isMessageLiked(id: string, idRessource: string) {
 
             var newPopulation = sfDoc.get("like");
             return newPopulation.includes(idRessource);
+        });
+    }).then((newPopulation) => {
+        return newPopulation;
+    })
+};
+
+export async function isMessageSaved(id: string, idRessource: string) {
+    var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
+    return firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("saved_by");
+            return newPopulation.includes(id);
         });
     }).then((newPopulation) => {
         return newPopulation;
