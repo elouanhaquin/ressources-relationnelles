@@ -36,6 +36,7 @@ import Profil from './pages/Profil';
 import ProfilView from './pages/Profil';
 import ResetPassword from './pages/ResetPassword';
 import Administration from './pages/Administration';
+import Search from './pages/Search';
 
 setupIonicReact();
 
@@ -60,6 +61,9 @@ const Routing: React.FC = () => {
         </Route>
         <Route path="/profil/:id">
           <ProfilView />
+        </Route>
+        <Route path="/search/:id">
+          <Search />
         </Route>
         <Route path="/submit">
           <Submit />

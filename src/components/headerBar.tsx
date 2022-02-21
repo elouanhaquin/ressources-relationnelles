@@ -23,7 +23,7 @@ import {
 } from '@ionic/react';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { Profil, getProfil } from '../data/profil';
-import { personCircle, addOutline } from 'ionicons/icons';
+import { personCircle, addOutline, arrowForwardOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import './HeaderBar.css';
 import { getProfilFromFireStoreDBwithID, getUIDCurrentUser } from '../firebaseConfig';
@@ -34,29 +34,13 @@ interface HeadBar {
 
 const HeaderBar: React.FC = () => {
   const [profil, setProfil] = useState<Profil>();
+  const [searchText, setSearchText] = useState<string>("");
 
   useIonViewWillEnter(() => {
     getUIDCurrentUser().then(data => {
       getProfilFromFireStoreDBwithID("" + data).then((d) => {
-        const profi: Profil =
-        {
-          name: d.name ? d.name : "",
-          lastName: d.lastName? d.lastName : "",
-          firstName: d.firstName? d.firstName : "",
-          img: d.img? d.img : "",
-          id: d.id? d.id : 0,
-          likes: d.likes? d.likes : [],
-          categories: d.categories? d.categories : [],
-          signaled: d.signaled? d.signaled : [],
-          signaled_comments: d.signaled_comments? d.signaled_comments : [],
-          friends: d.friends? d.friends : [],
-          friends_waiting: d.friends_waiting? d.friends_waiting : [],
-          family: d.family? d.family : [],
-          interested: d.interested? d.interested : [],
-          admin: d.admin? d.admin : 0,
-          uid: d.uid? d.uid : ""
-        };
-        setProfil(profi)
+       
+        setProfil(d)
       });
     });
   });
@@ -70,11 +54,14 @@ const HeaderBar: React.FC = () => {
           <IonCol size="3">
             <IonItem href='/home'><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
           </IonCol>
-          <IonCol size="5">
-            <IonSearchbar>
-
+          <IonCol size={searchText.length > 0 ? "4" : "5"}>
+            <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)} showCancelButton="focus" enterkeyhint="enter" >
             </IonSearchbar>
           </IonCol>
+          <IonCol hidden={!(searchText.length > 0)} size="1">
+            <IonButton href={"/search/" +searchText }  fill='clear' > <IonIcon icon={arrowForwardOutline}> </IonIcon> </IonButton>
+          </IonCol>
+
           <IonCol size="1">
             <IonButton href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
 

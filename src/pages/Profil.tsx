@@ -59,6 +59,7 @@ const ProfilView: React.FC = () => {
     const [friendRequestSent, setFriendRequest] = useState<boolean>(false);
     const [isAlreadyFriend, setAlreadyFriend] = useState<boolean>(false);
     const [isNotFriendAnymore, setNotFriendAnymore] = useState<boolean>(false);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [uidArray, setUidArray] = useState<string[]>([]);
 
     useIonViewWillEnter(() => {
@@ -66,6 +67,7 @@ const ProfilView: React.FC = () => {
             getUIDCurrentUser().then(data => {
                 getProfilFromFireStoreDBwithID("" + data).then((f) => {
                     setUID(f.uid)
+                    setIsAdmin(f.admin > 0)
                     setProfi(f)
                     getProfilsWaitingToAccept('' + data).then((d) => {
                         setUidArray(d)
@@ -148,10 +150,10 @@ const ProfilView: React.FC = () => {
     //todo ressources postées et sauvegardées - done
     //todo modifier ressources - IMPORTANT - done
     //todo button  demande amis sur profil - done
-    //todo recherche working - IMPORTANT 
     //todo sauvegarder ressource - IMPORTANT  - done
-    //todo css - IMPORTANT 
     //supprimer utilisateur - IMPORTANT - done
+    //todo recherche  - IMPORTANT 
+    //todo css - IMPORTANT 
     //modifier user - IMPORTANT 
 
     return (
@@ -181,7 +183,7 @@ const ProfilView: React.FC = () => {
                                 <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {"location"}</IonCardTitle>
                             </IonCol>
                             <IonCol size="3" className="hidden-md-up">
-                            {id == undefined ?  <div><IonButton fill="clear">Modifier</IonButton>
+                            {id == undefined || isAdmin ?  <div><IonButton fill="clear">Modifier</IonButton>
                                 <IonButton color='danger' onClick={e=> deleteProfil()}> Supprimer</IonButton></div> 
                                 :  isAlreadyFriend ?  <div>
                                     <IonButton hidden={isNotFriendAnymore} onClick={e => removeFriend(id)} fill="clear" color='danger'><IonIcon icon={personRemoveOutline}/></IonButton></div>

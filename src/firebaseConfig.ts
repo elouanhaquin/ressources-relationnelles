@@ -295,7 +295,7 @@ export const SignalToReponseFromDBFireStore = (id: string, idParent: string, lik
     })
 };
 
-export const ModifyReponse = (id: string, title: string, category: string, description : string) => {
+export const ModifyReponse = (id: string, title: string, category: string, description: string) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
     console.log(id);
     return firebase.default.firestore().runTransaction((transaction) => {
@@ -307,7 +307,7 @@ export const ModifyReponse = (id: string, title: string, category: string, descr
             var newTitle = title;
             var newCategory = category;
             var newDescription = description;
-            transaction.update(sfDocRef, { subject: newTitle, content: newDescription, category:newCategory, signaled:0  });
+            transaction.update(sfDocRef, { subject: newTitle, content: newDescription, category: newCategory, signaled: 0 });
             return newDescription;
         });
     })
@@ -537,21 +537,21 @@ export const deleteFriendToFireStore = (id: string, idFriend: string) => {
             }
             var newPopulation = sfDoc.get("family");
             var friends = sfDoc.get("friends");
-            
-            if (newPopulation.includes(idFriend)){
+
+            if (newPopulation.includes(idFriend)) {
                 const index = newPopulation.indexOf(idFriend);
                 if (index > -1) {
                     newPopulation.splice(index, 1); // 2nd parameter means remove one item only
                 }
             }
-   
-            if (friends.includes(idFriend)){
+
+            if (friends.includes(idFriend)) {
                 const index = friends.indexOf(idFriend);
                 if (index > -1) {
                     friends.splice(index, 1); // 2nd parameter means remove one item only
                 }
             }
-           
+
             transaction.update(sfDocRef, { family: newPopulation, friends: friends });
             return idFriend;
         });
@@ -758,6 +758,69 @@ export async function getProfilsArray(id: Array<string>) {
     });
 }
 
+export async function getAllProfilsArray() {
+    let profils = firebase.default.firestore().collection('profils');
+    return profils.get().then((querySnapshot) => {
+        let ress: Profil[] = [];
+        querySnapshot.forEach((doc) => {
+            let m: Profil = {
+                name: doc.data().name,
+                lastName: doc.data().lastName,
+                firstName: doc.data().firstName,
+                img: doc.data().img,
+                id: doc.data().id,
+                likes: doc.data().likes,
+                categories: doc.data().categories,
+                signaled: doc.data().signaled,
+                signaled_comments: doc.data().signaled_comments,
+                friends: doc.data().friends,
+                friends_waiting: doc.data().friends_waiting,
+                family: doc.data().family,
+                interested: doc.data().interested,
+                admin: doc.data().admin,
+                uid: doc.data().uid
+            };
+
+            ress.push(m)
+        });
+
+        return ress;
+    });
+}
+
+export async function getRessourcesAllRessources() {
+
+    let ressources = firebase.default.firestore().collection('messages');
+    return ressources.get().then((querySnapshot) => {
+        let ress: Message[] = [];
+        querySnapshot.forEach((doc) => {
+            let m: Message = {
+                category: doc.data().category,
+                content: doc.data().content,
+                date: doc.data().date,
+                precise_date: doc.data().precise_date,
+                saved_by: doc.data().saved_by,
+                views: doc.data().views,
+                fromName: doc.data().fromName,
+                img: doc.data().img,
+                id: doc.data().id,
+                like: doc.data().like,
+                signaled: doc.data().signaled,
+                fromId: doc.data().fromId,
+                reponse: doc.data().reponse,
+                subject: doc.data().subject,
+                shareLevel: doc.data().shareLevel
+            };
+
+            ress.push(m)
+        });
+        return ress;
+    });
+
+}
+
+
+
 export async function getRessourcesUserFamily(id: string) {
     return getFamilyUser(id).then((data) => {
         let ressources = firebase.default.firestore().collection('messages').where('fromId', 'in', data);
@@ -809,7 +872,7 @@ export const LikeToMessageFromDBFireStore = (id: string, like: number) => {
     })
 };
 
-export const SavedMessageFromDBFireStore = (id: string, idRessource : string) => {
+export const SavedMessageFromDBFireStore = (id: string, idRessource: string) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
     console.log(id);
     return firebase.default.firestore().runTransaction((transaction) => {
@@ -819,7 +882,7 @@ export const SavedMessageFromDBFireStore = (id: string, idRessource : string) =>
             }
 
             var newPopulation = sfDoc.get("saved_by");
-            if(!newPopulation.includes(id))
+            if (!newPopulation.includes(id))
                 newPopulation.push(id)
 
             transaction.update(sfDocRef, { saved_by: newPopulation });
@@ -828,7 +891,7 @@ export const SavedMessageFromDBFireStore = (id: string, idRessource : string) =>
     })
 };
 
-export const RemoveSavedMessageFromDBFireStore = (id: string, idRessource : string) => {
+export const RemoveSavedMessageFromDBFireStore = (id: string, idRessource: string) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + idRessource);
     console.log(id);
     return firebase.default.firestore().runTransaction((transaction) => {
@@ -843,8 +906,8 @@ export const RemoveSavedMessageFromDBFireStore = (id: string, idRessource : stri
             if (index > -1) {
                 newPopulation.splice(index, 1); // 2nd parameter means remove one item only
             }
-       
-                
+
+
             transaction.update(sfDocRef, { saved_by: newPopulation });
             return newPopulation;
         });
@@ -1001,7 +1064,7 @@ export const DeleteProfil = (id: string) => {
 
             getRessourcesfromUser(id).then((d) => {
                 d.forEach(element => {
-                    DeleteRessoucesToDBFireStore("" +element.id)
+                    DeleteRessoucesToDBFireStore("" + element.id)
                 });
             })
             transaction.delete(sfDocRef);
