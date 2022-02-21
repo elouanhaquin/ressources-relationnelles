@@ -33,13 +33,14 @@ import {
   IonTabBar,
   IonBadge,
   IonTabButton,
-  IonRouterOutlet
+  IonRouterOutlet,
+  IonInput
 } from '@ionic/react';
 import './Home.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
-import { exportMessagesToDB, getMessagesFromFireStoreDB, getProfilFromFireStoreDB, getProfilFromFireStoreDBwithID, getRessourcesUserFamily, getRessourcesUserFriends, getRessourcesUserIsInterestedBy, getTopicsUserIsInterested, getUIDCurrentUser, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig'
+import { addInterestToFireStore, exportMessagesToDB, getMessagesFromFireStoreDB, getProfilFromFireStoreDB, getProfilFromFireStoreDBwithID, getRessourcesUserFamily, getRessourcesUserFriends, getRessourcesUserIsInterestedBy, getTopicsUserIsInterested, getUIDCurrentUser, LikeToMessageFromDBWithoutCategory } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
@@ -60,6 +61,7 @@ const Home: React.FC = () => {
   const [busy, setBusy] = useState(true);
   const username = useSelector((state: any) => state.userData.username)
   const [userUID, setUID] = useState<string>("");
+  const [interest, setInterest] = useState<string>("");
   const [categories, setCategories] = useState<string[]>([]);
   const [pro, setProfi] = useState<Profil>();
   const profilIMG = useSelector((state: any) => state.userData.profilImg)
@@ -128,27 +130,39 @@ const Home: React.FC = () => {
     getContent()?.scrollToTop(500);
   }
 
+  function setInterestedBy(subject : string){
+    addInterestToFireStore(userUID, subject, true)
+    setInterest("")
+  }
+
   return (
     <IonPage className="home" id="home-page">
       <HeaderBar />
       <IonContent fullscreen>
+        <IonRow hidden={pageNumber != 2 }>
+          <IonCol size="6"><IonInput onIonChange={e=> setInterest(e.detail.value!)} value={interest}></IonInput></IonCol>
+          <IonCol size="6"><IonButton onClick={e=> setInterestedBy(interest)} fill='outline'>Suivre catégorie</IonButton></IonCol>
+        </IonRow>
+
         <IonGrid>
           <IonRow>
             <IonCol className="hidden-md-down" size="3"> {profil != undefined ? <ProfilItem profil={profil} /> : <div></div>} </IonCol>
             <IonCol size="12">
               <IonSlide hidden={pageNumber != 0}>
                 <IonList className='feed'>
-                  {messagesFamily.sort((a,b) => a.precise_date - b.precise_date ).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                  {messagesFamily.sort((a, b) => a.precise_date - b.precise_date).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
                 </IonList>
               </IonSlide>
               <IonSlide hidden={pageNumber != 1}>
                 <IonList className='feed'>
-                  {messagesFriends.sort((a,b) => a.precise_date - b.precise_date ).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                  {messagesFriends.sort((a, b) => a.precise_date - b.precise_date).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
                 </IonList>
               </IonSlide>
               <IonSlide hidden={pageNumber != 2}>
+
+
                 <IonList className='feed'>
-                  {messages.sort((a,b) => a.precise_date/a.like + b.precise_date/b.like ).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
+                  {messages.sort((a, b) => a.precise_date / a.like + b.precise_date / b.like).map(m => <MessageListItem key={m.id} message={m} uid={userUID != undefined ? userUID : ""} admin={false}> {m.category}</MessageListItem>)}
                 </IonList>
               </IonSlide>
 

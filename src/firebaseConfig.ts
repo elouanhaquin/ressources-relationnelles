@@ -492,6 +492,39 @@ export async function getRessourcesUserIsInterestedBy(id: string) {
     })
 }
 
+export const addInterestToFireStore = (id: string, idFriend: string, add: boolean) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            var newPopulation = sfDoc.get("interested");
+            if (!add) {
+                const index = newPopulation.indexOf(idFriend);
+                console.log("removing item : " + index)
+
+                if (index > -1) {
+                    newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+            else {
+                if (!newPopulation.includes(idFriend))
+                    newPopulation.push(idFriend)
+            }
+            console.log(newPopulation)
+
+            transaction.update(sfDocRef, { interested: newPopulation });
+            return idFriend;
+        });
+    }).then((newPopulation) => {
+        console.log("Friend added ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
 
 
 export const addFriendToFireStore = (id: string, idFriend: string, add: boolean) => {

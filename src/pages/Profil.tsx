@@ -83,7 +83,6 @@ const ProfilView: React.FC = () => {
 
                     getRessourcesSavedByUser('' + data).then((d) => {
                         setSavedRessources(d)
-
                     })
                 });
             });
@@ -152,7 +151,9 @@ const ProfilView: React.FC = () => {
     //todo button  demande amis sur profil - done
     //todo sauvegarder ressource - IMPORTANT  - done
     //supprimer utilisateur - IMPORTANT - done
-    //todo recherche  - IMPORTANT 
+    //todo recherche  - IMPORTANT - done
+    //todo delete user from admin - done
+    //todo suscribe to topic - IMPORTANT
     //todo css - IMPORTANT 
     //modifier user - IMPORTANT 
 
