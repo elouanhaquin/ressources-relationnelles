@@ -493,8 +493,9 @@ export async function getRessourcesUserIsInterestedBy(id: string) {
 }
 
 
+
 export const addFriendToFireStore = (id: string, idFriend: string, add: boolean) => {
-    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + idFriend);
     firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(sfDocRef).then((sfDoc) => {
             if (!sfDoc.exists) {
@@ -503,7 +504,7 @@ export const addFriendToFireStore = (id: string, idFriend: string, add: boolean)
 
             var newPopulation = sfDoc.get("friends_waiting");
             if (!add) {
-                const index = newPopulation.indexOf(idFriend);
+                const index = newPopulation.indexOf(id);
                 console.log("removing item : " + index)
 
                 if (index > -1) {
@@ -511,8 +512,8 @@ export const addFriendToFireStore = (id: string, idFriend: string, add: boolean)
                 }
             }
             else {
-                if (!newPopulation.includes(idFriend))
-                    newPopulation.push(idFriend)
+                if (!newPopulation.includes(id))
+                    newPopulation.push(id)
             }
             console.log(newPopulation)
 
@@ -521,6 +522,41 @@ export const addFriendToFireStore = (id: string, idFriend: string, add: boolean)
         });
     }).then((newPopulation) => {
         console.log("Friend added ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+
+export const deleteFriendToFireStore = (id: string, idFriend: string) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation = sfDoc.get("family");
+            var friends = sfDoc.get("friends");
+            
+            if (newPopulation.includes(idFriend)){
+                const index = newPopulation.indexOf(idFriend);
+                if (index > -1) {
+                    newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+   
+            if (friends.includes(idFriend)){
+                const index = friends.indexOf(idFriend);
+                if (index > -1) {
+                    friends.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+           
+            transaction.update(sfDocRef, { family: newPopulation, friends: friends });
+            return idFriend;
+        });
+    }).then((newPopulation) => {
+        console.log("Friend deleted ", newPopulation);
     }).catch((err) => {
         // This will be an "population is too big" error.
         console.error(err);
@@ -546,6 +582,34 @@ export const acceptFriendToFireStore = (id: string, idFriend: string, add: boole
                 newPopulation.splice(index, 1); // 2nd parameter means remove one item only
             }
             transaction.update(sfDocRef, { friends_waiting: newPopulation, friends: friends });
+            return idFriend;
+        });
+    }).then((newPopulation) => {
+        console.log("Friend added ", newPopulation);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+export const acceptFamilyToFireStore = (id: string, idFriend: string, add: boolean) => {
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+            var newPopulation = sfDoc.get("friends_waiting");
+            var friends = sfDoc.get("family");
+            if (add)
+                friends.push(idFriend)
+
+            const index = newPopulation.indexOf(idFriend);
+            console.log("removing item : " + index)
+
+            if (index > -1) {
+                newPopulation.splice(index, 1); // 2nd parameter means remove one item only
+            }
+            transaction.update(sfDocRef, { friends_waiting: newPopulation, family: friends });
             return idFriend;
         });
     }).then((newPopulation) => {
@@ -862,6 +926,29 @@ export const DeleteCommentToDBFireStore = (id: string, idComm: string) => {
 
             transaction.update(sfDocRef, { reponse: newarray });
             return index;
+        });
+    }).then((newPopulation) => {
+        console.log("Deleted ", id);
+    }).catch((err) => {
+        // This will be an "population is too big" error.
+        console.error(err);
+    });
+};
+export const DeleteProfil = (id: string) => {
+    var sfDocRef = firebase.default.firestore().collection('profil').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+        return transaction.get(sfDocRef).then((sfDoc) => {
+            if (!sfDoc.exists) {
+                throw "Document does not exist!";
+            }
+
+            getRessourcesfromUser(id).then((d) => {
+                d.forEach(element => {
+                    DeleteRessoucesToDBFireStore("" +element.id)
+                });
+            })
+            transaction.delete(sfDocRef);
+
         });
     }).then((newPopulation) => {
         console.log("Deleted ", id);

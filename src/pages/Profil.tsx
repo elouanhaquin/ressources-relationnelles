@@ -4,7 +4,7 @@ import ProfilItem from '../components/profilItem';
 import { Profil, getProfil } from '../data/profil';
 import { useEffect, useState } from 'react';
 import { Message, getMessages, setMessagesBDD } from '../data/messages';
-import { addOutline, checkmarkDone, locateOutline, locationOutline, personAdd, removeOutline, searchOutline } from 'ionicons/icons'
+import { addOutline, checkmarkDone, ellipsisHorizontalOutline, homeOutline, hourglassOutline, locateOutline, locationOutline, optionsOutline, peopleOutline, personAdd, personRemoveOutline, removeOutline, searchOutline } from 'ionicons/icons'
 import {
     IonContent,
     IonHeader,
@@ -37,7 +37,7 @@ import './Profil.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
-import { acceptFriendToFireStore, addFriendToFireStore, exportMessagesToDB, getProfilFromFireStoreDBwithID, getProfilsArray, getProfilsWaitingToAccept, getProfilToAdd, getRessourcesfromUser, getRessourcesSavedByUser, getUIDCurrentUser } from '../firebaseConfig'
+import { acceptFamilyToFireStore, acceptFriendToFireStore, addFriendToFireStore, deleteFriendToFireStore, DeleteProfil, exportMessagesToDB, getFamilyUser, getFriendsUser, getProfilFromFireStoreDBwithID, getProfilsArray, getProfilsWaitingToAccept, getProfilToAdd, getRessourcesfromUser, getRessourcesSavedByUser, getUIDCurrentUser } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
@@ -55,12 +55,17 @@ const ProfilView: React.FC = () => {
     const [ressources, setRessources] = useState<Message[]>([]);
     const [savedRessources, setSavedRessources] = useState<Message[]>([]);
     const [query, setQuery] = useState<string>("");
+    const [uid, setUID] = useState<string>("");
+    const [friendRequestSent, setFriendRequest] = useState<boolean>(false);
+    const [isAlreadyFriend, setAlreadyFriend] = useState<boolean>(false);
+    const [isNotFriendAnymore, setNotFriendAnymore] = useState<boolean>(false);
     const [uidArray, setUidArray] = useState<string[]>([]);
 
     useIonViewWillEnter(() => {
         if (id == undefined) {
             getUIDCurrentUser().then(data => {
                 getProfilFromFireStoreDBwithID("" + data).then((f) => {
+                    setUID(f.uid)
                     setProfi(f)
                     getProfilsWaitingToAccept('' + data).then((d) => {
                         setUidArray(d)
@@ -82,10 +87,30 @@ const ProfilView: React.FC = () => {
             });
         }
         else {
+            getUIDCurrentUser().then(data => {
+                getProfilFromFireStoreDBwithID("" + data).then((f) => {
+                    setUID(f.uid)
+                    getFriendsUser('' + f.uid).then((d) => {
+                        if(!isAlreadyFriend)
+                            setAlreadyFriend(d.includes(id))
+                    })
+
+                    getFamilyUser('' + f.uid).then((d) => {
+                        if(!isAlreadyFriend)
+                            setAlreadyFriend(d.includes(id))
+                    })
+
+                });
+            });
             getProfilFromFireStoreDBwithID("" + id).then((f) => {
-             
                 setProfi(f)
             });
+
+            getRessourcesfromUser('' + id).then((d) => {
+                console.log(id)
+                setRessources(d)
+            })
+        
         }
 
     
@@ -98,19 +123,33 @@ const ProfilView: React.FC = () => {
     }
 
     function addFriend(friendUID: string) {
-        addFriendToFireStore("" + pro?.uid, friendUID, true);
+        addFriendToFireStore("" + uid, friendUID, true);
+        setFriendRequest(!friendRequestSent)
     }
 
     function acceptFriend(friendUID: string) {
         acceptFriendToFireStore("" + pro?.uid, friendUID, true);
     }
+    function removeFriend(friendUID: string) {
+        deleteFriendToFireStore("" + uid, friendUID);
+        setNotFriendAnymore(true)
+    }
+    function acceptFamily(friendUID: string) {
+        acceptFamilyToFireStore("" + pro?.uid, friendUID, true);
+    }
     function refuseFriend(friendUID: string) {
         acceptFriendToFireStore("" + pro?.uid, friendUID, false);
     }
+
+    function deleteProfil() {
+        if(uid != undefined)
+            DeleteProfil(uid)
+    }
     //todo ressources postées et sauvegardées - done
-    //todo modifier ressources - IMPORTANT - WORKING
-    //todo button  demande amis sur profil
+    //todo modifier ressources - IMPORTANT - done
+    //todo button  demande amis sur profil - done
     //todo recherche working - IMPORTANT 
+    //todo sauvegarder ressource - IMPORTANT 
     //todo css - IMPORTANT 
     //supprimer utilisateur - IMPORTANT 
     //modifier user - IMPORTANT 
@@ -142,7 +181,17 @@ const ProfilView: React.FC = () => {
                                 <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {"location"}</IonCardTitle>
                             </IonCol>
                             <IonCol size="3" className="hidden-md-up">
-                                <IonButton>Modifier</IonButton>
+                            {id == undefined ?  <div><IonButton fill="clear">Modifier</IonButton>
+                                <IonButton color='danger'> Supprimer</IonButton></div> 
+                                :  isAlreadyFriend ?  <div>
+                                    <IonButton hidden={isNotFriendAnymore} onClick={e => removeFriend(id)} fill="clear" color='danger'><IonIcon icon={personRemoveOutline}/></IonButton></div>
+                                    : !friendRequestSent ? 
+                                <div>
+                                    <IonButton onClick={e => addFriend(id)} fill="clear"><IonIcon icon={peopleOutline}/> + </IonButton></div> 
+                                    : <div>
+                                    <IonButton  fill="clear"><IonIcon icon={hourglassOutline}/> </IonButton></div> }
+                                    {isNotFriendAnymore ?   <div>
+                                    <IonButton onClick={e => addFriend(id)} fill="clear"><IonIcon icon={peopleOutline}/> + </IonButton></div>  : <div></div>}
                             </IonCol>
                         </IonRow>
                     </IonCard>
@@ -154,7 +203,10 @@ const ProfilView: React.FC = () => {
                             <IonList>
                                 {profilsWaiting.map(p =>
                                     <IonItem>
-                                        <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.name}</IonCardSubtitle> <IonButton fill="clear" onClick={e => acceptFriend(p.uid)}><IonIcon color='success' icon={checkmarkDone}></IonIcon></IonButton> <IonButton fill="clear" onClick={e => refuseFriend(p.uid)}><IonIcon color='danger' icon={removeOutline}></IonIcon></IonButton>
+                                        <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.name}</IonCardSubtitle> 
+                                        <IonButton fill="clear" onClick={e => acceptFamily(p.uid)}><IonIcon color='success' icon={homeOutline}></IonIcon></IonButton> 
+                                        <IonButton fill="clear" onClick={e => acceptFriend(p.uid)}><IonIcon color='success' icon={peopleOutline}></IonIcon></IonButton> 
+                                        <IonButton fill="clear" onClick={e => refuseFriend(p.uid)}><IonIcon color='danger' icon={removeOutline}></IonIcon></IonButton>
                                     </IonItem>
                                 )}
                             </IonList>
@@ -178,10 +230,10 @@ const ProfilView: React.FC = () => {
                     </IonCard>
 
                     <IonCard hidden={ressources.length == 0} className="add-someone">
-                        <IonCardTitle>Vos ressources publiées <IonBadge color="secondary">{ressources.length}</IonBadge></IonCardTitle>
+                        <IonCardTitle>{id == undefined ? "Vos ressources publiées" : "Ses ressources publiées"} <IonBadge color="secondary">{ressources.length}</IonBadge></IonCardTitle>
                         <IonRow >
                             <IonList >
-                                {ressources.map(m => <MessageListItem key={m.id} message={m} uid={id} admin={true}> {m.category}</MessageListItem>)}
+                                {ressources.map(m => <MessageListItem key={m.id} message={m} uid={uid} admin={false}> {m.category}</MessageListItem>)}
                             </IonList>
                         </IonRow>
                     </IonCard>
@@ -190,7 +242,7 @@ const ProfilView: React.FC = () => {
                         <IonCardTitle>Vos ressources sauvegardées <IonBadge color="secondary">{savedRessources.length}</IonBadge></IonCardTitle>
                         <IonRow >
                             <IonList>
-                            {savedRessources.map(m => <MessageListItem key={m.id} message={m} uid={id} admin={true}> {m.category}</MessageListItem>)}
+                            {savedRessources.map(m => <MessageListItem key={m.id} message={m} uid={uid} admin={false}> {m.category}</MessageListItem>)}
 
                             </IonList>
                         </IonRow>
