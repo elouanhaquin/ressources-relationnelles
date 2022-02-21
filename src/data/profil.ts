@@ -4,11 +4,13 @@ export interface Profil {
   name: string;
   firstName: string;
   lastName: string;
+  pseudo?: string;
   likes: string[];
   categories?: string[];
   signaled: string[];
   signaled_comments: string[];
   friends: string[];
+  friends_waiting: string[];
   family: string[];
   interested: string[];
   img: string;

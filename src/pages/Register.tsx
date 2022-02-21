@@ -88,6 +88,7 @@ const Register: React.FC = () => {
       signaled: [],
       signaled_comments: [],
       friends: [],
+      friends_waiting: [],
       family: [],
       interested: [],
       admin: 0,

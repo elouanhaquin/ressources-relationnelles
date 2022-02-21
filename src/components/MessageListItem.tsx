@@ -25,7 +25,7 @@ import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, 
 import './MessageListItem.css';
 import { Reponse } from '../data/reponse';
 import { useEffect, useState } from 'react';
-import { DeleteRessoucesToDBFireStore, getImageTypeFromStorage, isMessageLiked, isMessageSignaled, isProfilSaysMessageSignaled, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, validateRessourceToFireStore } from '../firebaseConfig';
+import { DeleteRessoucesToDBFireStore, getImageTypeFromStorage, isMessageLiked, isMessageSignaled, isProfilSaysMessageSignaled, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ModifyReponse, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, validateRessourceToFireStore } from '../firebaseConfig';
 import { useSelector } from 'react-redux';
 import { Document, Page, pdfjs } from "react-pdf";
 import CommentListItem from './CommentListItem';
@@ -98,6 +98,10 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
   const [isPDF, setPDF] = useState<Boolean>(false);
   const [display, setDisplay] = useState<Boolean>(false);
   const [isOwnMessage, setIsOwn] = useState<Boolean>(false);
+  const [modify, setModify] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
 
 
 
@@ -204,19 +208,29 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
 
     }
   }
-
+  function modifyItem() {
+    if (uid.length > 0) {
+      var isModified = !modify;
+      setModify(!modify)
+      //when we've been modifyng something
+      if(!isModified && modify){
+        console.log("HHEEEY")
+        ModifyReponse("" + message.id, title.length > 0 ? title: message.subject, category.length > 0 ? category.toLowerCase(): message.category.toLowerCase(), description.length > 0 ? description:  message.content)
+      }
+    }
+  }
 
 
   return (!busy && show ?
     <IonItem className="message-list-item" slot="start" detail={false}>
-      <IonCard className="ion-text-wrap full-width">
+      <IonCard  className="ion-text-wrap full-width">
         <IonCardHeader>
-          <IonCardTitle> {message.subject}</IonCardTitle>
-          <IonCardSubtitle className="date" >{message.category.toUpperCase()}</IonCardSubtitle>
+          <IonCardTitle hidden={modify}> {message.subject}</IonCardTitle>  <IonInput  hidden={ ! modify} value={title.length > 0 ? title: message.subject } onIonChange={e=> setTitle(e.detail.value!)}> </IonInput>
+          <IonCardSubtitle hidden={modify} className="date" >{message.category.toUpperCase()}</IonCardSubtitle> <IonInput  hidden={!modify} onIonChange={e=> setCategory(e.detail.value!)} value={category.length > 0 ? category.toUpperCase(): message.category.toUpperCase()}  className="date"> </IonInput>
           <IonCardSubtitle >{message.fromName}</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonCardSubtitle >{message.content}</IonCardSubtitle>
+          <IonCardSubtitle hidden={modify} >{message.content}</IonCardSubtitle> <IonInput  hidden={ ! modify} value={description.length > 0 ? description:  message.content} onIonChange={e=> setDescription(e.detail.value!)}> </IonInput>
 
           {isPDF && message.img && !display ?
             <div>
@@ -246,7 +260,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
           <IonRow class="footer" >
             
             {!isOwnMessage ?<IonButton expand="block" color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton> : <div/>}
-            <IonButton expand="block" color='danger' onClick={e => deleteItem()}><IonIcon icon={trashOutline} /> Supprimer <IonIcon icon={trashOutline} /></IonButton>
+            <IonButton expand="block" fill="clear" onClick={e => modifyItem()}> Modifier </IonButton><IonButton expand="block" color='danger' onClick={e => deleteItem()}><IonIcon icon={trashOutline} /> Supprimer <IonIcon icon={trashOutline} /></IonButton>
           </IonRow>
 
         }

@@ -15,6 +15,7 @@ export interface Message {
   signaled: number;
   fromId: string;
   reponse: Reponse[];
+  saved_by: string[];
   subject: string;
   shareLevel: number;
 

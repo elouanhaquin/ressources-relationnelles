@@ -81,6 +81,7 @@ function Submit() {
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
           fromId: user.uid,
           shareLevel: 0,
+          saved_by: [],
           reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "", username:"" }]
         }
 

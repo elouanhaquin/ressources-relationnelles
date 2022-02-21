@@ -50,6 +50,7 @@ const HeaderBar: React.FC = () => {
           signaled: d.signaled? d.signaled : [],
           signaled_comments: d.signaled_comments? d.signaled_comments : [],
           friends: d.friends? d.friends : [],
+          friends_waiting: d.friends_waiting? d.friends_waiting : [],
           family: d.family? d.family : [],
           interested: d.interested? d.interested : [],
           admin: d.admin? d.admin : 0,

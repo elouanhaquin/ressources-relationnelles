@@ -77,6 +77,7 @@ const Administration: React.FC = () => {
                 signaled: data.signaled,
                 signaled_comments: data.signaled_comments,
                 friends: data.friends,
+                friends_waiting: data.friends_waiting,
                 family: data.family,
                 interested: data.interested,
                 admin: data.admin,
