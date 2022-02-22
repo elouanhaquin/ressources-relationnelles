@@ -35,6 +35,13 @@
     font-style: italic;
 }
 
+.message-list-item ion-input {
+    border: 1px solid var(--ion-color-light-shade);
+    border-radius: 5px;
+    width: 80%;
+    margin: auto;
+}
+
 .message-list-item .date {
     font-style: normal;
     color: var(--ion-color-secondary);

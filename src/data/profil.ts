@@ -4,11 +4,19 @@ export interface Profil {
   name: string;
   firstName: string;
   lastName: string;
-  likes?: number[];
-  categories?: string[];
+  pseudo?: string;
+  birthday?: string;
+  likes: string[];
+  categories: string[];
+  signaled: string[];
+  signaled_comments: string[];
+  friends: string[];
+  friends_waiting: string[];
+  family: string[];
+  interested: string[];
   img: string;
-  admin?: number
-  uid?: string;
+  admin: number
+  uid: string;
   id: number;
 }
 

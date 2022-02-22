@@ -4,7 +4,7 @@ import ProfilItem from '../components/profilItem';
 import { Profil, getProfil } from '../data/profil';
 import { useEffect, useState } from 'react';
 import { Message, getMessages, setMessagesBDD } from '../data/messages';
-import { addOutline, checkmarkDone, locateOutline, locationOutline, optionsOutline, refreshOutline, warningOutline } from 'ionicons/icons'
+import { addOutline, arrowBackOutline, arrowRedoOutline, checkmarkDone, closeOutline, eyeOutline, locateOutline, locationOutline, optionsOutline, pinOutline, refreshOutline, warningOutline } from 'ionicons/icons'
 import {
     IonContent,
     IonHeader,
@@ -32,6 +32,7 @@ import {
     IonCardTitle
 } from '@ionic/react';
 import './Profil.css';
+import './Administration.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
@@ -40,12 +41,15 @@ import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
 import { useHistory, useParams } from 'react-router';
+import CommentItem from '../components/CommentItem';
 
 
 
 const Administration: React.FC = () => {
 
     const [busy, setBusy] = useState(true);
+    const [closeComments, setCloseCpmments] = useState(false);
+    const [closeRessources, setCloseRessources] = useState(false);
     const { id } = useParams<{ id: string }>();
     const [pro, setProfi] = useState<Profil>();
     const [messages, setMessages] = useState<Message[]>([]);
@@ -68,7 +72,16 @@ const Administration: React.FC = () => {
                 firstName: data.firstName,
                 img: data.img,
                 id: data.id,
-                admin: data.admin
+                likes: data.likes,
+                categories: data.categories,
+                signaled: data.signaled,
+                signaled_comments: data.signaled_comments,
+                friends: data.friends,
+                friends_waiting: data.friends_waiting,
+                family: data.family,
+                interested: data.interested,
+                admin: data.admin,
+                uid: data.uid
             };
             if (profi.admin == undefined || profi.admin == 0)
                 history.replace('/home');
@@ -98,8 +111,8 @@ const Administration: React.FC = () => {
                 <IonGrid>
                     <IonRow>
 
-                        <IonCol size="8">
-                            <IonCard className="content">
+                        <IonCol size="12">
+                            <IonCard className="header">
                                 <IonTitle> <IonIcon icon={optionsOutline} />  Administration :<IonCardSubtitle>Enregistré en tant que : {pro?.name}</IonCardSubtitle> </IonTitle>
 
                             </IonCard>
@@ -107,14 +120,31 @@ const Administration: React.FC = () => {
                     </IonRow>
 
                     <IonRow>
-                        <IonCol size="8">
+                        <IonCol size="12">
                             <IonCard className="content">
                                 <IonTitle> <IonIcon color="danger" icon={warningOutline} /> Liste des ressources signalées : </IonTitle>
                                 <IonButton onClick={e => refresh()}> <IonIcon icon={refreshOutline}></IonIcon> Actualiser</IonButton>
-                                <IonList >
+                                { !closeRessources ? <IonButton onClick={e => setCloseRessources(!closeRessources)}> <IonIcon icon={closeOutline}></IonIcon> Fermer</IonButton> : 
+                                <IonButton onClick={e => setCloseRessources(!closeRessources)}> <IonIcon icon={eyeOutline}></IonIcon> Ouvrir </IonButton> }
+                                <IonList hidden={closeRessources}>
                                     {messages.filter(f => f.signaled != undefined && f.signaled > 0).length == 0 ?
-                                     <IonTitle> <IonIcon color="success" icon={checkmarkDone} /> Toutes les ressources ont étés traitées ! </IonTitle>
+                                     <IonTitle> <IonIcon color="success" icon={checkmarkDone} /> Toutes les ressources ont étés traitées ! <IonCardSubtitle>Actualisez pour mettre à jour</IonCardSubtitle></IonTitle>
                                     : messages.filter(f => f.signaled != undefined && f.signaled > 0).sort((a, b) => a.signaled + b.signaled).map(m => <MessageListItem key={m.id} message={m} uid={id} admin={true}> {m.category}</MessageListItem>)}
+                                </IonList>
+
+                            </IonCard>
+                        </IonCol>
+
+                        <IonCol size="12">
+                            <IonCard className="reponse">
+                                <IonTitle> <IonIcon color="danger" icon={arrowRedoOutline} /> Liste des commentaires signalées :  </IonTitle>
+                                <IonButton onClick={e => refresh()}> <IonIcon icon={refreshOutline}></IonIcon> Actualiser</IonButton>
+                                { !closeComments ? <IonButton onClick={e => setCloseCpmments(!closeComments)}> <IonIcon icon={closeOutline}/> Fermer </IonButton>
+                                : <IonButton onClick={e => setCloseCpmments(!closeComments)}> <IonIcon icon={eyeOutline}/>  Ouvrir </IonButton> } 
+                                <IonList hidden={closeComments}>
+                                    {messages.filter(f => f.signaled != undefined && f.signaled > 0).length == 0 ?
+                                     <IonTitle> <IonIcon color="success" icon={checkmarkDone} /> Tous mes commentaires ont étés traitées !<IonCardSubtitle>Actualisez pour mettre à jour</IonCardSubtitle> </IonTitle>
+                                    : messages.map(m => m.reponse.filter(r=> r.signaled != undefined && r.signaled > 0 ).map(r => <IonCard><CommentItem key={m.id} idParent={''+m.id} reponse={r} uid={id} admin={true}/> </IonCard>))}
                                 </IonList>
 
                             </IonCard>

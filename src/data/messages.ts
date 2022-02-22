@@ -6,6 +6,7 @@ export interface Message {
   category: string;
   content: string;
   date: string;
+  precise_date: number;
   views: number;
   fromName: string;
   img: string;
@@ -14,7 +15,9 @@ export interface Message {
   signaled: number;
   fromId: string;
   reponse: Reponse[];
+  saved_by: string[];
   subject: string;
+  shareLevel: number;
 
 }
 

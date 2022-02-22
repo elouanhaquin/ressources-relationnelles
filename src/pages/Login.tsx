@@ -88,7 +88,9 @@ const Home: React.FC = () => {
     if(res != "undefined"){
       dispatch(setUserState(res));
       history.push('/home');
+
     }
+    
   //  if(!false)
  // presentToast("dede");
  
@@ -174,7 +176,7 @@ const Home: React.FC = () => {
               <button onClick={notify}>Click Me!</button>
               <p style={{ fontSize: "medium" }}><Link to="reset_password">Mot de passe oublié</Link></p>
               <p style={{ fontSize: "medium" }}>
-                  Vous n'avez pas de compte ? <Link to="register">Inscrivez-vous !</Link>
+                  Vous n'avez pas de compte? <Link to="register">Créez votre compte!</Link>
               </p>
             </IonCol>
           </IonRow>

@@ -25,9 +25,10 @@ import { Message } from '../data/messages';
 import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward, trashBinOutline, checkmarkDone, warningOutline, warning, trashOutline } from 'ionicons/icons'
 import './MessageListItem.css';
 import './CommentListItem.css';
+import './CommentItem.css';
 import { Reponse } from '../data/reponse';
 import { useEffect, useState } from 'react';
-import { DeleteCommentToDBFireStore, getImageTypeFromStorage, getProfilFromFireStoreDBwithID, getUserImage, isMessageLiked, isProfilSaysMessageSignaled, isReponseSignaled, isReponseSignaledFromUser, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ReplyToMessageFromDBFireStore, setSignaledCommentToUserFirebase, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, SignalToReponseFromDBFireStore } from '../firebaseConfig';
+import { DeleteCommentToDBFireStore, getImageTypeFromStorage, getProfilFromFireStoreDBwithID, getUserImage, isMessageLiked, isProfilSaysMessageSignaled, isReponseSignaled, isReponseSignaledFromUser, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ReplyToMessageFromDBFireStore, setSignaledCommentToUserFirebase, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, SignalToReponseFromDBFireStore, validateCommentToFireStore } from '../firebaseConfig';
 import { useSelector } from 'react-redux';
 import { Document, Page, pdfjs } from "react-pdf";
 import { randomInt } from 'crypto';
@@ -85,8 +86,16 @@ const CommentItem: React.FC<MessageListItemProps> = ({ reponse, idParent, uid, a
         }
     }
 
+    function validateItem(){
+        if(admin){
+            console.log("HEYYOOO")
+            validateCommentToFireStore(idParent , "" +reponse.id)
+            setDeleted(true);
+        }
+    }
+
     return ( !deleted ? 
-        < IonItem key={reponse.id}>
+        < IonItem key={reponse.id} className='comment-item'>
             <IonAvatar className='avatar' >
                 <IonImg src={image} />
             </IonAvatar>
@@ -110,8 +119,8 @@ const CommentItem: React.FC<MessageListItemProps> = ({ reponse, idParent, uid, a
                     <IonItem > <IonIcon color="success" icon={checkmarkDone} /></IonItem>
             }
 
-            {admin ? <IonRow> <IonButton color='danger'> <IonIcon icon={trashBinOutline} /></IonButton>
-                <IonButton color='success'> <IonIcon icon={checkmarkDone} /></IonButton></IonRow> : <div />}
+            {admin ? <IonRow> <IonButton color='danger' onClick={e => deleteItem(""+reponse.id)}> <IonIcon icon={trashBinOutline} /></IonButton>
+                <IonButton color='success' onClick={e => validateItem()}> <IonIcon icon={checkmarkDone} /></IonButton></IonRow> : <div />}
 
         </IonItem>: 
         <div/>
