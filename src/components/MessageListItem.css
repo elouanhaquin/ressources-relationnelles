@@ -35,6 +35,13 @@
     font-style: italic;
 }
 
+.message-list-item ion-input {
+    border: 1px solid var(--ion-color-light-shade);
+    border-radius: 5px;
+    width: 80%;
+    margin: auto;
+}
+
 .message-list-item .date {
     font-style: normal;
     color: var(--ion-color-secondary);
@@ -111,6 +118,26 @@
     margin-left: auto;
     margin-right: auto;
     max-height: 500px;
+    min-height: 250px;
+    object-fit: scale-down;
+}
+
+.message-list-item ion-slides,
+.message-list-item ion-slide {
+    margin-top: 15px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 750px;
+    min-height: 250px;
+    object-fit: scale-down;
+}
+
+.message-list-item ion-slide canvas {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 750px;
     min-height: 250px;
     object-fit: scale-down;
 }
