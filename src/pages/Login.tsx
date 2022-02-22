@@ -82,7 +82,6 @@ const Home: React.FC = () => {
       }
   //  if(!false)
  // presentToast("dede");
-
     }
   }
 

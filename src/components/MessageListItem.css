@@ -115,6 +115,26 @@
     object-fit: scale-down;
 }
 
+.message-list-item ion-slides,
+.message-list-item ion-slide {
+    margin-top: 15px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 750px;
+    min-height: 250px;
+    object-fit: scale-down;
+}
+
+.message-list-item ion-slide canvas {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 750px;
+    min-height: 250px;
+    object-fit: scale-down;
+}
+
 .message-list-item .footer {
     margin: auto;
     justify-content: space-evenly;
