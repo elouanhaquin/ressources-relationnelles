@@ -5,12 +5,9 @@ export interface Profil {
   firstName: string;
   lastName: string;
   pseudo?: string;
-  birthday: string;
+  birthday?: string;
   likes: string[];
-  pseudo: string;
-  birthday: string;
-  likes?: Message[];
-  categories?: string[];
+  categories: string[];
   signaled: string[];
   signaled_comments: string[];
   friends: string[];
