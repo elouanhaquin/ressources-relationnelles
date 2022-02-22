@@ -1,11 +1,13 @@
 import { resolve } from 'dns';
 import * as firebase from 'firebase'
 import { userInfo } from 'os';
+import { useState } from 'react';
 import { Observable } from 'redux';
 import { pathToFileURL } from 'url';
 import { DBWrapper } from 'workbox-core/_private';
 import { getMessages, setMessages, Message, setMessagesBDD } from './data/messages';
 import { addProfilBBD, Profil, setProfilsBDD } from './data/profil';
+//import Profil from './pages/Profil';
 
 const config = {
     apiKey: "AIzaSyBfxVb5gDYd1cJehGGQwD468ZeQwNx7RVM",
@@ -18,6 +20,7 @@ const config = {
     measurementId: "G-3V12PWYHY8"
 }
 
+//const [pro, setProfi] = useState<Profil>();
 
 firebase.default.initializeApp(config);
 export function getCurrentUser() {
@@ -41,12 +44,16 @@ export function logoutUser() {
 export async function loginUser(username: string, password: string) {
     try {
         const res = await firebase.default.auth().signInWithEmailAndPassword(username, password);
-        //console.log(firebase.default.auth().currentUser?.emailVerified);
+        let id = firebase.default.auth().currentUser?.uid;
+        let name = await getProfilFromFireStoreDBwithID(String(id)).then((data) => {
+            return data.firstName;
+        });
+
         if (firebase.default.auth().currentUser?.emailVerified == true) {
-        return "" + res; 
+            return " " + name;
         }
         else {
-            return "undefined"; 
+            return "undefined";
         }
     }
     catch (error) {
@@ -59,9 +66,11 @@ export async function resetPassword(email: string) {
     try {
         var ValidMail = false;
         const res = await firebase.default.auth().sendPasswordResetEmail(email)
-        .then(() => {alert('Un mail de réinitialisation du mot de passe vous a été envoyé');
-        ValidMail = true;})
-        .catch(error => alert('Error'));
+            .then(() => {
+                alert('Un mail de réinitialisation du mot de passe vous a été envoyé');
+                ValidMail = true;
+            })
+            .catch(error => alert('Error'));
         return ValidMail;
     }
     catch (error) {
@@ -75,16 +84,16 @@ export async function loginUserGetUID(username: string, password: string) {
     return "" + res;
 }
 
-export async function RegisterUser(email: string, password: string, pseudo: string, firstName: string, lastName:String, birthday:string, society:string) {
+export async function RegisterUser(email: string, password: string, pseudo: string, firstName: string, lastName: String, birthday: string, society: string) {
     try {
 
         const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
                 email: email,
-                pseudo : pseudo,
-                firstName : firstName,
-                lastName : lastName,
-                birthday : birthday,
+                pseudo: pseudo,
+                firstName: firstName,
+                lastName: lastName,
+                birthday: birthday,
                 society: society
             })
         });
@@ -92,7 +101,7 @@ export async function RegisterUser(email: string, password: string, pseudo: stri
         firebase.default.auth().currentUser?.sendEmailVerification();
         console.log(res);
         console.log(firebase.default.auth().currentUser?.emailVerified);
-        return true;   
+        return true;
     }
     catch (error) {
         console.log(error);
@@ -197,7 +206,7 @@ export const uploadImageToStorage = (path: File, imageName: string) => {
 export const getProfilFromFireStoreDBwithID = (id: string) => {
 
     const te = firebase.default.firestore().collection('profils').doc(id);
-   return  firebase.default.firestore().runTransaction((transaction) => {
+    return firebase.default.firestore().runTransaction((transaction) => {
         return transaction.get(te).then((sfDoc) => {
             if (!sfDoc.exists) {
                 throw "Document does not exist!";
@@ -295,7 +304,23 @@ export const ViewToMessageFromDBWithoutCategory = (id: string, like: number) => 
         return currentRank + like;
     });
 };
-    function sendEmailVerification(currentUser: any) {
-        throw new Error('Function not implemented.');
-    }
+function sendEmailVerification(currentUser: any) {
+    throw new Error('Function not implemented.');
+}
+
+function FirebaseUser(firstName: any, FirebaseUser: any, arg2: any) {
+    throw new Error('Function not implemented.');
+}
+
+function doc(db: any, arg1: string, arg2: string) {
+    throw new Error('Function not implemented.');
+}
+
+function getDoc(docRef: void) {
+    throw new Error('Function not implemented.');
+}
+
+function db(db: any, arg1: string, arg2: string) {
+    throw new Error('Function not implemented.');
+}
 

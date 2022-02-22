@@ -64,7 +64,6 @@ const ProfilView: React.FC = () => {
             };
             setProfi(profi)
         });
-
       });
     
 

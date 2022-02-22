@@ -18,7 +18,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-toast.configure()
+toast.configure();
  
 function validateEmail(email: string) {
     const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
@@ -45,22 +45,6 @@ const Home: React.FC = () => {
   
   }
 
-    const notify = ()=>{
-        toast('Hello Geeks 4',
-           {position: toast.POSITION.BOTTOM_LEFT})
-        toast('Hello Geeks 6',
-           {position: toast.POSITION.BOTTOM_RIGHT})
-        toast('Hello Geeks 5',
-           {position: toast.POSITION.BOTTOM_CENTER})
-        toast('Hello Geeks 1',
-           {position: toast.POSITION.TOP_LEFT})
-        toast('Hello Geeks 3',
-           {position: toast.POSITION.TOP_RIGHT})
-        toast('Hello Geeks 2',
-           {position: toast.POSITION.TOP_CENTER})
-    }
-  
-
   async function Logged() {
     if (email == "ressources@relationelles.fr" || email == "") {
       setMessage("Entrez une adresse email");
@@ -83,16 +67,22 @@ const Home: React.FC = () => {
     }
     else {
     setBusy(true);
-    const res : any = await loginUser(email, password);
+    let  n =  await loginUser(email, password).then((data) => {
+      console.log(data);
+      return data;
+    })
     setBusy(false);
-    if(res != "undefined"){
-      dispatch(setUserState(res));
-      history.push('/home');
-    }
+      if(n != "undefined"){
+        dispatch(setUserState(n));
+        history.push('/home');
+        toast('Bienvenue' + n,
+        {position: toast.POSITION.BOTTOM_CENTER})
+        setBusy(false);
+        console.log(`${n}`);
+      }
   //  if(!false)
  // presentToast("dede");
- setBusy(false);
-    console.log(`${res}`);
+
     }
   }
 
@@ -171,7 +161,6 @@ const Home: React.FC = () => {
                   En cliquant sur se connecter vous acceptez nos <a href="#">conditions d'utilisations</a>.
               </p>
               <IonButton  onClick={Logged}>Login</IonButton>
-              <button onClick={notify}>Click Me!</button>
               <p style={{ fontSize: "medium" }}><Link to="reset_password">Mot de passe oublié</Link></p>
               <p style={{ fontSize: "medium" }}>
                   Vous n'avez pas de compte ? <Link to="register">Inscrivez-vous !</Link>
