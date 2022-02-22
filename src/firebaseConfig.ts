@@ -196,6 +196,7 @@ export async function deleteImageTypeFromStorage(imageName: string) {
 
 
 export const getProfilFromFireStoreDBwithID = (id: string) => {
+
     const te = firebase.default.firestore().collection('profils').where('uid', '==', id);
     return te.get().then((querySnapshot) => {
         let ress: Profil[] = [];

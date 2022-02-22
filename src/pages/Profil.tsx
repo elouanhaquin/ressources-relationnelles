@@ -50,6 +50,7 @@ const ProfilView: React.FC = () => {
     const [busy, setBusy] = useState(true);
     const { id } = useParams<{ id: string }>();
     const [pro, setProfi] = useState<Profil>();
+
     const [profilsADD, setADD] = useState<Profil[]>([]);
     const [profilsWaiting, setProfilWaiting] = useState<Profil[]>([]);
     const [ressources, setRessources] = useState<Message[]>([]);
@@ -62,6 +63,12 @@ const ProfilView: React.FC = () => {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [uidArray, setUidArray] = useState<string[]>([]);
 
+    
+    const username = useSelector((state: any) => state.userData.username)
+    const profilIMG = useSelector((state: any) => state.userData.profilImg)
+    const location = useSelector((state: any) => state.userData.location)
+    const age = getAgeProfilWithBirthday(pro?.birthday);
+    
     useIonViewWillEnter(() => {
         if (id == undefined) {
             getUIDCurrentUser().then(data => {
@@ -157,13 +164,25 @@ const ProfilView: React.FC = () => {
     //todo css - IMPORTANT 
     //modifier user - IMPORTANT 
 
+  
+    function getAgeProfilWithBirthday(birthday: string|undefined) {
+        if (birthday!=undefined){
+            //let birthdate=birthday.split('-');
+            //console.log(Math.floor((Math.abs(Date.now()-Date.parse(birthday) / (1000 * 3600 * 24))/365));
+            return Math.floor((Math.abs(Date.now()-Date.parse(birthday)) / (1000 * 3600 * 24))/365);
+        }
+        
+    }
+
+
+
+    
     return (
         <IonPage className="profil" id="profil-page">
             <HeaderBar />
             <IonContent fullscreen>
                 <IonGrid>
                     <IonCard className="content">
-
                         <IonRow >
                             <IonCol size="6" className="hidden-md-down">
                                 <IonCard className="profile-pic">
@@ -171,9 +190,14 @@ const ProfilView: React.FC = () => {
                                 </IonCard>
                             </IonCol>
                             <IonCol size="6" className="hidden-md-down">
+                                <IonCardTitle> {pro?.pseudo}</IonCardTitle>
                                 <IonCardTitle> {pro?.firstName}</IonCardTitle>
-                                <IonCardTitle> {'@' + pro?.lastName}</IonCardTitle>
-                                <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {"location"}</IonCardTitle>
+
+                                <IonCardTitle> {pro?.lastName}</IonCardTitle>
+                                <IonCardTitle> {pro?.birthday}</IonCardTitle>
+                                <IonCardTitle>  {age + "ans"}</IonCardTitle>
+                              <IonCardTitle> {'@' + username}</IonCardTitle>                                
+                                <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> { location}</IonCardTitle>
                             </IonCol>
                             <IonCol size="9" className="hidden-md-up">
                                 <IonCard className="profile-pic">
@@ -196,6 +220,7 @@ const ProfilView: React.FC = () => {
                                     {isNotFriendAnymore ?   <div>
                                     <IonButton onClick={e => addFriend(id)} fill="clear"><IonIcon icon={peopleOutline}/> + </IonButton></div>  : <div></div>}
                             </IonCol>
+
                         </IonRow>
                     </IonCard>
 
@@ -250,11 +275,12 @@ const ProfilView: React.FC = () => {
                             </IonList>
                         </IonRow>
                     </IonCard>
-
+                
                 </IonGrid>
-            </IonContent>
-
+            </IonContent>        
         </IonPage>);
 };
 
 export default ProfilView;
+
+

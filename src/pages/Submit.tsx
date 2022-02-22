@@ -34,7 +34,7 @@ import { useParams } from 'react-router';
 import HeaderBar from '../components/headerBar';
 import { Message } from '../data/messages';
 import { exportMessageToDB, exportMessageToFireStoreDB, getCurrentUser, uploadImageToStorage } from '../firebaseConfig';
-
+import { useHistory } from "react-router-dom";
 import './Submit.css';
 
 
@@ -56,6 +56,7 @@ const fileOutputAvailable = [
 
 function Submit() {
 
+  const history = useHistory();
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [tags, setTags] = useState<string>("");
