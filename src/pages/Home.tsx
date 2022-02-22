@@ -133,6 +133,7 @@ const Home: React.FC = () => {
   function setInterestedBy(subject : string){
     addInterestToFireStore(userUID, subject, true)
     setInterest("")
+
   }
 
   return (
