@@ -76,16 +76,25 @@ const Register: React.FC = () => {
 
   
     
-    const res = await RegisterUser(email, password, pseudo, firstName, lastName, birthDay, society);
     const profi: Profil =
     {
-      name:"test",
-      lastName: "dede",
-      firstName: "ded",
-      img: "../assets/profile_pic/image.jpg",
+      name: pseudo,
+      lastName: lastName,
+      firstName: firstName,
+      img: "data.img",
       id: 0,
-      uid: ""
+      likes: [],
+      categories: [],
+      signaled: [],
+      signaled_comments: [],
+      friends: [],
+      friends_waiting: [],
+      family: [],
+      interested: [],
+      admin: 0,
+      uid: "0"
     };
+    const res = await RegisterUser(email, password ,profi);
 
     loginUserGetUID(email, password).then(data=> profi.uid = data);
     

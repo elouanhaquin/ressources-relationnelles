@@ -21,15 +21,16 @@ import {
   IonAccordionGroup
 } from '@ionic/react';
 import { Message, setMessages } from '../data/messages';
-import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward, removeOutline, trashOutline, checkmarkDoneOutline, warningOutline, warning, checkmarkDone } from 'ionicons/icons'
+import { pin, chatboxOutline, giftOutline, shareSocialOutline, bookmarkOutline, thumbsUpOutline, thumbsDownOutline, eyeOutline, thumbsUp, arrowBack, arrowForwardCircleOutline, arrowForward, removeOutline, trashOutline, checkmarkDoneOutline, warningOutline, warning, checkmarkDone, bookmarkSharp } from 'ionicons/icons'
 import './MessageListItem.css';
 import { Reponse } from '../data/reponse';
 import { useEffect, useState } from 'react';
-import { DeleteRessoucesToDBFireStore, getImageTypeFromStorage, isMessageLiked, isMessageSignaled, isProfilSaysMessageSignaled, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, validateRessourceToFireStore } from '../firebaseConfig';
+import { DeleteRessoucesToDBFireStore, getImageTypeFromStorage, isMessageLiked, isMessageSaved, isMessageSignaled, isProfilSaysMessageSignaled, LikeToMessageFromDBFireStore, LikeToMessageFromDBWithoutCategory, LikeToProfilFromDBFireStore, ModifyReponse, RemoveSavedMessageFromDBFireStore, SavedMessageFromDBFireStore, signaledRessourceToFireStore, SignalToMessageFromDBFireStore, validateRessourceToFireStore } from '../firebaseConfig';
 import { useSelector } from 'react-redux';
 import { Document, Page, pdfjs } from "react-pdf";
 import CommentListItem from './CommentListItem';
 import { randomInt } from 'crypto';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface MessageListItemProps {
@@ -81,7 +82,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
         {arrayOfNumbers.map((e, i) => {
           return (
             <IonSlide  >
-              <Page key={i} pageNumber={i + 1} />
+              <Page pageNumber={i + 1} />
             </IonSlide>)
         })}
       </IonSlides>
@@ -97,6 +98,11 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
   const [isPDF, setPDF] = useState<Boolean>(false);
   const [display, setDisplay] = useState<Boolean>(false);
   const [isOwnMessage, setIsOwn] = useState<Boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [modify, setModify] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
 
 
 
@@ -104,13 +110,15 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
     if (busy) {
       setIsOwn("" + message.fromId == uid)
       isMessageSignaled("" + message.id).then((d) => {
-        console.log(d)
         setSignaledNumber(d)
         isMessageLiked(uid, "" + message.id).then(data => {
           showRessourceImageOrPdf();
           setLike(data);
           setBusy(false);
         });
+      });
+      isMessageSaved(uid ,"" + message.id).then((d) =>{
+        setIsSaved(d)
       });
     }
 
@@ -204,24 +212,46 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
 
     }
   }
-
+  function modifyItem() {
+    if (uid.length > 0) {
+      var isModified = !modify;
+      setModify(!modify)
+      //when we've been modifyng something
+      if (!isModified && modify) {
+        console.log("HHEEEY")
+        ModifyReponse("" + message.id, title.length > 0 ? title : message.subject, category.length > 0 ? category.toLowerCase() : message.category.toLowerCase(), description.length > 0 ? description : message.content)
+      }
+    }
+  }
+  function saveItem() {
+    if (uid.length > 0) {
+      if(!isSaved){
+        SavedMessageFromDBFireStore(uid, '' + message.id)
+        setIsSaved(true)
+      }
+      else{
+        RemoveSavedMessageFromDBFireStore(uid, '' + message.id)
+        setIsSaved(false)
+      }
+    }
+  }
 
 
   return (!busy && show ?
     <IonItem className="message-list-item" slot="start" detail={false}>
       <IonCard className="ion-text-wrap full-width">
         <IonCardHeader>
-          <IonCardTitle> {message.subject}</IonCardTitle>
-          <IonCardSubtitle className="date" >{message.category.toUpperCase()}</IonCardSubtitle>
+          <IonCardTitle hidden={modify}> {message.subject}</IonCardTitle>  <IonInput hidden={!modify} value={title.length > 0 ? title : message.subject} onIonChange={e => setTitle(e.detail.value!)}> </IonInput>
+          <IonCardSubtitle hidden={modify} className="date" >{message.category.toUpperCase()}</IonCardSubtitle> <IonInput hidden={!modify} onIonChange={e => setCategory(e.detail.value!)} value={category.length > 0 ? category.toUpperCase() : message.category.toUpperCase()} className="date"> </IonInput>
           <IonCardSubtitle >{message.fromName}</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonCardSubtitle >{message.content}</IonCardSubtitle>
+          <IonCardSubtitle hidden={modify} >{message.content}</IonCardSubtitle> <IonInput hidden={!modify} value={description.length > 0 ? description : message.content} onIonChange={e => setDescription(e.detail.value!)}> </IonInput>
 
           {isPDF && message.img && !display ?
             <div>
 
-              <Carousel key={message.id} message={message} uid={uid} admin={admin} />
+              <Carousel message={message} uid={uid} admin={admin} />
 
 
             </div>
@@ -229,7 +259,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
               <img src={message.img} /> : <div />}
         </IonCardContent>
 
-        {!admin && !isOwnMessage?
+        {!admin && !isOwnMessage ?
           <IonRow class="footer">
             <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
             <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
@@ -240,18 +270,18 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
                 <IonIcon color="danger" icon={warning} />}<h3 className="hidden-md-down">Signaler</h3></IonItem> :
               <IonItem > <IonIcon color="success" icon={checkmarkDone} /><h3 className="hidden-md-down">Validée</h3></IonItem>
             }
-            <IonItem><IonIcon icon={bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
+            <IonItem onClick={e => saveItem()}><IonIcon icon={isSaved ?bookmarkSharp :  bookmarkOutline}></IonIcon><h3 className="hidden-md-down">Sauvegarder</h3></IonItem>
           </IonRow>
           :
           <IonRow class="footer" >
-            
-            {!isOwnMessage ?<IonButton expand="block" color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton> : <div/>}
-            <IonButton expand="block" color='danger' onClick={e => deleteItem()}><IonIcon icon={trashOutline} /> Supprimer <IonIcon icon={trashOutline} /></IonButton>
+
+            {!isOwnMessage ? <IonButton expand="block" color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton> : <div />}
+            <IonButton expand="block" fill="clear" onClick={e => modifyItem()}> Modifier </IonButton><IonButton expand="block" color='danger' onClick={e => deleteItem()}><IonIcon icon={trashOutline} /> Supprimer <IonIcon icon={trashOutline} /></IonButton>
           </IonRow>
 
         }
 
-        <CommentListItem key={message.id} message={message} uid={uid} admin={admin} />
+        <CommentListItem message={message} uid={uid} admin={admin} />
 
 
       </IonCard>
