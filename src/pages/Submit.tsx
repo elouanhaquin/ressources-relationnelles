@@ -97,12 +97,8 @@ function Submit() {
           exportMessageToFireStoreDB(messages);
 
         }
-     
-
       }
-
     })
-
   }
 
 
@@ -142,8 +138,12 @@ function Submit() {
               <IonCol>
                 <IonItem>
                   <IonInput type="text" placeholder="Catégorie" value={tags} onIonChange={e => setTags(e.detail.value!.toLowerCase())}></IonInput>
-                  <input type="file" accept="image/*,.pdf" name="" id="upload-file" onChange={(event) => { onFileChange(event); }} />
                 </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol >
+                <input className='inputfile' type="file" accept="image/*,.pdf" name="" id="upload-file" onChange={(event) => { onFileChange(event); }} />
               </IonCol>
             </IonRow>
             {!(title?.length <= 5 || message?.length <= 5 || tags?.length <= 0) ? <IonButton className="button-submit" color="success" expand="block" onClick={submitMessage}> Soumettre</IonButton> : <IonButton className="button-submit" color="success" expand="block" disabled > Ecrivez un titre, un message et une catégorie</IonButton>}

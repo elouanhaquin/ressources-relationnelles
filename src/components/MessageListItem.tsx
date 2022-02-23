@@ -77,7 +77,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
   };
 
   return (!busy ?
-    <Document file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
+    <Document className="document" file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
       <IonSlides pager={true} options={slideOpts} onIonSlideDoubleTap={e => changePage(1)}>
         {arrayOfNumbers.map((e, i) => {
           return (
@@ -263,7 +263,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
           <IonRow class="footer">
             <IonItem onClick={e => likeItem()}>{isLike ? <IonIcon icon={thumbsUp}></IonIcon> : <IonIcon icon={thumbsUpOutline}> </IonIcon>}<h3>{isLike ? message.like + 1 : message.like}</h3> </IonItem>
             <IonItem><IonIcon icon={eyeOutline}></IonIcon><h3>{message.views}</h3></IonItem>
-            <IonItem><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.filter(r => r.text.length > 0).length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
+            <IonItem className="hidden-md-down"><IonIcon icon={chatboxOutline}></IonIcon><h3>{message.reponse.filter(r => r.text.length > 0).length}</h3> <h3 className="hidden-md-down"> réponses</h3></IonItem>
             {signaledNumber != -2 ?
               <IonItem onClick={e => signalItem()} >{!isSignaled ? <IonIcon icon={warningOutline} />
                 :
@@ -275,8 +275,8 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
           :
           <IonRow class="footer" >
 
-            {!isOwnMessage ? <IonButton expand="block" color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton> : <div />}
-            <IonButton expand="block" fill="clear" onClick={e => modifyItem()}> Modifier </IonButton><IonButton expand="block" color='danger' onClick={e => deleteItem()}><IonIcon icon={trashOutline} /> Supprimer <IonIcon icon={trashOutline} /></IonButton>
+            {!isOwnMessage ? <IonButton  color='success' onClick={e => validateItem()}><IonIcon icon={checkmarkDoneOutline} /> Valider <IonIcon icon={checkmarkDoneOutline} /></IonButton> : <div />}
+            <IonButton  fill="clear" onClick={e => modifyItem()}> Modifier </IonButton><IonButton  color='danger' onClick={e => deleteItem()}> Supprimer </IonButton>
           </IonRow>
 
         }

@@ -6,6 +6,14 @@
     width: 95%;
 }
 
+.comment-item ion-input {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    white-space: normal !important;
+    width: 95%;
+}
+
 .comment-item .swiper-pagination-fraction,
 .swiper-pagination-custom,
 .swiper-container-horizontal>.swiper-pagination-bullets {

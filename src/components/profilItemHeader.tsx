@@ -48,7 +48,6 @@ const ProfilItemHeader: React.FC<ProfilItemExample> = ({ profil }) => {
         onIonChange={e=>e.detail.value == "deconnection" ? Deconnection() : e.detail.value == "profil" ? Profil() : e.detail.value == "options" ? Options() : Profil()}
       >
         <IonSelectOption value="profil">Profil</IonSelectOption>
-        <IonSelectOption value="options">Options</IonSelectOption>
         <IonSelectOption value="deconnection" onClick={Deconnection}>Deconnection</IonSelectOption>
       </IonSelect>
 
