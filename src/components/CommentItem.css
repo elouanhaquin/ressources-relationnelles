@@ -14,6 +14,11 @@
     width: 95%;
 }
 
+.comment-item .text {
+    text-align: left !important;
+    max-width: unset;
+}
+
 .comment-item .swiper-pagination-fraction,
 .swiper-pagination-custom,
 .swiper-container-horizontal>.swiper-pagination-bullets {
