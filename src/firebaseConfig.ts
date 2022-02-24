@@ -205,6 +205,8 @@ export const getProfilFromFireStoreDBwithID = (id: string) => {
                 name: doc.data().name,
                 lastName: doc.data().lastName,
                 firstName: doc.data().firstName,
+                pseudo: doc.data().pseudo,
+                birthday: doc.data().birthday,
                 img: doc.data().img,
                 id: doc.data().id,
                 likes: doc.data().likes,
@@ -1111,7 +1113,19 @@ export const DeleteProfil = (id: string) => {
         console.error(err);
     });
 };
+export const UpdateProfil = (id:string,profilUpdate:Profil)=>{
+    var sfDocRef = firebase.default.firestore().collection('profils').doc('' + id);
+    firebase.default.firestore().runTransaction((transaction) => {
+    return transaction.get(sfDocRef).then((sfDoc) => {
+        transaction.update(sfDocRef,profilUpdate);
+    }).then(() => {
+        console.log("Update ", id);
+    }).catch((err) => {
+        console.error(err);
+    });
+});
 
+}
 
 export const DeleteRessoucesToDBFireStore = (id: string) => {
     var sfDocRef = firebase.default.firestore().collection('messages').doc('' + id);
