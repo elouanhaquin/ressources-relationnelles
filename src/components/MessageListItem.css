@@ -6,13 +6,18 @@
     border-collapse: separate;
     margin-bottom: 2vh;
     align-self: center;
-    margin-right: auto;
+    margin: auto;
     max-width: 800px;
+    min-width: 270px;
 }
 
 .message-list-item ion-label {
     margin-top: 12px;
     margin-bottom: auto;
+}
+
+.message-list-item .document {
+    width: 100%;
 }
 
 .message-list-item h2 {
@@ -139,10 +144,17 @@
     margin-right: auto;
     max-height: 750px;
     min-height: 250px;
+    min-width: 250px;
+    max-width: 110%;
     object-fit: scale-down;
 }
 
 .message-list-item .footer {
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.message-list-item .footer ion-button {
     margin: auto;
     justify-content: space-evenly;
 }

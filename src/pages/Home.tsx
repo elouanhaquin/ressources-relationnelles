@@ -130,7 +130,7 @@ const Home: React.FC = () => {
     getContent()?.scrollToTop(500);
   }
 
-  function setInterestedBy(subject : string){
+  function setInterestedBy(subject: string) {
     addInterestToFireStore(userUID, subject, true)
     setInterest("")
 
@@ -140,10 +140,12 @@ const Home: React.FC = () => {
     <IonPage className="home" id="home-page">
       <HeaderBar />
       <IonContent fullscreen>
-        <IonRow hidden={pageNumber != 2 }>
-          <IonCol size="6"><IonInput onIonChange={e=> setInterest(e.detail.value!)} value={interest}></IonInput></IonCol>
-          <IonCol size="6"><IonButton onClick={e=> setInterestedBy(interest)} fill='outline'>Suivre catégorie</IonButton></IonCol>
-        </IonRow>
+        <IonCard className='search-for-cat'>
+          <IonRow  hidden={pageNumber != 2}>
+            <IonInput onIonChange={e => setInterest(e.detail.value!)} value={interest}></IonInput>
+            <IonButton onClick={e => setInterestedBy(interest)} fill='outline'>Suivre</IonButton>
+          </IonRow>
+        </IonCard>
 
         <IonGrid>
           <IonRow>

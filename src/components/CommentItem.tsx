@@ -96,7 +96,7 @@ const CommentItem: React.FC<MessageListItemProps> = ({ reponse, idParent, uid, a
 
     return ( !deleted ? 
         < IonItem key={reponse.id} className='comment-item'>
-            <IonAvatar className='avatar' >
+            <IonAvatar className='avatar hidden-md-down' >
                 <IonImg src={image} />
             </IonAvatar>
             <div className="item-content">
@@ -111,7 +111,7 @@ const CommentItem: React.FC<MessageListItemProps> = ({ reponse, idParent, uid, a
 
                 :
                 signaledNumber != -2 ?
-                    <IonItem className="signal" onClick={e => signalItem("" + reponse.id)} >
+                    <IonItem hidden={admin} className="signal" onClick={e => signalItem("" + reponse.id)} >
                         {!isSignaled ?
                             <IonIcon icon={warningOutline} />
                             :

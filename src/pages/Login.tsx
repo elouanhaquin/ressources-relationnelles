@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading, IonAvatar } from '@ionic/react';
 import React, { useRef, useState } from 'react';
 import axios from "axios";
 import {
@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './Login.css'
 
 toast.configure()
  
@@ -99,10 +100,10 @@ const Home: React.FC = () => {
   }
 
   return (
-    <IonPage>
+    <IonPage id="login-page">
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Login</IonTitle>
+          <IonTitle>Connexion</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonLoading message="Attendez s'il-vous-plait" duration={0} isOpen={busy}></IonLoading>
@@ -122,10 +123,9 @@ const Home: React.FC = () => {
         </IonRow>
         <IonRow>
           <IonCol>
-            <IonIcon
-                style={{ fontSize: "70px", color: "#0040ff" }}
-                icon={personCircle}
-            />
+            <IonAvatar>
+              <img src="assets/icon/logoRSmall.png"></img>
+            </IonAvatar>
           </IonCol>
         </IonRow>
           <IonRow>
@@ -170,10 +170,9 @@ const Home: React.FC = () => {
           <IonRow>    
             <IonCol>
               <p style={{ fontSize: "small" }}>
-                  En cliquant sur se connecter vous acceptez nos <a href="#">conditions d'utilisations</a>.
+                  En cliquant sur se connecter vous acceptez nos <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/ressourcesrelationelles-d94f1.appspot.com/o/static%2FCGU.pdf?alt=media&token=2a1085b7-67c1-44f5-8c3d-387b6ae20ffa">conditions d'utilisations</a>.
               </p>
-              <IonButton  onClick={Logged}>Login</IonButton>
-              <button onClick={notify}>Click Me!</button>
+              <IonButton  onClick={Logged}>Se connecter</IonButton>
               <p style={{ fontSize: "medium" }}><Link to="reset_password">Mot de passe oublié</Link></p>
               <p style={{ fontSize: "medium" }}>
                   Vous n'avez pas de compte? <Link to="register">Créez votre compte!</Link>

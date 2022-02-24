@@ -34,6 +34,7 @@ import {
     IonBadge
 } from '@ionic/react';
 import './Profil.css';
+import './Profil.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
@@ -261,7 +262,7 @@ const ProfilView: React.FC = () => {
                         </IonRow>
                     </IonCard>
 
-                    <IonCard className="add-someone">
+                    <IonCard hidden={id!=null} className="add-someone">
                         <IonCardTitle>Ils vous ont ajouté <IonBadge color="secondary">{profilsWaiting.length}</IonBadge> </IonCardTitle>
                         <IonRow >
 
@@ -278,7 +279,7 @@ const ProfilView: React.FC = () => {
                         </IonRow>
                     </IonCard>
 
-                    <IonCard className="add-someone">
+                    <IonCard hidden={id!=null} className="add-someone">
                         <IonCardTitle>Ajouter une connaissance</IonCardTitle>
                         <IonRow >
                             <IonInput onIonChange={e => setQuery(e.detail.value!)}></IonInput><IonButton fill="clear" onClick={e => addSomeone()}><IonIcon icon={searchOutline} />   Rechercher</IonButton>
@@ -294,7 +295,7 @@ const ProfilView: React.FC = () => {
                         </IonRow>
                     </IonCard>
 
-                    <IonCard hidden={ressources.length == 0} className="add-someone">
+                    <IonCard hidden={ressources.length == 0} className="add-someone ressources">
                         <IonCardTitle>{id == undefined ? "Vos ressources publiées" : "Ses ressources publiées"} <IonBadge color="secondary">{ressources.length}</IonBadge></IonCardTitle>
                         <IonRow >
                             <IonList >
@@ -302,8 +303,11 @@ const ProfilView: React.FC = () => {
                             </IonList>
                         </IonRow>
                     </IonCard>
+                    <IonCard hidden={ressources.length != 0} className="add-someone">
+                        <IonCardSubtitle>Aucune ressource publiée pour le moment</IonCardSubtitle>
+                    </IonCard>
 
-                    <IonCard hidden={savedRessources.length == 0}  className="add-someone">
+                    <IonCard hidden={savedRessources.length == 0}  className="add-someone  ressources ">
                         <IonCardTitle>Vos ressources sauvegardées <IonBadge color="secondary">{savedRessources.length}</IonBadge></IonCardTitle>
                         <IonRow >
                             <IonList>
