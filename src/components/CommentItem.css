@@ -1,0 +1,28 @@
+.comment-item ion-label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    white-space: normal !important;
+    width: 95%;
+}
+
+.comment-item ion-input {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    white-space: normal !important;
+    width: 95%;
+}
+
+.comment-item .text {
+    text-align: left !important;
+    max-width: unset;
+}
+
+.comment-item .swiper-pagination-fraction,
+.swiper-pagination-custom,
+.swiper-container-horizontal>.swiper-pagination-bullets {
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+}

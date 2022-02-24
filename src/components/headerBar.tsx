@@ -23,49 +23,72 @@ import {
 } from '@ionic/react';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { Profil, getProfil } from '../data/profil';
-import { personCircle, addOutline } from 'ionicons/icons';
+import { personCircle, addOutline, arrowForwardOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
 import './HeaderBar.css';
+import '../pages/Home';
+import { getProfilFromFireStoreDBwithID, getUIDCurrentUser } from '../firebaseConfig';
 
 interface HeadBar {
   profil: Profil;
 }
 
 const HeaderBar: React.FC = () => {
-  const [profil, setProfil] = useState<Profil[]>([]);
+  const [profil, setProfil] = useState<Profil>();
+  const [searchText, setSearchText] = useState<string>("");
 
   useIonViewWillEnter(() => {
-    const prfl = getProfil();
-    setProfil(prfl);
+    getUIDCurrentUser().then(data => {
+      getProfilFromFireStoreDBwithID("" + data).then((d) => {
+       
+        setProfil(d)
+      });
+    });
   });
 
 
 
   return (
-      <IonHeader className="padding-headbar header-bar" slot="fixed">
-        <IonGrid>
-          <IonRow>
-            <IonCol  size="3">
-              <IonItem href='/home'><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
-            </IonCol>
-            <IonCol size="5">
-              <IonSearchbar>
+    <IonHeader className="padding-headbar header-bar" slot="fixed">
+      <IonGrid>
+        <IonRow>
+          <IonCol className='hidden-md-down' size="3">
+            <IonItem   href='/home'><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
+          </IonCol>
+          <IonCol className='hidden-md-up' size="2">
+          <IonItem   href='/home'><img src="assets/icon/logoRSmall.png"/></IonItem>
+          </IonCol>
+      
+          <IonCol className='hidden-md-up' size={searchText.length > 0 ? "6" : "7"}>
+            <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)} showCancelButton="focus" enterkeyhint="enter" >
+            </IonSearchbar>
+          </IonCol>
 
-              </IonSearchbar>
-            </IonCol>
-            <IonCol size="1">
-              <IonButton href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
+          <IonCol className='hidden-md-down' size={searchText.length > 0 ? "4" : "5"}>
+            <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)} showCancelButton="focus" enterkeyhint="enter" >
+            </IonSearchbar>
+          </IonCol>
 
-            </IonCol>
-            <IonCol size="3">
-              {profil.map(m => <ProfilItemHeader key={m.id} profil={m} />)}
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+      
+          <IonCol hidden={!(searchText.length > 0)} size="1">
+            <IonButton href={"/search/" +searchText }  fill='clear' > <IonIcon icon={arrowForwardOutline}> </IonIcon> </IonButton>
+          </IonCol>
+  
 
-      </IonHeader>
+          <IonCol className='hidden-md-down' size="1">
+            <IonButton fill="clear"  href={"/submit"} className="buttonHeader" > <IonIcon icon={addOutline}> </IonIcon> </IonButton>
+          </IonCol>
+        
 
-      );
+          <IonCol size="3">
+            {profil != undefined ? <ProfilItemHeader profil={profil} /> : <div></div>}
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+
+    </IonHeader>
+
+  );
 }
 
-      export default HeaderBar;
+export default HeaderBar;

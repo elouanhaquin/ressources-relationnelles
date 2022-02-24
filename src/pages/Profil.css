@@ -15,6 +15,104 @@
     margin: 0;
 }
 
+.profil ion-input {
+    border: 1px solid var(--ion-color-primary-shade);
+    border-radius: 5px;
+}
+
+.profil .add-someone {
+    width: 90%;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.profil .add-someone ion-row {
+    width: 90%;
+    margin: auto;
+    margin-top: 5%;
+    border: none !important;
+}
+
+.profil .add-someone {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    margin-top: 5%;
+    border: none !important;
+}
+
+.profil .add-someone ion-row ion-list {
+    width: 100%;
+    margin: 0;
+    margin-top: 5%;
+    border: none !important;
+}
+
+.profil .add-someone ion-row ion-card {
+    width: 80%;
+}
+
+.profil .add-someone ion-card-title {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.profil .add-someone ion-list {
+    width: 100%;
+}
+
+.profil .add-someone ion-item {
+    border: 1px solid var(--ion-color-light-shade);
+    border-radius: 5px;
+    margin: auto;
+    width: 60%;
+    margin-bottom: 15px;
+}
+
+.profil .ressources ion-item {
+    border: none;
+    width: unset;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.profil .ressources {
+    padding: 0;
+}
+
+.profil .ressources ion-row:first-of-type {
+    width: 100%;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.profil .ressources ion-row ion-card {
+    width: 100%;
+    margin: 10px;
+    margin-bottom: 10px;
+}
+
+.profil .add-someone ion-card-subtitle {
+    margin-left: 15px;
+}
+
+.profil .add-someone ion-item ion-button:first-of-type {
+    margin-right: 0;
+    margin-left: auto;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.profil .add-someone ion-item ion-button {
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 100%;
+}
+
 .profil ion-img {
     border-radius: 50px;
     max-width: 500px;

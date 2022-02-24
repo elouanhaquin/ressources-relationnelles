@@ -6,13 +6,18 @@
     border-collapse: separate;
     margin-bottom: 2vh;
     align-self: center;
-    margin-right: auto;
+    margin: auto;
     max-width: 800px;
+    min-width: 270px;
 }
 
 .message-list-item ion-label {
     margin-top: 12px;
     margin-bottom: auto;
+}
+
+.message-list-item .document {
+    width: 100%;
 }
 
 .message-list-item h2 {
@@ -33,6 +38,13 @@
 
 .message-list-item ion-card-subtitle {
     font-style: italic;
+}
+
+.message-list-item ion-input {
+    border: 1px solid var(--ion-color-light-shade);
+    border-radius: 5px;
+    width: 80%;
+    margin: auto;
 }
 
 .message-list-item .date {
@@ -115,7 +127,34 @@
     object-fit: scale-down;
 }
 
+.message-list-item ion-slides,
+.message-list-item ion-slide {
+    margin-top: 15px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 750px;
+    min-height: 250px;
+    object-fit: scale-down;
+}
+
+.message-list-item ion-slide canvas {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 750px;
+    min-height: 250px;
+    min-width: 250px;
+    max-width: 110%;
+    object-fit: scale-down;
+}
+
 .message-list-item .footer {
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.message-list-item .footer ion-button {
     margin: auto;
     justify-content: space-evenly;
 }
