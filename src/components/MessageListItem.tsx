@@ -79,7 +79,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
   };
 
   return (!busy ?
-    <Document renderMode="svg" className="document" file={message.img} onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
+    <Document  className="document" file={message.img} onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
       <IonSlides pager={true} options={slideOpts} onIonSlideDoubleTap={e => changePage(1)}>
         {arrayOfNumbers.map((e, i) => {
           return (
@@ -90,6 +90,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
       </IonSlides>
     </Document> : <div />)
 }
+
 
 const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }) => {
   const [isLike, setLike] = useState<Boolean>();
