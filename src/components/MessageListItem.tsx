@@ -79,7 +79,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
   };
 
   return (!busy ?
-    <Document className="document" file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
+    <Document renderMode="svg" className="document" file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
       <IonSlides pager={true} options={slideOpts} onIonSlideDoubleTap={e => changePage(1)}>
         {arrayOfNumbers.map((e, i) => {
           return (

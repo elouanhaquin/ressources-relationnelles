@@ -36,6 +36,7 @@
 .profil .add-someone {
     width: 90%;
     max-width: 600px;
+    min-width: 200px;
     margin: auto;
     margin-top: 5%;
     border: none !important;
@@ -129,7 +130,7 @@
     font-weight: 700;
 }
 
-.profil .profil-it{
+.profil .profil-it {
     max-width: 500px;
     margin-right: 0;
 }
