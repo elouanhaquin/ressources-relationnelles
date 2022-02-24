@@ -41,7 +41,7 @@ const ProfilItemHeader: React.FC<ProfilItemExample> = ({ profil }) => {
   return (
     <IonItem color="warning" className="ProfilItem">
       <IonAvatar>
-        <IonImg className="addPic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profilImg}></IonImg>
+        <IonImg className="addPic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profil.img}></IonImg>
       </IonAvatar>
       <IonLabel>{username == undefined ? "error" : username}</IonLabel>
       <IonSelect interface="popover"

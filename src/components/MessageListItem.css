@@ -143,9 +143,9 @@
     margin-left: auto;
     margin-right: auto;
     max-height: 750px;
-    min-height: 250px;
     min-width: 250px;
-    max-width: 110%;
+    min-height: 250px;
+    max-width: 130%;
     object-fit: scale-down;
 }
 

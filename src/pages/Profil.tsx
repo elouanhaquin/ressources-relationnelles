@@ -253,13 +253,36 @@ const ProfilView: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol size="9" className="hidden-md-up">
-                                        <IonCardTitle> {pro?.pseudo}</IonCardTitle>
-                                        <IonCardTitle> {pro?.firstName}</IonCardTitle>
-                                        <IonCardTitle> {pro?.lastName}</IonCardTitle>
-                                        <IonCardTitle> {pro?.birthday}</IonCardTitle>
-                                        <IonCardTitle>  {age + "ans"}</IonCardTitle>
-                                        <IonCardTitle> {'@' + pro?.pseudo}</IonCardTitle>
-                                        <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
+                                    <IonCardTitle> {pro?.pseudo} </IonCardTitle>
+                                            <IonCardTitle>
+                                                <IonInput
+                                                    hidden={!modify}
+                                                    type="text"
+                                                    value={pseudo}
+                                                    onIonChange={(e) => setPseudo(e.detail.value!)}>
+                                                </IonInput>
+                                            </IonCardTitle>
+                                            <IonCardTitle> {pro?.firstName}</IonCardTitle>
+                                            <IonCardTitle>
+                                                <IonInput
+                                                    hidden={!modify}
+                                                    type="text"
+                                                    value={firstName}
+                                                    onIonChange={(e) => setFirstName(e.detail.value!)}>
+                                                </IonInput>
+                                            </IonCardTitle>
+                                            <IonCardTitle> {pro?.lastName}</IonCardTitle>
+                                            <IonCardTitle>
+                                                <IonInput
+                                                    hidden={!modify}
+                                                    type="text"
+                                                    value={lastName}
+                                                    onIonChange={(e) => setLastName(e.detail.value!)}>
+                                                </IonInput>
+                                            </IonCardTitle>
+                                            <IonCardTitle>  {age + " ans (" + pro?.birthday + ")"}</IonCardTitle>
+                                            <IonCardTitle> {'@' + username}</IonCardTitle>
+                                            <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
                                     </IonCol>
 
                                     <IonCol size="3">
