@@ -43,6 +43,7 @@ import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
 import { useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 
 
@@ -144,6 +145,7 @@ const ProfilView: React.FC = () => {
     }
 
     function acceptFriend(friendUID: string) {
+        notify();
         acceptFriendToFireStore("" + pro?.uid, friendUID, true);
     }
     function removeFriend(friendUID: string) {
@@ -151,6 +153,7 @@ const ProfilView: React.FC = () => {
         setNotFriendAnymore(true)
     }
     function acceptFamily(friendUID: string) {
+        notify();
         acceptFamilyToFireStore("" + pro?.uid, friendUID, true);
     }
     function refuseFriend(friendUID: string) {
@@ -179,6 +182,18 @@ const ProfilView: React.FC = () => {
 
     }
 
+    const notify = ()=>{
+        toast.success('🤝 Et une relation de plus ! ' , {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      }
+    
 
 
 

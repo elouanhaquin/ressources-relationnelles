@@ -45,6 +45,7 @@ import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
 import { Route, Redirect } from 'react-router';
+import { toast } from 'react-toastify';
 
 
 
@@ -131,10 +132,23 @@ const Home: React.FC = () => {
   }
 
   function setInterestedBy(subject: string) {
+    notify();
     addInterestToFireStore(userUID, subject, true)
     setInterest("")
 
   }
+  const notify = ()=>{
+    toast.success('👏 Vous suivez désormais : ' + interest, {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+
 
   return (
     <IonPage className="home" id="home-page">

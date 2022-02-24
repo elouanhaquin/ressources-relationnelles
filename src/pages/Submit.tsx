@@ -36,6 +36,7 @@ import { Message } from '../data/messages';
 import { exportMessageToDB, exportMessageToFireStoreDB, getCurrentUser, getProfilFromFireStoreDBwithID, getUIDCurrentUser, uploadImageToStorage } from '../firebaseConfig';
 import { useHistory } from "react-router-dom";
 import './Submit.css';
+import { toast } from 'react-toastify';
 
 
 function getDate() {
@@ -110,6 +111,8 @@ function Submit() {
 
         }
       }
+      notify();
+      history.push('/profil')
     })
   }
 
@@ -121,6 +124,18 @@ function Submit() {
       setFile(e.target.files[0])
   }
 
+
+  const notify = ()=>{
+    toast.success('🦄 la ressource est publiée', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
 
   return (
     <IonPage>
