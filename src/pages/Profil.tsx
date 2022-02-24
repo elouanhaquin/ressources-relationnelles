@@ -225,7 +225,7 @@ const ProfilView: React.FC = () => {
                                                     onIonChange={(e) => setLastName(e.detail.value!)}>
                                                 </IonInput>
                                             </IonCardTitle>
-                                            <IonCardTitle>  {age + "ans (" + pro?.birthday + ")"}</IonCardTitle>
+                                            <IonCardTitle>  {age + " ans (" + pro?.birthday + ")"}</IonCardTitle>
                                             <IonCardTitle> {'@' + username}</IonCardTitle>
                                             <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
                                         </IonCol>
@@ -258,7 +258,7 @@ const ProfilView: React.FC = () => {
                                         <IonCardTitle> {pro?.lastName}</IonCardTitle>
                                         <IonCardTitle> {pro?.birthday}</IonCardTitle>
                                         <IonCardTitle>  {age + "ans"}</IonCardTitle>
-                                        <IonCardTitle> {'@' + username}</IonCardTitle>
+                                        <IonCardTitle> {'@' + pro?.pseudo}</IonCardTitle>
                                         <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
                                     </IonCol>
 
@@ -290,7 +290,7 @@ const ProfilView: React.FC = () => {
                                     <IonList>
                                         {profilsWaiting.map(p =>
                                             <IonItem>
-                                                <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.name}</IonCardSubtitle>
+                                                <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{pro?.pseudo}</IonCardSubtitle>
                                                 <IonButton fill="clear" onClick={e => acceptFamily(p.uid)}><IonIcon color='success' icon={homeOutline}></IonIcon></IonButton>
                                                 <IonButton fill="clear" onClick={e => acceptFriend(p.uid)}><IonIcon color='success' icon={peopleOutline}></IonIcon></IonButton>
                                                 <IonButton fill="clear" onClick={e => refuseFriend(p.uid)}><IonIcon color='danger' icon={removeOutline}></IonIcon></IonButton>
@@ -309,7 +309,7 @@ const ProfilView: React.FC = () => {
                                     <IonList>
                                         {profilsADD.filter(p => (p.firstName?.toLowerCase().includes(query) || p.lastName?.toLowerCase().includes(query)) && p.uid != undefined && p.uid != pro?.uid && !uidArray.includes(p.uid) && query.length > 0).map(p =>
                                             <IonItem>
-                                                <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.name}</IonCardSubtitle> <IonButton fill="clear" onClick={e => addFriend(p.uid)}><IonIcon icon={personAdd}></IonIcon></IonButton>
+                                                <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.pseudo??""}</IonCardSubtitle> <IonButton fill="clear" onClick={e => addFriend(p.uid)}><IonIcon icon={personAdd}></IonIcon></IonButton>
                                             </IonItem>
                                         )}
                                     </IonList>

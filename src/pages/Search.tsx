@@ -93,7 +93,7 @@ const Search: React.FC = () => {
                                 <IonList>
                                     {profilsADD.filter(p => (p.firstName?.toLowerCase().includes(id.toLowerCase()) || p.lastName?.toLowerCase().includes(id.toLowerCase())) && p.uid != undefined ).map(p =>
                                         <IonItem  href={"/profil/" +p.uid }>
-                                            <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.name}</IonCardSubtitle> 
+                                            <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p.pseudo}</IonCardSubtitle> 
                                         </IonItem>
                                     )}
                                 </IonList>

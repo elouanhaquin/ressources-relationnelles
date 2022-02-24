@@ -79,20 +79,21 @@ const Register: React.FC = () => {
     
     const profi: Profil =
     {
-      name: pseudo,
+      pseudo: pseudo,
       lastName: lastName,
       firstName: firstName,
-      img: "data.img",
+      img: "https://firebasestorage.googleapis.com/v0/b/ressourcesrelationelles-d94f1.appspot.com/o/static%2FlogoRSmall.png?alt=media&token=d3869780-abd5-4ccd-8e13-9df636e7f081",
       id: 0,
-      likes: [],
-      categories: [],
-      signaled: [],
-      signaled_comments: [],
-      friends: [],
-      friends_waiting: [],
-      family: [],
-      interested: [],
+      likes: ["0"],
+      categories: ["0"],
+      signaled: ["0"],
+      signaled_comments: ["0"],
+      friends: ["0"],
+      friends_waiting: ["0"],
+      family: ["0"],
+      interested: ["0"],
       admin: 0,
+      birthday: birthDay,
       uid: "0"
     };
     const res = await RegisterUser(email, password ,profi);

@@ -33,7 +33,7 @@ import { ChangeEvent, useState } from 'react';
 import { useParams } from 'react-router';
 import HeaderBar from '../components/headerBar';
 import { Message } from '../data/messages';
-import { exportMessageToDB, exportMessageToFireStoreDB, getCurrentUser, uploadImageToStorage } from '../firebaseConfig';
+import { exportMessageToDB, exportMessageToFireStoreDB, getCurrentUser, getProfilFromFireStoreDBwithID, getUIDCurrentUser, uploadImageToStorage } from '../firebaseConfig';
 import { useHistory } from "react-router-dom";
 import './Submit.css';
 
@@ -62,6 +62,18 @@ function Submit() {
   const [tags, setTags] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [file, setFile] = useState<File>();
+  const [username, setUsername] = useState<string>("");
+  const [uid, setUID] = useState<string>("");
+
+  useIonViewWillEnter(() => {
+    getUIDCurrentUser().then(data => {
+      getProfilFromFireStoreDBwithID("" + data).then((f) => {
+        setUID(uid);
+        setUsername(f.pseudo??"")
+      });
+    });
+  });
+
 
   function submitMessage() {
     getCurrentUser().then((user: any) => {
@@ -69,7 +81,7 @@ function Submit() {
         //I'm logged in
         const messages: Message =
         {
-          fromName: user.email,
+          fromName: username,
           subject: title,
           category: tags,
           content: message,
@@ -82,7 +94,7 @@ function Submit() {
           id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
           fromId: user.uid,
           shareLevel: 0,
-          saved_by: [],
+          saved_by: ["0"],
           reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "", username:"" }]
         }
 

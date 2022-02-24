@@ -65,24 +65,7 @@ const Administration: React.FC = () => {
             history.replace('/home');
 
         getProfilFromFireStoreDBwithID(id).then((data) => {
-            const profi: Profil =
-            {
-                name: data.name,
-                lastName: data.lastName,
-                firstName: data.firstName,
-                img: data.img,
-                id: data.id,
-                likes: data.likes,
-                categories: data.categories,
-                signaled: data.signaled,
-                signaled_comments: data.signaled_comments,
-                friends: data.friends,
-                friends_waiting: data.friends_waiting,
-                family: data.family,
-                interested: data.interested,
-                admin: data.admin,
-                uid: data.uid
-            };
+            const profi= data;
             if (profi.admin == undefined || profi.admin == 0)
                 history.replace('/home');
 
@@ -113,7 +96,7 @@ const Administration: React.FC = () => {
 
                         <IonCol size="12">
                             <IonCard className="header">
-                                <IonTitle> <IonIcon icon={optionsOutline} />  Administration :<IonCardSubtitle>Enregistré en tant que : {pro?.name}</IonCardSubtitle> </IonTitle>
+                                <IonTitle> <IonIcon icon={optionsOutline} />  Administration :<IonCardSubtitle>Enregistré en tant que : {pro?.pseudo}</IonCardSubtitle> </IonTitle>
 
                             </IonCard>
                         </IonCol>

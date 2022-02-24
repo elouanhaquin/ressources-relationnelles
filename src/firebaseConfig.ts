@@ -86,13 +86,15 @@ export async function getUIDCurrentUser() {
     return auth.currentUser?.uid;
 }
 
+
 export async function RegisterUser(email: string, password: string, profil: Profil) {
     try {
 
         const res = await firebase.default.auth().createUserWithEmailAndPassword(email, password).then(cred => {
             return firebase.default.firestore().collection('profils').doc("" + cred.user?.uid).set({
                 email: email,
-                pseudo: profil.name,
+                pseudo: profil.pseudo,
+                birthday: profil.birthday,
                 firstName: profil.firstName,
                 lastName: profil.lastName,
                 img: profil.img,
@@ -102,6 +104,7 @@ export async function RegisterUser(email: string, password: string, profil: Prof
                 signaled: profil.signaled,
                 signaled_comments: profil.signaled_comments,
                 friends: profil.friends,
+                friends_waiting: profil.friends_waiting,
                 family: profil.family,
                 interested: profil.interested,
                 admin: profil.admin,
@@ -202,7 +205,6 @@ export const getProfilFromFireStoreDBwithID = (id: string) => {
         let ress: Profil[] = [];
         querySnapshot.forEach((doc) => {
             let m: Profil = {
-                name: doc.data().name,
                 lastName: doc.data().lastName,
                 firstName: doc.data().firstName,
                 pseudo: doc.data().pseudo,
@@ -343,7 +345,7 @@ export async function setSignaledCommentToUserFirebase(id: string, idParent: str
             return id;
         });
     }).then((newPopulation) => {
-        console.log("Like increased to ", newPopulation);
+        console.log("signaled increased to ", newPopulation);
     }).catch((err) => {
         // This will be an "population is too big" error.
         console.error(err);
@@ -439,7 +441,8 @@ export const getProfilToAdd = () => {
         let ress: Profil[] = [];
         querySnapshot.forEach((doc) => {
             let m: Profil = {
-                name: doc.data().name,
+                pseudo: doc.data().pseudo,
+                birthday: doc.data().birthday,
                 lastName: doc.data().lastName,
                 firstName: doc.data().firstName,
                 img: doc.data().img,
@@ -770,12 +773,13 @@ export async function getProfilsArray(id: Array<string>) {
         let ress: Profil[] = [];
         querySnapshot.forEach((doc) => {
             let m: Profil = {
-                name: doc.data().name,
                 lastName: doc.data().lastName,
                 firstName: doc.data().firstName,
                 img: doc.data().img,
                 id: doc.data().id,
                 likes: doc.data().likes,
+                pseudo: doc.data().pseudo,
+                birthday: doc.data().birthday,
                 categories: doc.data().categories,
                 signaled: doc.data().signaled,
                 signaled_comments: doc.data().signaled_comments,
@@ -800,7 +804,8 @@ export async function getAllProfilsArray() {
         let ress: Profil[] = [];
         querySnapshot.forEach((doc) => {
             let m: Profil = {
-                name: doc.data().name,
+                pseudo: doc.data().pseudo,
+                birthday: doc.data().birthday,
                 lastName: doc.data().lastName,
                 firstName: doc.data().firstName,
                 img: doc.data().img,
@@ -975,7 +980,7 @@ export async function isMessageLiked(id: string, idRessource: string) {
                 throw "Document does not exist!";
             }
 
-            var newPopulation = sfDoc.get("like");
+            var newPopulation = sfDoc.get("likes");
             return newPopulation.includes(idRessource);
         });
     }).then((newPopulation) => {
@@ -1235,7 +1240,7 @@ export const LikeToProfilFromDBFireStore = (id: string, idRessource: string, add
                 throw "Document does not exist!";
             }
 
-            var newPopulation = sfDoc.get("like");
+            var newPopulation = sfDoc.get("likes");
             if (!add) {
                 const index = newPopulation.indexOf(idRessource);
                 console.log("removing item : " + index)
@@ -1249,7 +1254,7 @@ export const LikeToProfilFromDBFireStore = (id: string, idRessource: string, add
                     newPopulation.push(idRessource)
             }
 
-            transaction.update(sfDocRef, { like: newPopulation });
+            transaction.update(sfDocRef, { likes: newPopulation });
             return idRessource;
         });
     }).then((newPopulation) => {

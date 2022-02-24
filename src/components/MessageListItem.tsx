@@ -31,6 +31,8 @@ import { Document, Page, pdfjs } from "react-pdf";
 import CommentListItem from './CommentListItem';
 import { randomInt } from 'crypto';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { useHistory } from 'react-router';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface MessageListItemProps {
@@ -103,6 +105,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const history = useHistory();
 
 
 
@@ -243,7 +246,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
         <IonCardHeader>
           <IonCardTitle hidden={modify}> {message.subject}</IonCardTitle>  <IonInput hidden={!modify} value={title.length > 0 ? title : message.subject} onIonChange={e => setTitle(e.detail.value!)}> </IonInput>
           <IonCardSubtitle hidden={modify} className="date" >{message.category.toUpperCase()}</IonCardSubtitle> <IonInput hidden={!modify} onIonChange={e => setCategory(e.detail.value!)} value={category.length > 0 ? category.toUpperCase() : message.category.toUpperCase()} className="date"> </IonInput>
-          <IonCardSubtitle >{message.fromName}</IonCardSubtitle>
+          <IonCardSubtitle onClick={e=> history.push('/profil/' + message.fromId)}>{message.fromName}</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent>
           <IonCardSubtitle hidden={modify} >{message.content}</IonCardSubtitle> <IonInput hidden={!modify} value={description.length > 0 ? description : message.content} onIonChange={e => setDescription(e.detail.value!)}> </IonInput>

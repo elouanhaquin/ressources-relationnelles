@@ -1,11 +1,10 @@
 import { Message } from "./messages";
 
 export interface Profil {
-  name: string;
   firstName: string;
   lastName: string;
-  pseudo?: string;
-  birthday?: string;
+  pseudo: string;
+  birthday: string;
   likes: string[];
   categories: string[];
   signaled: string[];
