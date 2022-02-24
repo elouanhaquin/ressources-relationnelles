@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading, IonPicker, IonSelectOption, IonSelect } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading, IonPicker, IonSelectOption, IonSelect, IonAvatar } from '@ionic/react';
 import React, { useState } from 'react';
 import axios from "axios";
 import {
@@ -16,6 +16,7 @@ import { Profil } from '../data/profil';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendar } from 'ionicons/icons';
 import ReCAPTCHA from "react-google-recaptcha";
+import './Login.css'
 
 function validateEmail(email: string) {
     const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
@@ -108,7 +109,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage id='register-page'>
       <IonHeader>
         <IonToolbar>
           <IonTitle>S'inscrire</IonTitle>
@@ -139,10 +140,9 @@ const Register: React.FC = () => {
         </IonRow>
         <IonRow>
           <IonCol>
-            <IonIcon
-                style={{ fontSize: "70px", color: "#0040ff" }}
-                icon={personCircle}
-            />
+          <IonAvatar>
+              <img src="assets/icon/logoRSmall.png"/>
+              </IonAvatar>
           </IonCol>
         </IonRow>
           <IonRow>

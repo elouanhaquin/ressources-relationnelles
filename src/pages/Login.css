@@ -1,0 +1,31 @@
+#login-page  img,
+#register-page img{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#login-page ion-avatar,
+#register-page ion-avatar{
+    margin-left: auto;
+    margin-right: auto;
+   min-width: 150px;
+   min-height: 150px;
+}
+
+
+
+
+#login-page ion-item,
+#register-page ion-item{
+    max-width: 500px;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--ion-color-light-shade);
+    border-radius: 5px;
+}
+
+#register-page ion-item{
+    margin-bottom: 15px;
+}
