@@ -33,7 +33,7 @@ import { randomInt } from 'crypto';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 import { useHistory } from 'react-router';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface MessageListItemProps {
   message: Message;
