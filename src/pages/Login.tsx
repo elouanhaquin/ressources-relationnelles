@@ -124,8 +124,13 @@ const Home: React.FC = () => {
         <IonRow>
           <IonCol>
             <IonAvatar>
+<<<<<<< HEAD
               <img src="assets/icon/logoRSmall.png"/>
               </IonAvatar>
+=======
+              <img src="assets/icon/logoRSmall.png"></img>
+            </IonAvatar>
+>>>>>>> fc98efabd181be1aac5dea0563f3f436ab1b2f53
           </IonCol>
         </IonRow>
           <IonRow>

@@ -21,7 +21,6 @@
 ion-header .md {
     padding: 0;
     padding-top: 0.1%;
-    padding-bottom: 0.1%;
 }
 
 ion-header img {
@@ -87,9 +86,12 @@ ion-grid {
     display: none !important;
 }
 
+#home-page .search-for-cat{
+    max-width: 500px;
+}
 #home-page .search-for-cat ion-input {
-    border: 2px solid var(--ion-color-light-contrast);
     background-color: var(--ion-color-light);
+    border: 3px solid var(--ion-color-light);
     padding-left: 10px;
     margin-left: 10px;
     border-radius: 5px;
@@ -97,6 +99,10 @@ ion-grid {
     margin-bottom: auto;
     height: 35px !important;
 }
+#home-page .search-for-cat ion-button {
+    margin-left: 10px;
+}
+
 
 #home-page .search-for-cat {
     width: 80%;

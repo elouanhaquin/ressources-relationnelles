@@ -38,7 +38,7 @@ import './Profil.css';
 import HeadBar from '../components/headerBar';
 import ProfilItemHeader from '../components/profilItemHeader';
 import { useSelector } from 'react-redux';
-import { acceptFamilyToFireStore, acceptFriendToFireStore, addFriendToFireStore, deleteFriendToFireStore, DeleteProfil, exportMessagesToDB, getFamilyUser, getFriendsUser, getProfilFromFireStoreDBwithID, getProfilsArray, getProfilsWaitingToAccept, getProfilToAdd, getRessourcesfromUser, getRessourcesSavedByUser, getUIDCurrentUser } from '../firebaseConfig'
+import { acceptFamilyToFireStore, acceptFriendToFireStore, addFriendToFireStore, deleteFriendToFireStore, DeleteProfil, exportMessagesToDB, getFamilyUser, getFriendsUser, getProfilFromFireStoreDBwithID, getProfilsArray, getProfilsWaitingToAccept, getProfilToAdd, getRessourcesfromUser, getRessourcesSavedByUser, getUIDCurrentUser, UpdateProfil } from '../firebaseConfig'
 import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
@@ -51,6 +51,10 @@ const ProfilView: React.FC = () => {
     const [busy, setBusy] = useState(true);
     const { id } = useParams<{ id: string }>();
     const [pro, setProfi] = useState<Profil>();
+
+    const [pseudo, setPseudo] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
 
     const [profilsADD, setADD] = useState<Profil[]>([]);
     const [profilsWaiting, setProfilWaiting] = useState<Profil[]>([]);
@@ -149,27 +153,24 @@ const ProfilView: React.FC = () => {
     function refuseFriend(friendUID: string) {
         acceptFriendToFireStore("" + pro?.uid, friendUID, false);
     }
-
+    function updateProfil(){
+        if (uid!= undefined){
+            getProfilFromFireStoreDBwithID(uid).then((p)=>{
+                if (pseudo!=undefined && pseudo !=''){p.pseudo=pseudo;}
+                if (firstName!=undefined && firstName !=''){p.firstName=firstName;}
+                if (lastName!=undefined && lastName !=''){p.lastName=lastName;}
+                UpdateProfil(uid,p);
+            });          
+        }
+    }
     function deleteProfil() {
         if(uid != undefined)
             DeleteProfil(uid)
     }
-    //todo ressources postées et sauvegardées - done
-    //todo modifier ressources - IMPORTANT - done
-    //todo button  demande amis sur profil - done
-    //todo sauvegarder ressource - IMPORTANT  - done
-    //supprimer utilisateur - IMPORTANT - done
-    //todo recherche  - IMPORTANT - done
-    //todo delete user from admin - done
-    //todo suscribe to topic - IMPORTANT - done
-    //todo css - IMPORTANT 
-    //modifier user - IMPORTANT 
-
+    
   
     function getAgeProfilWithBirthday(birthday: string|undefined) {
         if (birthday!=undefined){
-            //let birthdate=birthday.split('-');
-            //console.log(Math.floor((Math.abs(Date.now()-Date.parse(birthday) / (1000 * 3600 * 24))/365));
             return Math.floor((Math.abs(Date.now()-Date.parse(birthday)) / (1000 * 3600 * 24))/365);
         }
         
@@ -185,6 +186,40 @@ const ProfilView: React.FC = () => {
                 <IonGrid>
                     <IonCard className="content">
                         <IonRow >
+                        {id == undefined || isAdmin ? <div>
+                            <IonCol size="6" className="hidden-md-down">
+                                <IonCard className="profile-pic">
+                                    <IonImg src={pro?.img}></IonImg>
+                                </IonCard>
+                            </IonCol>
+                            <IonCol size="6" className="hidden-md-down">
+                                <IonCardTitle> {pro?.pseudo} </IonCardTitle>
+                                <IonCardTitle>
+                                    <IonInput   type="text"
+                                                placeholder="Pseudo"
+                                                onIonChange={(e)=>setPseudo(e.detail.value!)}>
+                                    </IonInput>
+                                </IonCardTitle>
+                                <IonCardTitle> {pro?.firstName}</IonCardTitle>
+                                <IonCardTitle>
+                                    <IonInput   type="text"
+                                                placeholder="Prénom"
+                                                onIonChange={(e)=>setFirstName(e.detail.value!)}>
+                                    </IonInput>
+                                </IonCardTitle>
+                                <IonCardTitle> {pro?.lastName}</IonCardTitle>
+                                <IonCardTitle>
+                                    <IonInput   type="text"
+                                                placeholder="Nom"
+                                                onIonChange={(e)=>setLastName(e.detail.value!)}>
+                                    </IonInput>
+                                </IonCardTitle>
+                                <IonCardTitle>  {age + "ans (" +pro?.birthday + ")"}</IonCardTitle>
+                              <IonCardTitle> {'@' + username}</IonCardTitle>                                
+                                <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> { location}</IonCardTitle>
+                            </IonCol>
+                            </div> :
+                            <div>
                             <IonCol size="6" className="hidden-md-down">
                                 <IonCard className="profile-pic">
                                     <IonImg src={pro?.img}></IonImg>
@@ -193,13 +228,14 @@ const ProfilView: React.FC = () => {
                             <IonCol size="6" className="hidden-md-down">
                                 <IonCardTitle> {pro?.pseudo}</IonCardTitle>
                                 <IonCardTitle> {pro?.firstName}</IonCardTitle>
-
                                 <IonCardTitle> {pro?.lastName}</IonCardTitle>
                                 <IonCardTitle> {pro?.birthday}</IonCardTitle>
                                 <IonCardTitle>  {age + "ans"}</IonCardTitle>
                               <IonCardTitle> {'@' + username}</IonCardTitle>                                
                                 <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> { location}</IonCardTitle>
                             </IonCol>
+                            </div>}
+
                             <IonCol size="9" className="hidden-md-up">
                                 <IonCard className="profile-pic">
                                     <IonImg src={pro?.img}></IonImg>
@@ -208,8 +244,9 @@ const ProfilView: React.FC = () => {
                                 <IonCardTitle> {'@' + pro?.lastName}</IonCardTitle>
                                 <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {"location"}</IonCardTitle>
                             </IonCol>
-                            <IonCol size="3" className="hidden-md-up">
-                            {id == undefined || isAdmin ?  <div><IonButton fill="clear">Modifier</IonButton>
+
+                            <IonCol size="3" className="hidden-md-down">
+                            {id == undefined || isAdmin ?  <div><IonButton fill="clear" onClick={e=>updateProfil()}>Modifier</IonButton>
                                 <IonButton color='danger' onClick={e=> deleteProfil()}> Supprimer</IonButton></div> 
                                 :  isAlreadyFriend ?  <div>
                                     <IonButton hidden={isNotFriendAnymore} onClick={e => removeFriend(id)} fill="clear" color='danger'><IonIcon icon={personRemoveOutline}/></IonButton></div>
