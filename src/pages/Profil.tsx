@@ -241,7 +241,7 @@ const ProfilView: React.FC = () => {
                                                 </IonInput>
                                             </IonCardTitle>
                                             <IonCardTitle>  {age + " ans (" + pro?.birthday + ")"}</IonCardTitle>
-                                            <IonCardTitle> {'@' + username}</IonCardTitle>
+                                            <IonCardTitle> {'@' + pro?.pseudo}</IonCardTitle>
                                             <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
                                         </IonCol>
                                     </div> :
@@ -257,7 +257,7 @@ const ProfilView: React.FC = () => {
                                                 <IonCardTitle> {pro?.lastName}</IonCardTitle>
                                                 <IonCardTitle> {pro?.birthday}</IonCardTitle>
                                                 <IonCardTitle>  {age + "ans"}</IonCardTitle>
-                                                <IonCardTitle> {'@' + username}</IonCardTitle>
+                                                <IonCardTitle> {'@' + pro?.pseudo}</IonCardTitle>
                                                 <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
                                             </IonCol>
                                         </div>}
@@ -296,7 +296,7 @@ const ProfilView: React.FC = () => {
                                                 </IonInput>
                                             </IonCardTitle>
                                             <IonCardTitle>  {age + " ans (" + pro?.birthday + ")"}</IonCardTitle>
-                                            <IonCardTitle> {'@' + username}</IonCardTitle>
+                                            <IonCardTitle> {'@' + pro?.pseudo}</IonCardTitle>
                                             <IonCardTitle> <IonIcon icon={locationOutline}></IonIcon> {location}</IonCardTitle>
                                     </IonCol>
 

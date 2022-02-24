@@ -43,7 +43,7 @@ const ProfilItemHeader: React.FC<ProfilItemExample> = ({ profil }) => {
       <IonAvatar>
         <IonImg className="addPic" src={profil == undefined ? "../assets/profile_pic/image.jpg" : profil.img}></IonImg>
       </IonAvatar>
-      <IonLabel className='hidden-md-down'>{username == undefined ? "error" : username}</IonLabel>
+      <IonLabel className='hidden-md-down'>{profil.pseudo == undefined ? "error" : profil.pseudo}</IonLabel>
       <IonSelect interface="popover"
         onIonChange={e=>e.detail.value == "deconnection" ? Deconnection() : e.detail.value == "profil" ? Profil() : e.detail.value == "options" ? Options() : Profil()}
       >
