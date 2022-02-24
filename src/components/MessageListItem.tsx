@@ -79,7 +79,7 @@ const Carousel: React.FC<MessageListItemProps> = ({ message, uid }) => {
   };
 
   return (!busy ?
-    <Document renderMode="svg" className="document" file={message.img} error="" onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
+    <Document renderMode="svg" className="document" file={message.img} onLoadSuccess={e => onDocumentLoadSuccess(e.numPages)} onLoadError={e => onDocumentLoadError(e)}>
       <IonSlides pager={true} options={slideOpts} onIonSlideDoubleTap={e => changePage(1)}>
         {arrayOfNumbers.map((e, i) => {
           return (
@@ -253,10 +253,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message, uid, admin }
 
           {isPDF && message.img && !display ?
             <div>
-
               <Carousel message={message} uid={uid} admin={admin} />
-
-
             </div>
             : !isPDF && message.img ?
               <img src={message.img} /> : <div />}

@@ -24,7 +24,9 @@ import {
   IonCardTitle,
   IonCardContent,
   IonTextarea,
-  IonText
+  IonText,
+  IonSelect,
+  IonSelectOption
 } from '@ionic/react';
 import firebase from 'firebase';
 
@@ -70,7 +72,7 @@ function Submit() {
     getUIDCurrentUser().then(data => {
       getProfilFromFireStoreDBwithID("" + data).then((f) => {
         setUID(uid);
-        setUsername(f.pseudo??"")
+        setUsername(f.pseudo ?? "")
       });
     });
   });
@@ -96,17 +98,17 @@ function Submit() {
           fromId: user.uid,
           shareLevel: 0,
           saved_by: ["0"],
-          reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "", username:"" }]
+          reponse: [{ id: 0, idAuthor: 0, idMessage: 0, text: "", username: "" }]
         }
 
-        if(file != undefined && file.size < 50000000 && fileOutputAvailable.includes(file.type.toLowerCase().split('/')[1]) ){
+        if (file != undefined && file.size < 50000000 && fileOutputAvailable.includes(file.type.toLowerCase().split('/')[1])) {
           uploadImageToStorage(file, "" + messages.id).then(data => {
             messages.img = data;
             exportMessageToFireStoreDB(messages);
 
           })
-        }else{
-          console.log(file?.type.toLowerCase() + " with size " +  file?.size);
+        } else {
+          console.log(file?.type.toLowerCase() + " with size " + file?.size);
           exportMessageToFireStoreDB(messages);
 
         }
@@ -125,7 +127,7 @@ function Submit() {
   }
 
 
-  const notify = ()=>{
+  const notify = () => {
     toast.success('🦄 la ressource est publiée', {
       position: "bottom-center",
       autoClose: 5000,
@@ -134,7 +136,7 @@ function Submit() {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      });
+    });
   }
 
   return (
@@ -166,6 +168,11 @@ function Submit() {
                 <IonItem>
                   <IonInput type="text" placeholder="Catégorie" value={tags} onIonChange={e => setTags(e.detail.value!.toLowerCase())}></IonInput>
                 </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+
               </IonCol>
             </IonRow>
             <IonRow>
