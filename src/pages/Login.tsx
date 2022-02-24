@@ -170,7 +170,7 @@ const Home: React.FC = () => {
           <IonRow>    
             <IonCol>
               <p style={{ fontSize: "small" }}>
-                  En cliquant sur se connecter vous acceptez nos <a href="#">conditions d'utilisations</a>.
+                  En cliquant sur se connecter vous acceptez nos <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/ressourcesrelationelles-d94f1.appspot.com/o/static%2FCGU.pdf?alt=media&token=2a1085b7-67c1-44f5-8c3d-387b6ae20ffa">conditions d'utilisations</a>.
               </p>
               <IonButton  onClick={Logged}>Se connecter</IonButton>
               <p style={{ fontSize: "medium" }}><Link to="reset_password">Mot de passe oublié</Link></p>
