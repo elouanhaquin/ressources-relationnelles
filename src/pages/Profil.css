@@ -128,3 +128,8 @@
 .profil ion-col ion-card-title:first-of-type {
     font-weight: 700;
 }
+
+.profil .profil-it{
+    max-width: 500px;
+    margin-right: 0;
+}
