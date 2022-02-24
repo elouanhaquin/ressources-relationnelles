@@ -34,7 +34,9 @@ import {
   IonBadge,
   IonTabButton,
   IonRouterOutlet,
-  IonInput
+  IonInput,
+  IonFab,
+  IonFabButton
 } from '@ionic/react';
 import './Home.css';
 import HeadBar from '../components/headerBar';
@@ -44,7 +46,7 @@ import { addInterestToFireStore, exportMessagesToDB, getMessagesFromFireStoreDB,
 import { resolve } from 'dns';
 import React from 'react';
 import HeaderBar from '../components/headerBar';
-import { Route, Redirect } from 'react-router';
+import { Route, Redirect, useHistory } from 'react-router';
 import { toast } from 'react-toastify';
 
 
@@ -67,7 +69,9 @@ const Home: React.FC = () => {
   const [pro, setProfi] = useState<Profil>();
   const profilIMG = useSelector((state: any) => state.userData.profilImg)
   const location = useSelector((state: any) => state.userData.location)
+  const history = useHistory();
 
+  
   useIonViewWillEnter(() => {
     getUIDCurrentUser().then(data => {
       setUID("" + data);
@@ -161,6 +165,13 @@ const Home: React.FC = () => {
           </IonRow>
         </IonCard>
 
+
+        <IonFab  className="hidden-md-up"  vertical="top" horizontal="start" slot="fixed">
+          <IonFabButton  onClick={e=> history.push('submit/')}>
+            <IonIcon icon={addOutline} />
+          </IonFabButton>
+        </IonFab>
+        
         <IonGrid>
           <IonRow>
             <IonCol className="hidden-md-down" size="3"> {profil != undefined ? <ProfilItem profil={profil} /> : <div></div>} </IonCol>

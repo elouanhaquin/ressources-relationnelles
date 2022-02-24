@@ -24,7 +24,7 @@ import {
 import ProfilItemHeader from '../components/profilItemHeader';
 import { Profil, getProfil } from '../data/profil';
 import { personCircle, addOutline, arrowForwardOutline } from 'ionicons/icons';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import './HeaderBar.css';
 import '../pages/Home';
 import { getProfilFromFireStoreDBwithID, getUIDCurrentUser } from '../firebaseConfig';
@@ -36,7 +36,9 @@ interface HeadBar {
 const HeaderBar: React.FC = () => {
   const [profil, setProfil] = useState<Profil>();
   const [searchText, setSearchText] = useState<string>("");
+  const history = useHistory();
 
+  
   useIonViewWillEnter(() => {
     getUIDCurrentUser().then(data => {
       getProfilFromFireStoreDBwithID("" + data).then((d) => {
@@ -53,10 +55,10 @@ const HeaderBar: React.FC = () => {
       <IonGrid>
         <IonRow>
           <IonCol className='hidden-md-down' size="3">
-            <IonItem   href='/home'><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
+            <IonItem   onClick={e=> history.push('/home')}><img src="assets/icon/logoR.svg" width="246" height="43" /></IonItem>
           </IonCol>
           <IonCol className='hidden-md-up' size="2">
-          <IonItem   href='/home'><img src="assets/icon/logoRSmall.png"/></IonItem>
+          <IonItem    onClick={e=> history.push('/home')}><img src="assets/icon/logoRSmall.png"/></IonItem>
           </IonCol>
       
           <IonCol className='hidden-md-up' size={searchText.length > 0 ? "6" : "7"}>

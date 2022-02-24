@@ -328,7 +328,7 @@ const ProfilView: React.FC = () => {
                                     <IonList>
                                         {profilsWaiting.map(p =>
                                             <IonItem>
-                                                <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{pro?.pseudo}</IonCardSubtitle>
+                                                <IonAvatar ><img src={p.img} /></IonAvatar><IonCardSubtitle>{p?.pseudo}</IonCardSubtitle>
                                                 <IonButton fill="clear" onClick={e => acceptFamily(p.uid)}><IonIcon color='success' icon={homeOutline}></IonIcon></IonButton>
                                                 <IonButton fill="clear" onClick={e => acceptFriend(p.uid)}><IonIcon color='success' icon={peopleOutline}></IonIcon></IonButton>
                                                 <IonButton fill="clear" onClick={e => refuseFriend(p.uid)}><IonIcon color='danger' icon={removeOutline}></IonIcon></IonButton>
