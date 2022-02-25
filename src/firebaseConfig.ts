@@ -648,6 +648,7 @@ export const acceptFamilyToFireStore = (id: string, idFriend: string, add: boole
             if (index > -1) {
                 newPopulation.splice(index, 1); // 2nd parameter means remove one item only
             }
+
             transaction.update(sfDocRef, { friends_waiting: newPopulation, family: friends });
             return idFriend;
         });

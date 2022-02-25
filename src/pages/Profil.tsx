@@ -141,23 +141,30 @@ const ProfilView: React.FC = () => {
 
     function addFriend(friendUID: string) {
         addFriendToFireStore("" + uid, friendUID, true);
+        addFriendToFireStore(friendUID,"" + uid,  true);
         setFriendRequest(!friendRequestSent)
     }
 
     function acceptFriend(friendUID: string) {
         notify();
         acceptFriendToFireStore("" + pro?.uid, friendUID, true);
+        acceptFriendToFireStore("" + friendUID,""+  pro?.uid, true);
     }
     function removeFriend(friendUID: string) {
         deleteFriendToFireStore("" + uid, friendUID);
+        deleteFriendToFireStore(friendUID,"" + uid );
         setNotFriendAnymore(true)
     }
     function acceptFamily(friendUID: string) {
         notify();
         acceptFamilyToFireStore("" + pro?.uid, friendUID, true);
+        acceptFamilyToFireStore( friendUID,"" + pro?.uid, true);
+
+
     }
     function refuseFriend(friendUID: string) {
         acceptFriendToFireStore("" + pro?.uid, friendUID, false);
+        acceptFriendToFireStore( friendUID,"" + pro?.uid, false);
     }
     function updateProfil() {
         if (uid != undefined) {
